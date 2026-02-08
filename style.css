@@ -165,210 +165,32 @@ main {
   gap: 24px;
 }
 
-.concept-card {
+.prompt-card {
   background: white;
   border-radius: var(--radius);
-  padding: 24px;
-  box-shadow: var(--shadow);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.concept-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 25px 40px rgba(38, 42, 40, 0.1);
-}
-
-.icon {
-  font-size: 1.4rem;
-  margin-bottom: 10px;
-}
-
-.vision-layout {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 36px;
-  align-items: center;
-}
-
-.vision-screen {
-  background: radial-gradient(circle at top, #ffffff, var(--bg-alt));
-  border-radius: var(--radius);
-  height: 260px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-  transition: background 0.6s ease;
-}
-
-.vision-screen.rotate {
-  background: radial-gradient(circle at bottom, #ffffff, var(--wood));
-}
-
-.vision-screen.night {
-  background: radial-gradient(circle at top, #3a4140, #1f2423);
-  color: #f7f5f1;
-}
-
-.vision-overlay {
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  opacity: 0.7;
-}
-
-.button-row {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.ghost {
-  padding: 10px 18px;
-  border-radius: 999px;
-  border: 1px solid var(--accent);
-  background: transparent;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.ghost:hover {
-  background: var(--accent);
-}
-
-.materials-scroll {
-  display: flex;
-  gap: 18px;
-  overflow-x: auto;
-  padding-bottom: 8px;
-  scroll-snap-type: x mandatory;
-}
-
-.materials-scroll::-webkit-scrollbar {
-  height: 6px;
-}
-
-.materials-scroll::-webkit-scrollbar-thumb {
-  background: var(--accent);
-  border-radius: 999px;
-}
-
-.material-card {
-  flex: 0 0 auto;
-  min-width: 180px;
-  background: white;
-  padding: 16px 20px;
-  border-radius: 999px;
-  box-shadow: var(--shadow);
-  scroll-snap-align: start;
-}
-
-.smart-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
-}
-
-.toggle-card {
-  background: white;
-  border-radius: var(--radius);
-  padding: 20px;
+  padding: 32px;
   box-shadow: var(--shadow);
   display: grid;
   gap: 18px;
 }
 
-.toggle-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.toggle-button {
-  width: 44px;
-  height: 24px;
-  background: #d8d8d8;
-  border-radius: 999px;
-  border: none;
-  position: relative;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.toggle-button::after {
-  content: "";
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: white;
-  transition: transform 0.3s ease;
-}
-
-.toggle-button.on {
-  background: var(--accent);
-}
-
-.toggle-button.on::after {
-  transform: translateX(20px);
-}
-
-.toggle-status {
+.prompt-title {
   font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.prompt-body {
   color: var(--muted);
-}
-
-.gallery-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 16px;
+  gap: 12px;
 }
 
-.gallery-item {
-  border: none;
-  border-radius: 14px;
-  padding: 30px 20px;
-  background: linear-gradient(135deg, #ffffff, var(--bg-alt));
-  cursor: pointer;
-  transition: transform 0.3s ease;
+.prompt-body ul {
+  padding-left: 20px;
+  display: grid;
+  gap: 6px;
 }
 
-.gallery-item:hover {
-  transform: scale(1.03);
-}
-
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(31, 36, 35, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-.overlay.active {
-  opacity: 1;
-  pointer-events: all;
-}
-
-.overlay-content {
-  background: #f9f7f3;
-  padding: 40px;
-  border-radius: var(--radius);
-  max-width: 420px;
-  text-align: center;
-}
-
-.overlay-title {
-  font-size: 1.5rem;
-  margin-bottom: 12px;
-}
 
 .reveal {
   opacity: 0;
