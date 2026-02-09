@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zen Finance</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#ffffff;
+  --text:#000000;
+  --primary:#4da6ff;
+  --secondary:#ff69b4;
+  --card:#ffffff;
+  --border:#000000;
+  --muted:rgba(0,0,0,0.65);
+  --shadow:0 12px 28px rgba(0,0,0,0.08);
+}
+
+[data-theme="dark"]{
+  --bg:#000000;
+  --text:#ffffff;
+  --primary:#4da6ff;
+  --secondary:#ff69b4;
+  --card:#000000;
+  --border:#ffffff;
+  --muted:rgba(255,255,255,0.7);
+  --shadow:0 12px 28px rgba(255,255,255,0.08);
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  padding:24px 16px 64px;
+  transition:background 0.3s ease,color 0.3s ease;
+  word-break:break-word;
+  overflow-wrap:anywhere;
+}
+
+.container{
+  max-width:1200px;
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+
+header{
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+header h1{
+  font-size:clamp(2rem,4vw,3rem);
+  font-weight:800;
+  letter-spacing:1px;
+}
+
+header p{
+  font-size:clamp(1rem,2.6vw,1.2rem);
+  color:var(--muted);
+}
+
+.slogan{
+  font-size:clamp(1.2rem,3vw,1.6rem);
+  font-weight:800;
+  color:var(--secondary);
+  border:2px solid var(--secondary);
+  padding:12px 16px;
+  border-radius:999px;
+  display:inline-flex;
+  align-self:center;
+  gap:8px;
+  animation:breathe 4s ease-in-out infinite;
+}
+
+@keyframes breathe{
+  0%,100%{opacity:0.7;letter-spacing:0.5px;}
+  50%{opacity:1;letter-spacing:2px;}
+}
+
+.grid{
+  display:flex;
+  flex-wrap:wrap;
+  gap:16px;
+}
+
+.card{
+  background:var(--card);
+  border:2px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+  box-shadow:var(--shadow);
+  flex:1 1 320px;
+  min-width:280px;
+}
+
+.card h2{
+  font-size:clamp(1.2rem,2.6vw,1.45rem);
+  margin-bottom:16px;
+  color:var(--primary);
+  font-weight:800;
+}
+
+.row-nowrap{
+  display:flex;
+  flex-wrap:nowrap;
+}
+
+.stats{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+}
+
+.stat-box{
+  flex:1 1 160px;
+  border:2px solid var(--border);
+  border-radius:14px;
+  padding:14px;
+  background:var(--card);
+}
+
+.stat-label{
+  font-size:0.9rem;
+  color:var(--muted);
+  margin-bottom:6px;
+}
+
+.stat-value{
+  font-size:clamp(1.2rem,2.8vw,1.5rem);
+  font-weight:800;
+}
+
+input,button,select{
+  width:100%;
+  padding:12px 14px;
+  border-radius:12px;
+  border:2px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+  font-size:clamp(0.95rem,2.4vw,1.05rem);
+}
+
+input:focus{
+  outline:none;
+  border-color:var(--primary);
+}
+
+button{
+  background:var(--primary);
+  color:var(--bg);
+  cursor:pointer;
+  font-weight:800;
+  transition:transform 0.2s ease,opacity 0.2s ease;
+}
+
+button:hover{transform:translateY(-2px)}
+
+button.secondary{
+  background:var(--secondary);
+}
+
+.form-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+}
+
+.form-row > *{
+  flex:1 1 160px;
+}
+
+.expense-list{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  max-height:360px;
+  overflow:auto;
+}
+
+.expense-item{
+  border:2px solid var(--border);
+  border-radius:14px;
+  padding:12px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.expense-top{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.expense-amount{
+  color:var(--primary);
+  font-weight:800;
+}
+
+.expense-meta{
+  font-size:0.85rem;
+  color:var(--muted);
+}
+
+.filter-row{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+}
+
+.settings-row{
+  display:flex;
+  gap:16px;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:nowrap;
+  overflow-x:auto;
+}
+
+.settings-group{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  white-space:nowrap;
+}
+
+.settings-group label{
+  font-weight:700;
+}
+
+.settings-group input[type="color"]{
+  width:56px;
+  height:42px;
+  padding:0;
+  border-radius:10px;
+  border:2px solid var(--border);
+}
+
+.toggle{
+  position:relative;
+  width:64px;
+  height:34px;
+  flex-shrink:0;
+}
+
+.toggle input{opacity:0;width:0;height:0;position:absolute;}
+
+.toggle span{
+  position:absolute;
+  inset:0;
+  background:var(--border);
+  border-radius:999px;
+  transition:background 0.3s ease;
+}
+
+.toggle span::before{
+  content:"";
+  position:absolute;
+  width:24px;
+  height:24px;
+  background:var(--bg);
+  border-radius:50%;
+  top:4px;
+  left:6px;
+  transition:transform 0.3s ease;
+}
+
+.toggle input:checked + span{
+  background:var(--primary);
+}
+
+.toggle input:checked + span::before{
+  transform:translateX(28px);
+}
+
+.charts{
+  display:flex;
+  flex-wrap:wrap;
+  gap:16px;
+}
+
+.chart-card{
+  flex:1 1 320px;
+  min-width:280px;
+}
+
+.chart-wrap{
+  height:300px;
+}
+
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.55);
+  backdrop-filter:blur(10px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+}
+
+.modal-overlay.show{display:flex;}
+
+.modal{
+  background:rgba(255,255,255,0.15);
+  border:3px solid var(--secondary);
+  border-radius:18px;
+  padding:24px;
+  width:min(420px,90vw);
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  box-shadow:0 18px 40px rgba(0,0,0,0.25);
+}
+
+.modal h3{
+  font-size:1.3rem;
+}
+
+.modal p{
+  color:var(--muted);
+}
+
+@media(max-width:700px){
+  .settings-row{
+    gap:12px;
+  }
+}
+</style>
+</head>
+<body>
+<div class="container" id="app">
+  <header>
+    <h1>Zen Finance</h1>
+    <div class="slogan">✨ Quản trị bằng Logic – Thưởng thức bằng Tâm hồn</div>
+    <p>Modern · Clean · Zen · Pastel · Logic‑Driven</p>
+  </header>
+
+  <div class="card">
+    <h2>💰 Thu nhập & Thống kê</h2>
+    <div class="form-row">
+      <input type="number" id="incomeInput" min="0" placeholder="Nhập thu nhập ban đầu" />
+      <button id="setIncomeBtn">Lưu thu nhập</button>
+    </div>
+    <div class="stats" style="margin-top:16px;">
+      <div class="stat-box">
+        <div class="stat-label">Tổng thu nhập</div>
+        <div class="stat-value" id="totalIncome">0</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Tổng chi tiêu</div>
+        <div class="stat-value" id="totalExpense">0</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Số dư</div>
+        <div class="stat-value" id="balance">0</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Tỷ lệ tiết kiệm</div>
+        <div class="stat-value" id="savingRate">0%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h2>➕ Thêm chi tiêu</h2>
+      <div class="form-row">
+        <input type="text" id="categoryInput" placeholder="Tên danh mục" />
+        <input type="number" id="amountInput" min="0" placeholder="Số tiền" />
+      </div>
+      <button class="secondary" id="addExpenseBtn" style="margin-top:12px;">Thêm chi tiêu</button>
+    </div>
+
+    <div class="card">
+      <h2>📋 Danh sách chi tiêu</h2>
+      <div class="filter-row">
+        <input type="text" id="filterInput" placeholder="Lọc theo danh mục..." />
+      </div>
+      <div class="expense-list" id="expenseList"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🎨 Tùy chỉnh giao diện</h2>
+    <div class="settings-row row-nowrap">
+      <div class="settings-group">
+        <label for="primaryColor">🎨 Màu</label>
+        <input type="color" id="primaryColor" value="#4da6ff" />
+      </div>
+      <div class="settings-group">
+        <span>☀️</span>
+        <label class="toggle">
+          <input type="checkbox" id="themeToggle" />
+          <span></span>
+        </label>
+        <span>🌙</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📊 Biểu đồ</h2>
+    <div class="charts">
+      <div class="chart-card">
+        <div class="chart-wrap">
+          <canvas id="doughnutChart"></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-wrap">
+          <canvas id="barChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modalBox">
+    <div id="modalIcon">⚠️</div>
+    <h3 id="modalTitle">Cảnh báo</h3>
+    <p id="modalMessage"></p>
+    <button id="modalClose">Đã hiểu</button>
+  </div>
+</div>
+
+<script>
+const AppState = {
+  key: "zenFinanceState",
+  data: {
+    income: 0,
+    expenses: [],
+    theme: "light",
+    primary: "#4da6ff",
+    aiFlags: {
+      lowBalance: false,
+      highCategory: false,
+      reward: false
+    }
+  },
+  load(){
+    const raw = localStorage.getItem(this.key);
+    if(raw){
+      try{
+        const parsed = JSON.parse(raw);
+        this.data = {
+          ...this.data,
+          ...parsed,
+          aiFlags: { ...this.data.aiFlags, ...(parsed.aiFlags || {}) }
+        };
+      } catch (error){
+        console.warn("Load state failed", error);
+      }
+    }
+  },
+  save(){
+    localStorage.setItem(this.key, JSON.stringify(this.data));
+  },
+  resetExpenses(){
+    this.data.expenses = [];
+    this.data.aiFlags = { lowBalance: false, highCategory: false, reward: false };
+    this.save();
+  }
+};
+
+const ThemeManager = {
+  init(){
+    Rendering.applyTheme(AppState.data.theme, AppState.data.primary);
+    document.getElementById("themeToggle").checked = AppState.data.theme === "dark";
+    document.getElementById("primaryColor").value = AppState.data.primary;
+  },
+  toggleTheme(){
+    const root = document.documentElement;
+    const current = root.getAttribute("data-theme");
+    const nextTheme = current === "dark" ? "light" : "dark";
+    AppState.data.theme = nextTheme;
+    AppState.save();
+    Rendering.applyTheme(AppState.data.theme, AppState.data.primary);
+    document.getElementById("themeToggle").checked = nextTheme === "dark";
+  },
+  syncToggle(isDark){
+    AppState.data.theme = isDark ? "dark" : "light";
+    AppState.save();
+    Rendering.applyTheme(AppState.data.theme, AppState.data.primary);
+  },
+  updatePrimary(color){
+    AppState.data.primary = color;
+    AppState.save();
+    Rendering.applyTheme(AppState.data.theme, AppState.data.primary);
+  }
+};
+
+const Handlers = {
+  bind(){
+    document.getElementById("setIncomeBtn").addEventListener("click", () => {
+      const input = document.getElementById("incomeInput");
+      const value = Math.max(0, Number(input.value || 0));
+      AppState.data.income = value;
+      AppState.resetExpenses();
+      input.value = value ? value : "";
+      AppState.save();
+      Rendering.renderAll();
+    });
+
+    document.getElementById("addExpenseBtn").addEventListener("click", () => {
+      const category = document.getElementById("categoryInput").value.trim();
+      const amountValue = Number(document.getElementById("amountInput").value || 0);
+
+      if(!category){
+        AIChecks.showModal("⚠️", "Thiếu danh mục", "Vui lòng nhập tên danh mục.", "warn");
+        return;
+      }
+
+      if(amountValue < 0){
+        AIChecks.showModal("⚠️", "Không hợp lệ", "Số tiền không được âm.", "warn");
+        return;
+      }
+
+      const balance = Rendering.getBalance();
+      if(amountValue > balance){
+        AIChecks.showModal("🚫", "Vượt số dư", "Không thể chi vượt số dư hiện tại.", "danger");
+        return;
+      }
+
+      const expense = {
+        id: crypto.randomUUID(),
+        category,
+        amount: amountValue,
+        timestamp: new Date().toLocaleString()
+      };
+
+      AppState.data.expenses.push(expense);
+      AppState.save();
+      Rendering.renderAll();
+      AIChecks.runAll();
+      document.getElementById("categoryInput").value = "";
+      document.getElementById("amountInput").value = "";
+    });
+
+    document.getElementById("filterInput").addEventListener("input", () => {
+      Rendering.renderExpenseList();
+    });
+
+    document.getElementById("themeToggle").addEventListener("change", (event) => {
+      ThemeManager.syncToggle(event.target.checked);
+    });
+
+    document.getElementById("primaryColor").addEventListener("input", (event) => {
+      ThemeManager.updatePrimary(event.target.value);
+    });
+
+    document.getElementById("modalClose").addEventListener("click", () => {
+      AIChecks.closeModal();
+    });
+
+    document.getElementById("modalOverlay").addEventListener("click", (event) => {
+      if(event.target.id === "modalOverlay"){
+        AIChecks.closeModal();
+      }
+    });
+  }
+};
+
+const Rendering = {
+  doughnutChart: null,
+  barChart: null,
+  renderAll(){
+    this.renderStats();
+    this.renderExpenseList();
+    this.renderCharts();
+  },
+  renderStats(){
+    const income = AppState.data.income;
+    const totalExpense = AppState.data.expenses.reduce((sum, item) => sum + item.amount, 0);
+    const balance = income - totalExpense;
+    const savingRate = income > 0 ? Math.max(0, ((balance / income) * 100)) : 0;
+
+    document.getElementById("totalIncome").textContent = this.formatCurrency(income);
+    document.getElementById("totalExpense").textContent = this.formatCurrency(totalExpense);
+    document.getElementById("balance").textContent = this.formatCurrency(balance);
+    document.getElementById("savingRate").textContent = `${savingRate.toFixed(1)}%`;
+  },
+  renderExpenseList(){
+    const list = document.getElementById("expenseList");
+    const filter = document.getElementById("filterInput").value.trim().toLowerCase();
+    const filtered = AppState.data.expenses.filter(item => item.category.toLowerCase().includes(filter));
+
+    if(filtered.length === 0){
+      list.innerHTML = `<div class="expense-item">Chưa có chi tiêu phù hợp.</div>`;
+      return;
+    }
+
+    list.innerHTML = filtered.map(item => {
+      return `
+        <div class="expense-item">
+          <div class="expense-top">
+            <strong>${item.category}</strong>
+            <span class="expense-amount">${this.formatCurrency(item.amount)}</span>
+          </div>
+          <div class="expense-meta">${item.timestamp}</div>
+          <button class="secondary" data-id="${item.id}">Xóa</button>
+        </div>
+      `;
+    }).join("");
+
+    list.querySelectorAll("button[data-id]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-id");
+        AppState.data.expenses = AppState.data.expenses.filter(item => item.id !== id);
+        AppState.save();
+        this.renderAll();
+        AIChecks.runAll();
+      });
+    });
+  },
+  renderCharts(){
+    const totals = {};
+    AppState.data.expenses.forEach(item => {
+      totals[item.category] = (totals[item.category] || 0) + item.amount;
+    });
+    const labels = Object.keys(totals);
+    const data = Object.values(totals);
+
+    const textColor = getComputedStyle(document.body).color;
+    const primary = AppState.data.primary;
+    const secondary = "#ff69b4";
+    const palette = [primary, secondary, "#4da6ff", "#ff69b4"];
+
+    if(!this.doughnutChart){
+      this.doughnutChart = new Chart(document.getElementById("doughnutChart"), {
+        type: "doughnut",
+        data: { labels, datasets: [{ data, backgroundColor: palette }] },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { labels: { color: textColor } }
+          }
+        }
+      });
+    } else {
+      this.doughnutChart.data.labels = labels;
+      this.doughnutChart.data.datasets[0].data = data;
+      this.doughnutChart.options.plugins.legend.labels.color = textColor;
+      this.doughnutChart.update();
+    }
+
+    if(!this.barChart){
+      this.barChart = new Chart(document.getElementById("barChart"), {
+        type: "bar",
+        data: { labels, datasets: [{ data, backgroundColor: primary }] },
+        options: {
+          responsive: true,
+          scales: {
+            x: { ticks: { color: textColor } },
+            y: { ticks: { color: textColor } }
+          },
+          plugins: {
+            legend: { display: false }
+          }
+        }
+      });
+    } else {
+      this.barChart.data.labels = labels;
+      this.barChart.data.datasets[0].data = data;
+      this.barChart.data.datasets[0].backgroundColor = primary;
+      this.barChart.options.scales.x.ticks.color = textColor;
+      this.barChart.options.scales.y.ticks.color = textColor;
+      this.barChart.update();
+    }
+  },
+  applyTheme(theme, primary){
+    document.documentElement.setAttribute("data-theme", theme);
+    document.documentElement.style.setProperty("--primary", primary);
+    this.renderCharts();
+  },
+  formatCurrency(value){
+    return Number(value).toLocaleString("vi-VN") + " ₫";
+  },
+  getBalance(){
+    const income = AppState.data.income;
+    const totalExpense = AppState.data.expenses.reduce((sum, item) => sum + item.amount, 0);
+    return income - totalExpense;
+  }
+};
+
+const GenZMessages = {
+  low: [
+    "Ví đang kêu cứu rồi đó, tạm ngưng chốt đơn nha.",
+    "Tài chính hơi căng, cho ví nghỉ ngơi chút nha."
+  ],
+  heavy: [
+    "Danh mục này đang chiếm spotlight quá rồi.",
+    "Biểu đồ đang nghiêng hẳn về một phía, cân bằng lại."
+  ],
+  reward: [
+    "Quản lý tiền rất ổn định.",
+    "Cấu trúc tài chính đẹp."
+  ]
+};
+
+const AIChecks = {
+  showModal(icon, title, message, tone){
+    const overlay = document.getElementById("modalOverlay");
+    const box = document.getElementById("modalBox");
+    const borderColor = tone === "danger" ? "#ff69b4" : tone === "reward" ? "#4da6ff" : "#ff69b4";
+    box.style.borderColor = borderColor;
+    document.getElementById("modalIcon").textContent = icon;
+    document.getElementById("modalTitle").textContent = title;
+    document.getElementById("modalMessage").textContent = message;
+    overlay.classList.add("show");
+  },
+  closeModal(){
+    document.getElementById("modalOverlay").classList.remove("show");
+  },
+  runAll(){
+    const income = AppState.data.income;
+    const balance = Rendering.getBalance();
+    const totalExpense = AppState.data.expenses.reduce((sum, item) => sum + item.amount, 0);
+
+    if(income > 0 && balance / income < 0.2 && !AppState.data.aiFlags.lowBalance){
+      AppState.data.aiFlags.lowBalance = true;
+      AppState.save();
+      const message = GenZMessages.low[Math.floor(Math.random() * GenZMessages.low.length)];
+      this.showModal("⚠️", "Số dư thấp", message, "warn");
+      return;
+    }
+
+    const categoryTotals = {};
+    AppState.data.expenses.forEach(item => {
+      categoryTotals[item.category] = (categoryTotals[item.category] || 0) + item.amount;
+    });
+    const hasHighCategory = Object.values(categoryTotals).some(amount => income > 0 && amount / income > 0.4);
+    if(hasHighCategory && !AppState.data.aiFlags.highCategory){
+      AppState.data.aiFlags.highCategory = true;
+      AppState.save();
+      const message = GenZMessages.heavy[Math.floor(Math.random() * GenZMessages.heavy.length)];
+      this.showModal("🧐", "Chi tiêu mất cân bằng", message, "warn");
+      return;
+    }
+
+    const ratio = income > 0 ? totalExpense / income : 0;
+    if(ratio >= 0.3 && ratio <= 0.7 && AppState.data.expenses.length >= 3 && !AppState.data.aiFlags.reward){
+      AppState.data.aiFlags.reward = true;
+      AppState.save();
+      const message = GenZMessages.reward[Math.floor(Math.random() * GenZMessages.reward.length)];
+      this.showModal("🌟", "Tốt lắm!", message, "reward");
+    }
+  }
+};
+
+AppState.load();
+Handlers.bind();
+ThemeManager.init();
+Rendering.renderAll();
+AIChecks.runAll();
+</script>
+</body>
+</html>
