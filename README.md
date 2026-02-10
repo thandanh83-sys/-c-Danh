@@ -13,9 +13,8 @@ Mở: `http://localhost:4173`
 ## Tính năng chính
 
 - Signature thương hiệu: **NeuroX** (Neuro + X = tư duy vượt giới hạn).
-- Giao diện viền sáng đồng nhất cho card/input/toggle/button.
-- Picker View danh mục chi tiêu (gọn trang, hiện đại, không dài dòng).
-- Danh mục:
+- 4 màu chủ đạo nền được nhấn mạnh và phối sáng tạo: xanh dương, hồng, vàng, mint.
+- Picker View danh mục chi tiêu gọn trang:
   - 🍱 Ăn uống, ☕ Cafe, 🛍️ Mua sắm, 🚗 Di chuyển, 🎮 Giải trí,
   - 📚 Học tập, 💊 Sức khỏe, 🏠 Nhà cửa, ✍️ Mục khác.
 - Thêm / sửa / xoá khoản chi.
@@ -28,8 +27,13 @@ Mở: `http://localhost:4173`
   - `idealBudgetPerCategory = income / existingCategoryCount`
   - Cảnh báo hồng khi danh mục vượt chuẩn.
   - Cảnh báo đỏ khi tổng chi vượt thu nhập.
+- Âm thanh cho toàn bộ hành động quan trọng:
+  - thao tác thường,
+  - cảnh báo,
+  - thành công,
+  - vượt mức chi tiêu.
 - Theme Engine “🎨 GIAO DIỆN NeuroX”:
-  - Preset màu,
-  - Tuỳ chỉnh color picker,
-  - Nút dark/light,
-  - Nút âm thanh bật/tắt đặt trong mục giao diện.
+  - preset màu,
+  - tùy chỉnh color picker,
+  - module âm thanh riêng,
+  - toggle sáng/tối dạng nút cố định góc phải trên.

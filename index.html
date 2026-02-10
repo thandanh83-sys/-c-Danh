@@ -5,340 +5,213 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NeuroX Finance</title>
   <style>
-    /* ===== NỀN & MÀU CHỦ ĐẠO NEUROX ===== */
     :root{
-      --neuro-bg:#0a0a0a;
+      --neuro-bg-1:#0a0a0a;
+      --neuro-bg-2:#1f1142;
+      --neuro-bg-3:#0d2f46;
+      --neuro-bg-4:#3c154b;
       --neuro-blue:#6fd3ff;
       --neuro-pink:#ff6ec7;
+      --neuro-gold:#ffd86f;
+      --neuro-mint:#73ffd1;
       --neuro-white:#f5f7fa;
-
       --glass-light:rgba(255,255,255,.08);
       --glass-dark:rgba(0,0,0,.35);
-
       --glow-blue:0 0 25px rgba(111,211,255,.45);
       --glow-pink:0 0 30px rgba(255,110,199,.5);
-
-      --radius:28px;
+      --radius:24px;
       --transition:.35s cubic-bezier(.2,.8,.2,1);
-
       --nx-accent:#ff6ec7;
       --nx-accent-2:#6fd3ff;
       --nx-glow:0 0 20px rgba(255,110,199,.6);
+      --bg:#0b0b12;
+      --card:rgba(15,18,25,.92);
+      --text:#ffffff;
+      --accent:#ff6ec7;
+      --glow:0 0 18px rgba(255,110,199,.6);
     }
 
     * { box-sizing: border-box; }
 
-    /* ===== LIGHT MODE ===== */
     body{
-      --bg:var(--neuro-white);
-      --text:#0a0a0a;
-      --card-bg:rgba(255,255,255,.92);
-      --border:rgba(111,211,255,.25);
-      margin: 0;
-      font-family: "Inter", "Segoe UI", system-ui, sans-serif;
-      background:var(--bg);
-      color:var(--text);
-      min-height: 100dvh;
-      padding: 20px;
-      overflow-x: hidden;
-    }
-
-    /* ===== DARK MODE ===== */
-    body.dark{
-      --bg:var(--neuro-bg);
-      --text:#f5f7fa;
-      --card-bg:rgba(15,18,25,.92);
-      --border:rgba(111,211,255,.18);
-      background:radial-gradient(circle at 20% 20%,#2a0033,transparent),
-                 radial-gradient(circle at 80% 80%,#001b33,transparent),
-                 var(--neuro-bg);
-    }
-
-    /* ===== NỀN GRADIENT ZEN ===== */
-    body::before{
-      content:'';
-      position:fixed;
-      inset:0;
+      margin:0;
+      font-family:"Inter","Segoe UI",system-ui,sans-serif;
       background:
-        radial-gradient(circle at 25% 30%,rgba(111,211,255,.18),transparent 60%),
-        radial-gradient(circle at 75% 70%,rgba(255,110,199,.18),transparent 60%);
-      pointer-events:none;
-      z-index:-1;
+        radial-gradient(circle at 15% 20%, rgba(111,211,255,.18), transparent 55%),
+        radial-gradient(circle at 80% 20%, rgba(255,216,111,.14), transparent 48%),
+        radial-gradient(circle at 75% 80%, rgba(255,110,199,.20), transparent 58%),
+        radial-gradient(circle at 25% 80%, rgba(115,255,209,.16), transparent 52%),
+        linear-gradient(140deg,var(--neuro-bg-1),var(--neuro-bg-2) 35%,var(--neuro-bg-3) 65%,var(--neuro-bg-4));
+      color:var(--text);
+      transition:.35s ease;
+      min-height:100dvh;
+      padding:22px 20px;
+      overflow-x:hidden;
     }
 
-    .app {
-      max-width: 1240px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1.45fr;
-      gap: 16px;
+    .light{
+      --bg:#f6f7fb;
+      --card:#ffffff;
+      --text:#111;
+      --accent:#ff6ec7;
+      --glow:0 0 18px rgba(255,110,199,.4);
     }
 
-    @media (max-width: 980px){ .app { grid-template-columns: 1fr; } }
-
-    /* ===== CARD GIAO DIỆN CHỦ ĐẠO ===== */
-    .neuro-card{
-      background:var(--card-bg);
-      border-radius:var(--radius);
-      border:2px solid var(--border);
-      backdrop-filter:blur(20px);
-      box-shadow:var(--glow-blue);
-      padding:20px;
-      transition:all var(--transition);
-      overflow: hidden;
+    body.light{
+      background:
+        radial-gradient(circle at 18% 18%, rgba(111,211,255,.20), transparent 50%),
+        radial-gradient(circle at 82% 24%, rgba(255,216,111,.18), transparent 46%),
+        radial-gradient(circle at 70% 78%, rgba(255,110,199,.18), transparent 55%),
+        radial-gradient(circle at 20% 78%, rgba(115,255,209,.16), transparent 50%),
+        #f6f7fb;
     }
 
-    .neuro-card:hover{
-      box-shadow:var(--glow-pink);
-      transform:translateY(-3px);
-    }
-
-    .hero { grid-column: 1 / -1; }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 12px;
-      border-radius: 999px;
-      border: 2px solid var(--neuro-blue);
-      box-shadow: var(--nx-glow);
-      background: rgba(255,255,255,.05);
-      margin-bottom: 10px;
-      font-size: .9rem;
-      max-width: 100%;
-      flex-wrap: wrap;
-    }
-
-    /* ===== TIÊU ĐỀ NEUROX ===== */
-    .neuro-title{
-      font-size:clamp(1.5rem,2.6vw,2.35rem);
-      font-weight:800;
-      letter-spacing:1.5px;
-      color:var(--neuro-pink);
-      text-shadow:0 0 25px rgba(255,110,199,.6),
-                  0 0 40px rgba(111,211,255,.3);
-      margin: 0 0 8px;
-    }
-
-    h2 { margin: 0 0 10px; font-size: 1.08rem; }
-    p { margin: 0; line-height: 1.5; }
-    .muted { opacity: .82; }
-
-    label { display: block; margin-bottom: 6px; font-size: .92rem; opacity: .86; }
-
-    /* ===== NÚT CHỦ ĐẠO ===== */
-    .neuro-btn{
-      background:linear-gradient(135deg,var(--nx-accent),var(--nx-accent-2));
-      border:none;
-      border-radius:18px;
-      padding:11px 14px;
-      color:white;
-      font-weight:800;
-      cursor:pointer;
-      box-shadow:var(--nx-glow);
-      transition:all var(--transition);
-      width: 100%;
-    }
-
-    .neuro-btn:hover{ transform:translateY(-2px); box-shadow:0 0 45px rgba(255,110,199,.65); }
-    .neuro-btn.subtle { background: rgba(60,60,90,.35); border: 2px solid var(--border); color: var(--text); }
-    .neuro-btn.danger { background: linear-gradient(135deg,#ff5f92,#ff2d6d); }
-
-    .neuro-input, .neuro-toggle {
-      width: 100%;
-      border-radius: 16px;
-      padding: 11px 12px;
-      border:2px solid var(--neuro-blue);
-      box-shadow:var(--glow-blue);
-      background: rgba(255,255,255,.12);
-      color: var(--text);
-      outline: none;
-      font-size: .95rem;
-    }
-
-    body.dark .neuro-input, body.dark .neuro-toggle {
-      background: rgba(16,16,25,.72);
-    }
-
-    .neuro-input:focus, .neuro-toggle:focus {
-      border-color: var(--neuro-pink);
-      box-shadow: var(--glow-pink);
-    }
-
-    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-
-    /* ===== VIỀN GLOW TOGGLE ===== */
-    .neuro-outline{
-      border:2px solid var(--neuro-blue);
-      box-shadow:var(--glow-blue);
-      border-radius:18px;
-      padding:10px;
-      background:var(--glass-light);
-    }
-
-    body.dark .neuro-outline{ background:var(--glass-dark); }
-
-    .picker-wrap {
-      position: relative;
-      height: 220px;
-      overflow: hidden;
-      border-radius: 18px;
-      border:2px solid var(--neuro-blue);
-      box-shadow: var(--glow-blue);
-      background: rgba(255,255,255,.07);
-      margin-bottom: 12px;
-    }
-
-    .picker {
-      position: absolute;
-      inset: 0;
-      overflow-y: auto;
-      padding: 84px 12px;
-      scroll-snap-type: y mandatory;
-    }
-
-    .picker::-webkit-scrollbar { width: 0; }
-
-    .picker-item {
-      height: 52px;
-      margin: 5px 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 12px;
-      border: 2px solid transparent;
-      opacity: .52;
-      scroll-snap-align: center;
-      transition: .2s ease;
-      font-weight: 650;
-    }
-
-    .picker-item.active {
-      opacity: 1;
-      border-color: var(--neuro-pink);
-      box-shadow: var(--glow-pink);
-      background: rgba(255,255,255,.08);
-      transform: scale(1.02);
-    }
-
-    .picker-focus {
-      position: absolute;
-      left: 10px;
-      right: 10px;
-      top: 84px;
-      height: 52px;
-      border-radius: 12px;
-      border:2px solid var(--neuro-blue);
-      box-shadow: var(--glow-blue);
-      pointer-events: none;
-    }
-
-    .status {
-      border-radius: 16px;
-      border:2px solid var(--neuro-blue);
-      box-shadow: var(--glow-blue);
-      padding: 12px;
-      line-height: 1.45;
-      background: rgba(255,255,255,.07);
-    }
-
-    .status.warn { border-color: #ff88d8; box-shadow: 0 0 22px rgba(255,136,216,.7); }
-    .status.danger { border-color: #ff4f86; box-shadow: 0 0 22px rgba(255,79,134,.8); }
-    .status.ok { border-color: #76ffd4; box-shadow: 0 0 22px rgba(118,255,212,.65); }
-
-    .list { display: grid; gap: 8px; max-height: 350px; overflow: auto; }
-
-    .expense-item {
-      display: grid;
-      grid-template-columns: 1fr auto auto;
-      gap: 8px;
-      align-items: center;
-      border-radius: 14px;
-      border:2px solid var(--neuro-blue);
-      box-shadow: var(--glow-blue);
-      padding: 10px;
-      background: rgba(255,255,255,.07);
-    }
-
-    .expense-item small { display: block; opacity: .74; margin-top: 4px; }
-
-    .chart-toolbar { display:flex; gap:8px; margin-bottom: 10px; }
-
-    .neuro-toggle {
-      cursor: pointer;
-      padding: 10px 12px;
-      font-weight: 700;
-      border:2px solid var(--neuro-blue);
-      box-shadow: var(--glow-blue);
-      background: rgba(255,255,255,.09);
-    }
-
-    .neuro-toggle.active {
-      border-color: var(--neuro-pink);
-      box-shadow: var(--glow-pink);
-      background: rgba(255,255,255,.14);
-    }
-
-    canvas {
-      width: 100%;
-      border-radius: 16px;
-      border:2px solid var(--neuro-blue);
-      box-shadow: var(--glow-blue);
-      background: radial-gradient(circle at 50% -25%, rgba(255,255,255,.14), rgba(255,255,255,.03));
-    }
-
-    /* ===== THEME ENGINE CARD ===== */
-    .nx-theme-title{
-      font-weight:700;
-      letter-spacing:1px;
-      margin-bottom:12px;
-      text-align:center;
-      text-shadow:var(--nx-glow);
-    }
-
-    .nx-theme-grid{
+    .app{
+      max-width:1240px;
+      margin:0 auto;
       display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:10px;
+      grid-template-columns:1fr 1.45fr;
+      gap:16px;
+    }
+    @media(max-width:980px){ .app{ grid-template-columns:1fr; } }
+
+    .neuro-card, .card{
+      background:var(--card);
+      border-radius:var(--radius);
+      border:2px solid rgba(111,211,255,.28);
+      backdrop-filter:blur(18px);
+      box-shadow:var(--glow-blue);
+      padding:18px;
+      transition:all var(--transition);
+      overflow:hidden;
+    }
+    .neuro-card:hover,.card:hover{ transform:translateY(-2px); box-shadow:var(--glow-pink); }
+
+    .hero{ grid-column:1 / -1; }
+    .badge{
+      display:inline-flex; gap:8px; flex-wrap:wrap; align-items:center;
+      padding:7px 12px; border-radius:999px;
+      border:2px solid var(--neuro-blue); box-shadow:var(--nx-glow);
+      background:rgba(255,255,255,.06); margin-bottom:10px; font-size:.9rem;
+    }
+    .neuro-title{
+      margin:0 0 8px;
+      font-size:clamp(1.45rem,2.5vw,2.25rem);
+      font-weight:850;
+      letter-spacing:1.2px;
+      color:var(--neuro-pink);
+      text-shadow:0 0 25px rgba(255,110,199,.6),0 0 40px rgba(111,211,255,.3);
     }
 
-    .nx-theme-btn{
-      padding:11px;
-      border-radius:14px;
-      border:2px solid var(--neuro-blue);
-      background:#000;
-      color:#fff;
-      cursor:pointer;
-      font-size:.84rem;
-      transition:.2s;
-      box-shadow:var(--nx-glow);
-    }
+    h2{ margin:0 0 10px; font-size:1.06rem; }
+    p{ margin:0; line-height:1.5; }
+    .muted{ opacity:.84; }
+    .tiny-note{ font-size:.84rem; opacity:.8; margin-top:8px; }
+    label{ display:block; margin-bottom:6px; font-size:.93rem; opacity:.86; }
 
+    .neuro-input, .neuro-toggle{
+      width:100%; border-radius:16px; padding:11px 12px; font-size:.95rem;
+      border:2px solid var(--neuro-blue); box-shadow:var(--glow-blue);
+      background:rgba(255,255,255,.10); color:var(--text); outline:none;
+    }
+    .neuro-input:focus,.neuro-toggle:focus{ border-color:var(--neuro-pink); box-shadow:var(--glow-pink); }
+
+    .neuro-btn{
+      width:100%; border:none; cursor:pointer; color:#fff; font-weight:800;
+      padding:11px 14px; border-radius:18px;
+      background:linear-gradient(135deg,var(--nx-accent),var(--nx-accent-2));
+      box-shadow:var(--nx-glow); transition:all var(--transition);
+    }
+    .neuro-btn:hover{ transform:translateY(-1px); }
+    .neuro-btn.subtle{ background:rgba(58,58,90,.35); border:2px solid rgba(111,211,255,.35); color:var(--text); }
+    .neuro-btn.danger{ background:linear-gradient(135deg,#ff5f92,#ff2d6d); }
+
+    .row{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+
+    .picker-wrap{
+      position:relative; height:220px; overflow:hidden; border-radius:18px;
+      border:2px solid var(--neuro-blue); box-shadow:var(--glow-blue);
+      background:rgba(255,255,255,.07); margin-bottom:12px;
+    }
+    .picker{ position:absolute; inset:0; overflow-y:auto; padding:84px 12px; scroll-snap-type:y mandatory; }
+    .picker::-webkit-scrollbar{ width:0; }
+    .picker-item{
+      height:52px; margin:5px 0; display:flex; align-items:center; justify-content:center;
+      border-radius:12px; border:2px solid transparent; opacity:.52;
+      scroll-snap-align:center; transition:.2s ease; font-weight:650;
+    }
+    .picker-item.active{ opacity:1; border-color:var(--neuro-pink); box-shadow:var(--glow-pink); background:rgba(255,255,255,.08); transform:scale(1.02); }
+    .picker-focus{ position:absolute; left:10px; right:10px; top:84px; height:52px; border-radius:12px; border:2px solid var(--neuro-blue); box-shadow:var(--glow-blue); pointer-events:none; }
+
+    .status{
+      border-radius:16px; border:2px solid var(--neuro-blue); box-shadow:var(--glow-blue);
+      padding:12px; line-height:1.45; background:rgba(255,255,255,.07);
+    }
+    .status.warn{ border-color:#ff88d8; box-shadow:0 0 22px rgba(255,136,216,.7); }
+    .status.danger{ border-color:#ff4f86; box-shadow:0 0 22px rgba(255,79,134,.8); }
+    .status.ok{ border-color:#76ffd4; box-shadow:0 0 22px rgba(118,255,212,.65); }
+
+    .list{ display:grid; gap:8px; max-height:350px; overflow:auto; }
+    .expense-item{
+      display:grid; grid-template-columns:1fr auto auto; gap:8px; align-items:center;
+      border-radius:14px; border:2px solid var(--neuro-blue); box-shadow:var(--glow-blue);
+      padding:10px; background:rgba(255,255,255,.07);
+    }
+    .expense-item small{ display:block; opacity:.74; margin-top:4px; }
+
+    .chart-toolbar{ display:flex; gap:8px; margin-bottom:10px; }
+    .neuro-toggle{ cursor:pointer; padding:10px 12px; font-weight:700; background:rgba(255,255,255,.09); }
+    .neuro-toggle.active{ border-color:var(--neuro-pink); box-shadow:var(--glow-pink); background:rgba(255,255,255,.14); }
+    canvas{ width:100%; border-radius:16px; border:2px solid var(--neuro-blue); box-shadow:var(--glow-blue); background:radial-gradient(circle at 50% -25%, rgba(255,255,255,.14), rgba(255,255,255,.03)); }
+
+    .nx-theme-title{ font-weight:800; letter-spacing:1px; margin-bottom:12px; text-align:center; text-shadow:var(--nx-glow); }
+    .nx-theme-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+    .nx-theme-btn{ padding:11px; border-radius:14px; border:2px solid var(--neuro-blue); background:#000; color:#fff; cursor:pointer; font-size:.84rem; transition:.2s; box-shadow:var(--nx-glow); }
     .nx-theme-btn:active{ transform:scale(.95); }
-
     .nx-color-wrap{ margin-top:12px; display:flex; flex-direction:column; gap:6px; }
-    .nx-color-label{ font-size:.82rem; opacity:.85; }
+    .nx-color-input{ width:100%; height:44px; border:none; border-radius:14px; cursor:pointer; box-shadow:var(--nx-glow); background:none; }
 
-    .nx-color-input{
-      width:100%;
-      height:44px;
-      border:none;
-      border-radius:14px;
-      cursor:pointer;
-      box-shadow:var(--nx-glow);
-      background:none;
+    /* 🌗 Toggle Sáng / Tối — NeuroX UI */
+    .mode-toggle{
+      position:fixed; top:20px; right:20px; width:48px; height:48px; border-radius:50%;
+      border:none; font-size:20px; cursor:pointer; background:var(--card); color:var(--text);
+      box-shadow:var(--glow); transition:.25s ease; z-index:99;
     }
+    .mode-toggle:active{ transform:scale(.9); }
 
-    .tiny-note { font-size:.84rem; opacity:.8; margin-top: 8px; }
+    /* ===== 🎵 SOUND UI ===== */
+    .nx-top-controls{ display:grid; grid-template-columns: 1fr auto; gap:10px; align-items:start; margin-bottom:10px; }
+    .nx-sound-card{
+      border-radius:22px; padding:16px; border:2px solid var(--neuro-blue); box-shadow:var(--glow-blue);
+      background:rgba(255,255,255,.08); backdrop-filter:blur(16px);
+    }
+    .nx-sound-title{ text-align:center; font-weight:800; letter-spacing:1px; margin-bottom:12px; text-shadow:var(--nx-glow); }
+    .nx-sound-toggle{
+      width:100%; border-radius:18px; padding:14px; border:2px solid var(--neuro-blue);
+      background:rgba(255,255,255,.08); font-weight:800; font-size:1rem; cursor:pointer;
+      display:flex; align-items:center; justify-content:center; gap:10px; transition:.25s; box-shadow:var(--glow-blue);
+      color:var(--text);
+    }
+    .nx-sound-toggle .icon{ font-size:1.2rem; }
+    .nx-sound-toggle.active{ border-color:var(--neuro-pink); box-shadow:var(--glow-pink); background:linear-gradient(135deg,var(--nx-accent),var(--nx-accent-2)); color:white; }
+    .nx-sound-toggle:active{ transform:scale(.97); }
+
+    .palette-strip{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:10px;}
+    .palette-chip{height:14px; border-radius:999px; box-shadow:var(--glow-blue); border:1px solid rgba(255,255,255,.35);}
+    .chip1{background:var(--neuro-bg-2);} .chip2{background:var(--neuro-blue);} .chip3{background:var(--neuro-pink);} .chip4{background:var(--neuro-gold);} 
   </style>
 </head>
-<body class="dark">
+<body>
+  <button id="modeToggle" class="mode-toggle">🌙</button>
+
   <main class="app">
     <section class="neuro-card hero">
       <div class="badge">🧠 Signature: <strong>NeuroX</strong> — Neuro: thần kinh, não bộ • X: đột phá → Trí tuệ não bộ vượt giới hạn</div>
       <h1 class="neuro-title">NeuroX Finance ✨</h1>
-      <p class="muted">Bộ quản lý chi tiêu hiện đại, logic và tinh tế: nhập liệu nhanh, lưu bền vững, biểu đồ so sánh và AI đánh giá hành vi tài chính theo thuật toán thực tế, khả thi, dễ ứng dụng mỗi ngày. 🌸</p>
+      <p class="muted">Trang quản lý chi tiêu cao cấp, hiện đại, logic và nghệ thuật: dữ liệu rõ ràng, cảnh báo AI sắc nét, giao diện glow đẹp mắt, icon cute và trải nghiệm zen mà vẫn cực kỳ thực dụng. 🌸</p>
+      <div class="palette-strip">
+        <div class="palette-chip chip1"></div><div class="palette-chip chip2"></div><div class="palette-chip chip3"></div><div class="palette-chip chip4"></div>
+      </div>
     </section>
 
     <section>
@@ -374,6 +247,18 @@
 
       <div class="neuro-card">
         <div class="nx-theme-title">🎨 GIAO DIỆN NeuroX</div>
+
+        <div class="nx-top-controls">
+          <div class="nx-sound-card">
+            <div class="nx-sound-title">🎶 Âm thanh NeuroX</div>
+            <button id="nxSoundToggle" class="nx-sound-toggle active">
+              <span class="icon">🔊</span>
+              <span class="label">Âm thanh: Bật</span>
+            </button>
+          </div>
+          <div class="tiny-note">🌗 Nút sáng/tối nằm góc trên phải để truy cập siêu nhanh.</div>
+        </div>
+
         <div class="nx-theme-grid">
           <button class="nx-theme-btn" data-preset="default">🌌 Mặc định</button>
           <button class="nx-theme-btn" data-preset="ocean">🌊 Đại Dương</button>
@@ -384,13 +269,8 @@
         </div>
 
         <div class="nx-color-wrap">
-          <div class="nx-color-label">🎯 Tuỳ chỉnh màu accent</div>
+          <div class="tiny-note">🎯 Tuỳ chỉnh màu accent</div>
           <input id="themeColorInput" type="color" class="nx-color-input" />
-        </div>
-
-        <div class="row" style="margin-top:10px;">
-          <button id="modeBtn" class="neuro-btn subtle">🌓 Dark / Light</button>
-          <button id="soundBtn" class="neuro-btn subtle">🔊 Âm thanh: Bật</button>
         </div>
       </div>
     </section>
@@ -419,7 +299,7 @@
   </main>
 
   <script>
-    const STORAGE_KEY = "neurox-finance-v4";
+    const STORAGE_KEY = "neurox-finance-v5";
     const THEME_KEY = "nx-theme";
 
     const CATEGORIES = [
@@ -444,10 +324,11 @@
       editingId: null,
       soundOn: true,
       lastAuditLevel: "none",
-      darkMode: true
+      mode: "dark"
     };
 
     const el = {
+      modeToggle: document.getElementById("modeToggle"),
       incomeInput: document.getElementById("incomeInput"),
       saveIncomeBtn: document.getElementById("saveIncomeBtn"),
       resetBtn: document.getElementById("resetBtn"),
@@ -461,30 +342,24 @@
       summary: document.getElementById("summary"),
       expenseList: document.getElementById("expenseList"),
       chart: document.getElementById("chart"),
-      soundBtn: document.getElementById("soundBtn"),
-      modeBtn: document.getElementById("modeBtn"),
+      soundBtn: document.getElementById("nxSoundToggle"),
       themeColorInput: document.getElementById("themeColorInput")
     };
 
-    function formatMoney(v) {
-      return Number(v || 0).toLocaleString("vi-VN") + " đ";
-    }
+    function formatMoney(v){ return Number(v || 0).toLocaleString("vi-VN") + " đ"; }
+    function uid(){ return crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`; }
 
-    function uid() {
-      return crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`;
-    }
-
-    function saveState() {
+    function saveState(){
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         income: state.income,
         expenses: state.expenses,
         chartMode: state.chartMode,
         soundOn: state.soundOn,
-        darkMode: state.darkMode
+        mode: state.mode
       }));
     }
 
-    function loadState() {
+    function loadState(){
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return;
       try {
@@ -493,416 +368,347 @@
         state.expenses = Array.isArray(data.expenses) ? data.expenses : [];
         state.chartMode = data.chartMode === "pie" ? "pie" : "bar";
         state.soundOn = data.soundOn !== false;
-        state.darkMode = data.darkMode !== false;
-      } catch {
-        console.warn("NeuroX: invalid storage");
-      }
+        state.mode = data.mode === "light" ? "light" : "dark";
+      } catch { console.warn("NeuroX: invalid storage"); }
     }
 
-    function beep(type = "ai") {
-      if (!state.soundOn) return;
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    function nxBeep(freq=520, dur=.08){
+      if(!state.soundOn) return;
+      const ctx = new (window.AudioContext||window.webkitAudioContext)();
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
+      osc.connect(gain); gain.connect(ctx.destination);
+      gain.gain.value=.035; osc.frequency.value=freq;
+      osc.start(); osc.stop(ctx.currentTime+dur);
+    }
+
+    function playEventSound(type){
       const map = {
-        ok:[720, .06],
-        warn:[360, .11],
-        danger:[190, .15],
-        delete:[250, .08],
-        ai:[520, .08]
+        click:[560,.05], edit:[640,.06], delete:[220,.09],
+        warn:[320,.12], danger:[180,.16], success:[760,.07],
+        theme:[500,.06], chart:[620,.07], mode:[470,.07]
       };
-      const [freq, dur] = map[type] || map.ai;
-      gain.gain.value = .034;
-      osc.frequency.value = freq;
-      osc.start();
-      osc.stop(ctx.currentTime + dur);
+      const [f,d]= map[type] || map.click;
+      nxBeep(f,d);
     }
 
-    function nxApply(c1, c2) {
-      document.documentElement.style.setProperty("--nx-accent", c1);
-      document.documentElement.style.setProperty("--nx-accent-2", c2);
-      document.documentElement.style.setProperty("--nx-glow", `0 0 20px ${c1}`);
-      localStorage.setItem(THEME_KEY, JSON.stringify([c1, c2]));
+    function nxApply(c1,c2){
+      document.documentElement.style.setProperty("--nx-accent",c1);
+      document.documentElement.style.setProperty("--nx-accent-2",c2);
+      document.documentElement.style.setProperty("--nx-glow",`0 0 20px ${c1}`);
+      localStorage.setItem(THEME_KEY,JSON.stringify([c1,c2]));
     }
 
-    function nxPreset(name) {
-      const [c1, c2] = nxPresets[name];
-      nxApply(c1, c2);
-      beep("ai");
+    function nxPreset(name){ const [c1,c2]=nxPresets[name]; nxApply(c1,c2); playEventSound("theme"); }
+    function nxCustom(hex){ nxApply(hex,"#ffffff"); playEventSound("theme"); }
+
+    function loadTheme(){
+      const saved=JSON.parse(localStorage.getItem(THEME_KEY)||"null");
+      if(saved) nxApply(saved[0],saved[1]);
     }
 
-    function nxCustom(hex) {
-      nxApply(hex, "#ffffff");
-      beep("ai");
+    function syncSoundUI(){
+      el.soundBtn.classList.toggle("active", state.soundOn);
+      el.soundBtn.querySelector(".icon").textContent = state.soundOn ? "🔊" : "🔇";
+      el.soundBtn.querySelector(".label").textContent = state.soundOn ? "Âm thanh: Bật" : "Âm thanh: Tắt";
     }
 
-    function loadTheme() {
-      const saved = JSON.parse(localStorage.getItem(THEME_KEY) || "null");
-      if (saved) nxApply(saved[0], saved[1]);
+    function syncModeUI(){
+      const isLight = state.mode === "light";
+      document.body.classList.toggle("light", isLight);
+      el.modeToggle.textContent = isLight ? "☀️" : "🌙";
+      localStorage.setItem("mode", isLight ? "light" : "dark");
     }
 
-    function buildPicker() {
-      el.picker.innerHTML = "";
-      CATEGORIES.forEach((cat, index) => {
-        const node = document.createElement("div");
-        node.className = "picker-item";
-        node.textContent = cat;
-        node.addEventListener("click", () => scrollToPicker(index));
+    function buildPicker(){
+      el.picker.innerHTML="";
+      CATEGORIES.forEach((cat,index)=>{
+        const node=document.createElement("div");
+        node.className="picker-item";
+        node.textContent=cat;
+        node.addEventListener("click",()=>{ scrollToPicker(index); playEventSound("click"); });
         el.picker.appendChild(node);
       });
-      scrollToPicker(0, false);
+      scrollToPicker(0,false);
     }
 
-    function scrollToPicker(index, smooth = true) {
-      const itemHeight = 57;
-      el.picker.scrollTo({ top: index * itemHeight, behavior: smooth ? "smooth" : "auto" });
-      state.selectedCategoryIndex = index;
+    function scrollToPicker(index,smooth=true){
+      const itemHeight=57;
+      el.picker.scrollTo({top:index*itemHeight,behavior:smooth?"smooth":"auto"});
+      state.selectedCategoryIndex=index;
       refreshPickerActive();
     }
 
-    function refreshPickerActive() {
-      const itemHeight = 57;
-      const index = Math.round(el.picker.scrollTop / itemHeight);
-      state.selectedCategoryIndex = Math.max(0, Math.min(CATEGORIES.length - 1, index));
-      [...el.picker.children].forEach((n, i) => n.classList.toggle("active", i === state.selectedCategoryIndex));
+    function refreshPickerActive(){
+      const itemHeight=57;
+      const index=Math.round(el.picker.scrollTop/itemHeight);
+      state.selectedCategoryIndex=Math.max(0,Math.min(CATEGORIES.length-1,index));
+      [...el.picker.children].forEach((n,i)=>n.classList.toggle("active",i===state.selectedCategoryIndex));
     }
 
-    function currentCategory() {
-      const value = CATEGORIES[state.selectedCategoryIndex] || CATEGORIES[0];
-      if (value !== "✍️ Mục khác") return value;
-      const custom = el.otherInput.value.trim();
-      return custom ? `✍️ ${custom}` : "✍️ Mục khác";
+    function currentCategory(){
+      const value=CATEGORIES[state.selectedCategoryIndex]||CATEGORIES[0];
+      if(value!=="✍️ Mục khác") return value;
+      const custom=el.otherInput.value.trim();
+      return custom?`✍️ ${custom}`:"✍️ Mục khác";
     }
 
-    function groupedExpenses() {
-      return state.expenses.reduce((acc, item) => {
-        acc[item.category] = (acc[item.category] || 0) + Number(item.amount || 0);
-        return acc;
-      }, {});
+    function groupedExpenses(){
+      return state.expenses.reduce((acc,item)=>{ acc[item.category]=(acc[item.category]||0)+Number(item.amount||0); return acc; },{});
     }
 
-    function auditFinance() {
-      const income = Number(state.income || 0);
-      const byCategory = groupedExpenses();
-      const categories = Object.keys(byCategory);
-      const categoryCount = categories.length;
-      const totalExpense = Object.values(byCategory).reduce((a, b) => a + b, 0);
-      const idealPerCategory = categoryCount > 0 ? income / categoryCount : 0;
+    function auditFinance(){
+      const income=Number(state.income||0);
+      const byCategory=groupedExpenses();
+      const categories=Object.keys(byCategory);
+      const categoryCount=categories.length;
+      const totalExpense=Object.values(byCategory).reduce((a,b)=>a+b,0);
+      const idealPerCategory=categoryCount>0?income/categoryCount:0;
 
-      let level = "ok";
-      let text = "🌿 Hãy thêm dữ liệu để AI bắt đầu nhận xét hành vi chi tiêu.";
+      let level="ok";
+      let text="🌿 Hãy thêm dữ liệu để AI bắt đầu nhận xét hành vi chi tiêu.";
 
-      if (income <= 0) {
-        level = "warn";
-        text = "🩷 Bạn cần nhập thu nhập tháng để hệ thống tạo ngưỡng cảnh báo chính xác.";
-      } else if (categoryCount === 0) {
-        level = "warn";
-        text = "🪷 Chưa có khoản chi nào. Thêm dữ liệu để xem đánh giá AI và biểu đồ.";
-      } else if (totalExpense > income) {
-        level = "danger";
-        text = `🚨 Cảnh báo đỏ: tổng chi đã vượt thu nhập ${formatMoney(totalExpense - income)}. Ưu tiên giảm 1-2 danh mục cao nhất ngay hôm nay.`;
-      } else {
-        const over = categories.filter((cat) => byCategory[cat] > idealPerCategory);
-        if (over.length) {
-          level = "warn";
-          text = `⚠️ Cảnh báo hồng: ${over.join(", ")} đang vượt ngưỡng trung bình theo thuật toán. Gợi ý: chia ngân sách theo tuần để giữ nhịp ổn định.`;
-        } else {
-          level = "ok";
-          text = "✅ Chi tiêu đang cân đối tốt. Giữ nhịp đều đặn, bạn đang kiểm soát rất tốt! ✨";
+      if(income<=0){
+        level="warn";
+        text="🩷 Bạn cần nhập thu nhập tháng để hệ thống tạo ngưỡng cảnh báo chính xác.";
+      }else if(categoryCount===0){
+        level="warn";
+        text="🪷 Chưa có khoản chi nào. Thêm dữ liệu để xem đánh giá AI và biểu đồ.";
+      }else if(totalExpense>income){
+        level="danger";
+        text=`🚨 Cảnh báo đỏ: tổng chi đã vượt thu nhập ${formatMoney(totalExpense-income)}. Ưu tiên giảm 1-2 danh mục cao nhất ngay hôm nay.`;
+      }else{
+        const over=categories.filter((cat)=>byCategory[cat]>idealPerCategory);
+        if(over.length){
+          level="warn";
+          text=`⚠️ Cảnh báo hồng: ${over.join(", ")} đang vượt ngưỡng trung bình theo thuật toán. Gợi ý: chia ngân sách theo tuần để giữ nhịp ổn định.`;
+        }else{
+          level="ok";
+          text="✅ Chi tiêu đang cân đối tốt. Giữ nhịp đều đặn, bạn đang kiểm soát rất tốt! ✨";
         }
       }
 
-      el.aiStatus.className = `status ${level}`;
-      el.aiStatus.textContent = text;
-      el.summary.textContent = `Thu nhập: ${formatMoney(income)} • Tổng chi: ${formatMoney(totalExpense)} • Còn lại: ${formatMoney(Math.max(0, income - totalExpense))} • Danh mục hiện có: ${categoryCount}`;
+      el.aiStatus.className=`status ${level}`;
+      el.aiStatus.textContent=text;
+      el.summary.textContent=`Thu nhập: ${formatMoney(income)} • Tổng chi: ${formatMoney(totalExpense)} • Còn lại: ${formatMoney(Math.max(0,income-totalExpense))} • Danh mục hiện có: ${categoryCount}`;
 
-      if (totalExpense > income) {
-        el.incomeHint.textContent = "🚨 Thu nhập hiện không đủ cho tổng chi. Cần giảm chi hoặc tăng thu nhập để cân bằng.";
-      } else if (categoryCount > 0) {
-        el.incomeHint.textContent = `📌 Ngưỡng nội bộ AI đang tính theo income / số danh mục hiện có (${categoryCount}).`;
-      } else {
-        el.incomeHint.textContent = "💡 Mẹo NeuroX: cập nhật thu nhập trước khi thêm chi tiêu để AI phân tích chính xác.";
+      if(totalExpense>income){
+        el.incomeHint.textContent="🚨 Thu nhập hiện không đủ cho tổng chi. Cần giảm chi hoặc tăng thu nhập để cân bằng.";
+      }else if(categoryCount>0){
+        el.incomeHint.textContent=`📌 Ngưỡng nội bộ AI đang tính theo income / số danh mục hiện có (${categoryCount}).`;
+      }else{
+        el.incomeHint.textContent="💡 Mẹo NeuroX: cập nhật thu nhập trước khi thêm chi tiêu để AI phân tích chính xác.";
       }
 
-      if (state.lastAuditLevel !== level) {
-        if (level === "danger") beep("danger");
-        else if (level === "warn") beep("warn");
-        else beep("ok");
-        state.lastAuditLevel = level;
+      if(state.lastAuditLevel!==level){
+        if(level==="danger") playEventSound("danger");
+        else if(level==="warn") playEventSound("warn");
+        else playEventSound("success");
+        state.lastAuditLevel=level;
       }
     }
 
-    function drawChart() {
-      const canvas = el.chart;
-      const ctx = canvas.getContext("2d");
-      const W = canvas.width;
-      const H = canvas.height;
-      ctx.clearRect(0, 0, W, H);
+    function drawChart(){
+      const canvas=el.chart, ctx=canvas.getContext("2d");
+      const W=canvas.width, H=canvas.height;
+      ctx.clearRect(0,0,W,H);
 
-      const grouped = groupedExpenses();
-      const labels = Object.keys(grouped);
-      const values = Object.values(grouped);
+      const grouped=groupedExpenses();
+      const labels=Object.keys(grouped);
+      const values=Object.values(grouped);
 
-      if (!labels.length) {
-        ctx.fillStyle = state.darkMode ? "#efe8ff" : "#3a3157";
-        ctx.font = "20px Inter";
-        ctx.fillText("Chưa có dữ liệu biểu đồ 🌙", 24, 46);
+      if(!labels.length){
+        ctx.fillStyle = state.mode === "light" ? "#3a3157" : "#efe8ff";
+        ctx.font="20px Inter";
+        ctx.fillText("Chưa có dữ liệu biểu đồ 🌙",24,46);
         return;
       }
 
-      const colors = labels.map((_, i) => `hsl(${(i * 49) % 360} 85% 64%)`);
+      const colors=labels.map((_,i)=>`hsl(${(i*49)%360} 85% 64%)`);
 
-      if (state.chartMode === "bar") {
-        const max = Math.max(...values, 1);
-        const left = 58;
-        const top = 24;
-        const cw = W - 90;
-        const ch = H - 86;
+      if(state.chartMode==="bar"){
+        const max=Math.max(...values,1), left=58, top=24, cw=W-90, ch=H-86;
+        ctx.strokeStyle= state.mode === "light" ? "rgba(0,0,0,.2)" : "rgba(255,255,255,.22)";
+        for(let i=0;i<5;i++){ const y=top+(ch/4)*i; ctx.beginPath(); ctx.moveTo(left,y); ctx.lineTo(left+cw,y); ctx.stroke(); }
 
-        ctx.strokeStyle = state.darkMode ? "rgba(255,255,255,.22)" : "rgba(0,0,0,.2)";
-        for (let i = 0; i < 5; i++) {
-          const y = top + (ch / 4) * i;
-          ctx.beginPath();
-          ctx.moveTo(left, y);
-          ctx.lineTo(left + cw, y);
-          ctx.stroke();
-        }
-
-        labels.forEach((lb, i) => {
-          const x = left + (i * cw) / labels.length + 12;
-          const bw = Math.max(26, cw / labels.length - 18);
-          const h = (values[i] / max) * (ch - 8);
-          const y = top + ch - h;
-
-          const grad = ctx.createLinearGradient(0, y, 0, top + ch);
-          grad.addColorStop(0, colors[i]);
-          grad.addColorStop(1, "rgba(255,255,255,.2)");
-          ctx.fillStyle = grad;
-          ctx.fillRect(x, y, bw, h);
-
-          ctx.fillStyle = state.darkMode ? "#fbf3ff" : "#2b2149";
-          ctx.font = "12px Inter";
-          ctx.fillText(values[i].toLocaleString("vi-VN"), x, y - 6);
-          ctx.fillText(lb.slice(0, 12), x, top + ch + 18);
+        labels.forEach((lb,i)=>{
+          const x=left+(i*cw)/labels.length+12;
+          const bw=Math.max(26,cw/labels.length-18);
+          const h=(values[i]/max)*(ch-8);
+          const y=top+ch-h;
+          const grad=ctx.createLinearGradient(0,y,0,top+ch);
+          grad.addColorStop(0,colors[i]); grad.addColorStop(1,"rgba(255,255,255,.2)");
+          ctx.fillStyle=grad; ctx.fillRect(x,y,bw,h);
+          ctx.fillStyle= state.mode === "light" ? "#2b2149" : "#fbf3ff";
+          ctx.font="12px Inter";
+          ctx.fillText(values[i].toLocaleString("vi-VN"),x,y-6);
+          ctx.fillText(lb.slice(0,12),x,top+ch+18);
         });
-      } else {
-        const total = values.reduce((a, b) => a + b, 0);
-        let angleStart = -Math.PI / 2;
-        const cx = W * 0.34;
-        const cy = H * 0.53;
-        const r = Math.min(W, H) * 0.28;
-
-        values.forEach((v, i) => {
-          const angle = (v / total) * 2 * Math.PI;
-          ctx.beginPath();
-          ctx.moveTo(cx, cy);
-          ctx.fillStyle = colors[i];
-          ctx.arc(cx, cy, r, angleStart, angleStart + angle);
-          ctx.closePath();
-          ctx.fill();
-          angleStart += angle;
+      }else{
+        const total=values.reduce((a,b)=>a+b,0);
+        let angleStart=-Math.PI/2;
+        const cx=W*0.34, cy=H*0.53, r=Math.min(W,H)*0.28;
+        values.forEach((v,i)=>{
+          const angle=(v/total)*2*Math.PI;
+          ctx.beginPath(); ctx.moveTo(cx,cy); ctx.fillStyle=colors[i];
+          ctx.arc(cx,cy,r,angleStart,angleStart+angle); ctx.closePath(); ctx.fill(); angleStart+=angle;
         });
-
         ctx.beginPath();
-        ctx.fillStyle = state.darkMode ? "rgba(6,6,14,.72)" : "rgba(255,255,255,.82)";
-        ctx.arc(cx, cy, r * 0.5, 0, 2 * Math.PI);
-        ctx.fill();
+        ctx.fillStyle= state.mode === "light" ? "rgba(255,255,255,.82)" : "rgba(6,6,14,.72)";
+        ctx.arc(cx,cy,r*0.5,0,2*Math.PI); ctx.fill();
+        ctx.fillStyle= state.mode === "light" ? "#2b2149" : "#fff";
+        ctx.font="bold 14px Inter";
+        ctx.fillText("Tổng chi",cx-28,cy-4); ctx.fillText(formatMoney(total),cx-52,cy+18);
 
-        ctx.fillStyle = state.darkMode ? "#fff" : "#2b2149";
-        ctx.font = "bold 14px Inter";
-        ctx.fillText("Tổng chi", cx - 28, cy - 4);
-        ctx.fillText(formatMoney(total), cx - 52, cy + 18);
-
-        labels.forEach((lb, i) => {
-          const y = 38 + i * 27;
-          const lx = W * 0.62;
-          ctx.fillStyle = colors[i];
-          ctx.fillRect(lx, y, 14, 14);
-          ctx.fillStyle = state.darkMode ? "#f6edff" : "#2b2149";
-          ctx.font = "13px Inter";
-          const pct = ((values[i] / total) * 100).toFixed(1);
-          ctx.fillText(`${lb} — ${pct}% (${values[i].toLocaleString("vi-VN")})`, lx + 20, y + 12);
+        labels.forEach((lb,i)=>{
+          const y=38+i*27, lx=W*0.62;
+          ctx.fillStyle=colors[i]; ctx.fillRect(lx,y,14,14);
+          ctx.fillStyle= state.mode === "light" ? "#2b2149" : "#f6edff";
+          ctx.font="13px Inter";
+          const pct=((values[i]/total)*100).toFixed(1);
+          ctx.fillText(`${lb} — ${pct}% (${values[i].toLocaleString("vi-VN")})`,lx+20,y+12);
         });
       }
     }
 
-    function renderExpenseList() {
-      el.expenseList.innerHTML = "";
-      if (!state.expenses.length) {
-        el.expenseList.innerHTML = `<div class="status">Chưa có khoản chi nào. Hãy thêm dữ liệu để AI và biểu đồ hoạt động nhé 💫</div>`;
+    function renderExpenseList(){
+      el.expenseList.innerHTML="";
+      if(!state.expenses.length){
+        el.expenseList.innerHTML=`<div class="status">Chưa có khoản chi nào. Hãy thêm dữ liệu để AI và biểu đồ hoạt động nhé 💫</div>`;
         return;
       }
 
-      state.expenses
-        .slice()
-        .sort((a, b) => b.createdAt - a.createdAt)
-        .forEach((item) => {
-          const card = document.createElement("article");
-          card.className = "expense-item";
-          card.innerHTML = `
-            <div>
-              <strong>${item.category}</strong>
-              <small>${new Date(item.createdAt).toLocaleString("vi-VN")}</small>
-            </div>
-            <div><strong>${formatMoney(item.amount)}</strong></div>
-            <div class="row" style="grid-template-columns:1fr 1fr;">
-              <button class="neuro-btn subtle" data-action="edit" data-id="${item.id}">✏️</button>
-              <button class="neuro-btn danger" data-action="delete" data-id="${item.id}">🗑️</button>
-            </div>
-          `;
-          el.expenseList.appendChild(card);
-        });
-    }
-
-    function resetEditor() {
-      state.editingId = null;
-      el.addBtn.textContent = "➕ Thêm khoản chi";
-      el.cancelEditBtn.disabled = true;
-      el.amountInput.value = "";
-      el.otherInput.value = "";
-      scrollToPicker(0, false);
-    }
-
-    function addOrUpdateExpense() {
-      const income = Number(state.income || 0);
-      if (income <= 0) {
-        alert("Vui lòng nhập thu nhập hợp lệ trước khi thêm khoản chi.");
-        return;
-      }
-
-      const amount = Number(el.amountInput.value || 0);
-      if (!amount || amount <= 0) {
-        alert("Số tiền chi phải lớn hơn 0.");
-        return;
-      }
-
-      const category = currentCategory();
-      const now = Date.now();
-
-      if (state.editingId) {
-        const item = state.expenses.find((x) => x.id === state.editingId);
-        if (!item) return;
-        item.category = category;
-        item.amount = amount;
-        item.createdAt = now;
-      } else {
-        state.expenses.push({ id: uid(), category, amount, createdAt: now });
-      }
-
-      beep("ok");
-      saveState();
-      resetEditor();
-      renderAll();
-    }
-
-    function editExpense(id) {
-      const item = state.expenses.find((x) => x.id === id);
-      if (!item) return;
-      state.editingId = id;
-      el.addBtn.textContent = "✅ Cập nhật khoản chi";
-      el.cancelEditBtn.disabled = false;
-      el.amountInput.value = item.amount;
-
-      if (item.category.startsWith("✍️")) {
-        state.selectedCategoryIndex = CATEGORIES.indexOf("✍️ Mục khác");
-        el.otherInput.value = item.category.replace(/^✍️\s*/, "");
-      } else {
-        const idx = CATEGORIES.indexOf(item.category);
-        state.selectedCategoryIndex = idx >= 0 ? idx : 0;
-        el.otherInput.value = "";
-      }
-
-      scrollToPicker(state.selectedCategoryIndex);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function deleteExpense(id) {
-      state.expenses = state.expenses.filter((x) => x.id !== id);
-      beep("delete");
-      saveState();
-      renderAll();
-    }
-
-    function syncUI() {
-      el.incomeInput.value = state.income || "";
-      document.body.classList.toggle("dark", state.darkMode);
-      el.soundBtn.textContent = state.soundOn ? "🔊 Âm thanh: Bật" : "🔇 Âm thanh: Tắt";
-
-      document.querySelectorAll(".neuro-toggle[data-mode]").forEach((btn) => {
-        btn.classList.toggle("active", btn.dataset.mode === state.chartMode);
+      state.expenses.slice().sort((a,b)=>b.createdAt-a.createdAt).forEach((item)=>{
+        const card=document.createElement("article");
+        card.className="expense-item";
+        card.innerHTML=`
+          <div>
+            <strong>${item.category}</strong>
+            <small>${new Date(item.createdAt).toLocaleString("vi-VN")}</small>
+          </div>
+          <div><strong>${formatMoney(item.amount)}</strong></div>
+          <div class="row" style="grid-template-columns:1fr 1fr;">
+            <button class="neuro-btn subtle" data-action="edit" data-id="${item.id}">✏️</button>
+            <button class="neuro-btn danger" data-action="delete" data-id="${item.id}">🗑️</button>
+          </div>
+        `;
+        el.expenseList.appendChild(card);
       });
     }
 
-    function renderAll() {
-      syncUI();
+    function resetEditor(){
+      state.editingId=null;
+      el.addBtn.textContent="➕ Thêm khoản chi";
+      el.cancelEditBtn.disabled=true;
+      el.amountInput.value="";
+      el.otherInput.value="";
+      scrollToPicker(0,false);
+    }
+
+    function addOrUpdateExpense(){
+      const income=Number(state.income||0);
+      if(income<=0){ alert("Vui lòng nhập thu nhập hợp lệ trước khi thêm khoản chi."); playEventSound("warn"); return; }
+      const amount=Number(el.amountInput.value||0);
+      if(!amount || amount<=0){ alert("Số tiền chi phải lớn hơn 0."); playEventSound("warn"); return; }
+
+      const category=currentCategory();
+      const now=Date.now();
+      if(state.editingId){
+        const item=state.expenses.find((x)=>x.id===state.editingId);
+        if(!item) return;
+        item.category=category; item.amount=amount; item.createdAt=now;
+        playEventSound("edit");
+      }else{
+        state.expenses.push({id:uid(),category,amount,createdAt:now});
+        playEventSound("success");
+      }
+      saveState(); resetEditor(); renderAll();
+    }
+
+    function editExpense(id){
+      const item=state.expenses.find((x)=>x.id===id);
+      if(!item) return;
+      state.editingId=id;
+      el.addBtn.textContent="✅ Cập nhật khoản chi";
+      el.cancelEditBtn.disabled=false;
+      el.amountInput.value=item.amount;
+      if(item.category.startsWith("✍️")){
+        state.selectedCategoryIndex=CATEGORIES.indexOf("✍️ Mục khác");
+        el.otherInput.value=item.category.replace(/^✍️\s*/,"");
+      }else{
+        const idx=CATEGORIES.indexOf(item.category);
+        state.selectedCategoryIndex=idx>=0?idx:0;
+        el.otherInput.value="";
+      }
+      scrollToPicker(state.selectedCategoryIndex);
+      playEventSound("edit");
+      window.scrollTo({top:0,behavior:"smooth"});
+    }
+
+    function deleteExpense(id){
+      state.expenses=state.expenses.filter((x)=>x.id!==id);
+      playEventSound("delete");
+      saveState(); renderAll();
+    }
+
+    function renderAll(){
+      syncModeUI();
+      syncSoundUI();
+      el.incomeInput.value=state.income||"";
+      document.querySelectorAll(".neuro-toggle[data-mode]").forEach((btn)=>btn.classList.toggle("active",btn.dataset.mode===state.chartMode));
       renderExpenseList();
       drawChart();
       auditFinance();
     }
 
-    function bindEvents() {
-      el.saveIncomeBtn.addEventListener("click", () => {
-        const value = Number(el.incomeInput.value || 0);
-        if (value < 0) {
-          alert("Thu nhập không được âm.");
-          return;
-        }
-        state.income = value;
-        saveState();
-        beep("ok");
-        renderAll();
+    function bindEvents(){
+      // mode toggle module behavior
+      if(localStorage.getItem("mode")==="light") state.mode="light";
+      el.modeToggle.addEventListener("click",()=>{
+        state.mode = state.mode === "light" ? "dark" : "light";
+        playEventSound("mode");
+        saveState(); renderAll();
       });
 
-      el.resetBtn.addEventListener("click", () => {
-        if (!confirm("Bạn chắc chắn muốn xoá toàn bộ dữ liệu?")) return;
-        state.income = 0;
-        state.expenses = [];
-        state.lastAuditLevel = "none";
-        resetEditor();
-        saveState();
-        beep("delete");
-        renderAll();
+      el.soundBtn.addEventListener("click",()=>{
+        const next = !state.soundOn;
+        if(next){ state.soundOn=true; playEventSound("success"); }
+        else { playEventSound("warn"); state.soundOn=false; }
+        saveState(); renderAll();
       });
 
-      el.addBtn.addEventListener("click", addOrUpdateExpense);
-      el.cancelEditBtn.addEventListener("click", resetEditor);
-      el.picker.addEventListener("scroll", refreshPickerActive);
-
-      document.querySelectorAll(".neuro-toggle[data-mode]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          state.chartMode = btn.dataset.mode;
-          saveState();
-          beep("ai");
-          renderAll();
-        });
+      el.saveIncomeBtn.addEventListener("click",()=>{
+        const value=Number(el.incomeInput.value||0);
+        if(value<0){ alert("Thu nhập không được âm."); playEventSound("warn"); return; }
+        state.income=value;
+        saveState(); playEventSound("success"); renderAll();
       });
 
-      el.soundBtn.addEventListener("click", () => {
-        state.soundOn = !state.soundOn;
-        saveState();
-        renderAll();
+      el.resetBtn.addEventListener("click",()=>{
+        if(!confirm("Bạn chắc chắn muốn xoá toàn bộ dữ liệu?")) return;
+        state.income=0; state.expenses=[]; state.lastAuditLevel="none";
+        resetEditor(); saveState(); playEventSound("delete"); renderAll();
       });
 
-      el.modeBtn.addEventListener("click", () => {
-        state.darkMode = !state.darkMode;
-        saveState();
-        renderAll();
+      el.addBtn.addEventListener("click",addOrUpdateExpense);
+      el.cancelEditBtn.addEventListener("click",()=>{ resetEditor(); playEventSound("click"); });
+      el.picker.addEventListener("scroll",refreshPickerActive);
+
+      document.querySelectorAll(".neuro-toggle[data-mode]").forEach((btn)=>{
+        btn.addEventListener("click",()=>{ state.chartMode=btn.dataset.mode; saveState(); playEventSound("chart"); renderAll(); });
       });
 
-      document.querySelectorAll(".nx-theme-btn[data-preset]").forEach((btn) => {
-        btn.addEventListener("click", () => nxPreset(btn.dataset.preset));
+      document.querySelectorAll(".nx-theme-btn[data-preset]").forEach((btn)=>{
+        btn.addEventListener("click",()=>nxPreset(btn.dataset.preset));
       });
+      el.themeColorInput.addEventListener("change",(e)=>nxCustom(e.target.value));
 
-      el.themeColorInput.addEventListener("change", (e) => nxCustom(e.target.value));
-
-      el.expenseList.addEventListener("click", (event) => {
-        const target = event.target.closest("button[data-action]");
-        if (!target) return;
-        const id = target.dataset.id;
-        if (target.dataset.action === "edit") editExpense(id);
-        if (target.dataset.action === "delete") deleteExpense(id);
+      el.expenseList.addEventListener("click",(event)=>{
+        const target=event.target.closest("button[data-action]");
+        if(!target) return;
+        const id=target.dataset.id;
+        if(target.dataset.action==="edit") editExpense(id);
+        if(target.dataset.action==="delete") deleteExpense(id);
       });
     }
 
