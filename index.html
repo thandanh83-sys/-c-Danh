@@ -1,260 +1,665 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>NeuroX Finance</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>NeuroX Finance</title>
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --bg-2: #111111;
+      --neu-purple: #a29bfe;
+      --neu-pink: #ff8fab;
+      --glass: rgba(255,255,255,0.08);
+      --glass-border: rgba(255,255,255,0.16);
+      --text: #f7f8ff;
+      --muted: #b9b6d8;
+      --ok: #85f2c3;
+      --warn: #ffd166;
+      --danger: #ff8fab;
+      --space-1: 8px;
+      --space-2: 16px;
+      --space-3: 24px;
+      --space-4: 32px;
+    }
 
-<style>
-:root{
---bg:#0a0a0a;
---glass:rgba(255,255,255,.06);
---accent:#ff6ec7;
---blue:#6fd3ff;
---radius:110px;
---item-h:48px;
-}
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+    body {
+      min-height: 100vh;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 10%, rgba(162,155,254,.26), transparent 42%),
+        radial-gradient(circle at 88% 88%, rgba(255,143,171,.26), transparent 42%),
+        linear-gradient(155deg, var(--bg), var(--bg-2));
+      padding: var(--space-3) var(--space-2);
+    }
 
-body{
-margin:0;
-font-family:system-ui,-apple-system,Segoe UI,sans-serif;
-background:
-radial-gradient(circle at 10% 10%,#1a1a2e,transparent),
-radial-gradient(circle at 90% 90%,#2a0033,transparent),
-var(--bg);
-color:#fff;
-display:flex;
-flex-direction:column;
-align-items:center;
-padding:30px 16px;
-}
+    .app { width: min(980px, 100%); margin: 0 auto; }
 
-h1{
-font-weight:300;
-letter-spacing:3px;
-margin-bottom:6px;
-text-shadow:0 0 20px rgba(255,110,199,.6);
-animation:glow 3s ease-in-out infinite alternate;
-}
+    .hero {
+      text-align: center;
+      margin-bottom: var(--space-3);
+      animation: breatheLight 5s ease-in-out infinite;
+    }
 
-@keyframes glow{
-from{text-shadow:0 0 10px rgba(255,110,199,.3);}
-to{text-shadow:0 0 30px rgba(255,110,199,.9);}
-}
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      letter-spacing: .04em;
+      background: linear-gradient(120deg, var(--neu-purple), var(--neu-pink));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 22px rgba(255, 143, 171, .35);
+    }
 
-.signature{
-font-size:.8rem;
-opacity:.6;
-text-align:center;
-margin-bottom:20px;
-}
+    .signature { color: var(--muted); margin-top: var(--space-1); }
+    .slogan { color: var(--neu-pink); margin-top: var(--space-1); font-weight: 700; }
 
-.card{
-width:100%;
-max-width:420px;
-padding:18px;
-border-radius:26px;
-background:var(--glass);
-backdrop-filter:blur(14px);
-border:1px solid rgba(255,255,255,.12);
-box-shadow:0 20px 60px rgba(0,0,0,.7);
-margin-bottom:18px;
-animation:float 6s ease-in-out infinite;
-}
+    @keyframes breatheLight {
+      0%,100% { filter: drop-shadow(0 0 0 rgba(162,155,254,.15)); }
+      50% { filter: drop-shadow(0 0 14px rgba(162,155,254,.38)); }
+    }
 
-@keyframes float{
-0%,100%{transform:translateY(0);}
-50%{transform:translateY(-6px);}
-}
+    .grid { display: grid; gap: var(--space-2); }
 
-.zen-picker{
-max-height:220px;
-overflow:auto;
-margin-bottom:12px;
-border:1px solid rgba(255,255,255,.12);
-border-radius:14px;
-padding:6px;
-}
+    .card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(14px);
+      border-radius: 18px;
+      padding: var(--space-2);
+      box-shadow: 0 12px 38px rgba(0,0,0,.38);
+      position: relative;
+      overflow: hidden;
+      transition: transform .24s ease, box-shadow .24s ease, border-color .24s ease;
+    }
 
-.wheel div{
-padding:10px;
-border-radius:10px;
-cursor:pointer;
-transition:.2s ease;
-}
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(130deg, rgba(162,155,254,.1), rgba(255,143,171,.08));
+      opacity: .5;
+    }
 
-.wheel div.active,
-.wheel div:hover{
-background:rgba(255,255,255,.12);
-}
+    .card > * { position: relative; z-index: 1; }
 
-input{
-width:100%;
-padding:14px;
-margin-bottom:12px;
-border-radius:16px;
-border:1px solid rgba(255,255,255,.2);
-background:#000;
-color:#fff;
-outline:none;
-box-shadow:0 0 10px rgba(255,110,199,.3);
-}
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255,255,255,.34);
+      box-shadow: 0 16px 50px rgba(0,0,0,.5), 0 0 28px rgba(162,155,254,.25);
+    }
 
-button{
-width:100%;
-padding:14px;
-border:none;
-border-radius:18px;
-background:linear-gradient(45deg,#ff6ec7,#6fd3ff);
-font-weight:700;
-cursor:pointer;
-color:#000;
-}
+    h2 { color: var(--neu-purple); margin-bottom: var(--space-2); font-size: 1.1rem; }
 
-button:active{transform:scale(.96);}
+    .row { display: grid; grid-template-columns: 1fr auto; gap: var(--space-1); }
+    .row-wrap { display: flex; flex-wrap: wrap; gap: var(--space-1); align-items: center; }
 
-.list-item{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:10px;
-border-radius:12px;
-background:rgba(255,255,255,.05);
-margin-bottom:6px;
-gap:8px;
-}
+    input, select, button {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.2);
+      background: rgba(11,11,16,.65);
+      color: var(--text);
+      padding: 11px 12px;
+      font-weight: 600;
+      outline: none;
+    }
 
-.actions button{
-width:auto;
-padding:6px 10px;
-font-size:.8rem;
-margin-left:4px;
-}
+    input:focus, select:focus {
+      border-color: var(--neu-purple);
+      box-shadow: 0 0 0 2px rgba(162,155,254,.28);
+    }
 
-canvas{
-width:100%;
-background:#000;
-border-radius:20px;
-margin-top:10px;
-}
-</style>
+    button {
+      cursor: pointer;
+      border: none;
+      color: #130f2b;
+      background: linear-gradient(135deg, var(--neu-purple), var(--neu-pink));
+      transition: transform .15s ease, filter .15s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    button:hover { transform: translateY(-1px); filter: saturate(1.08); }
+
+    .ghost {
+      background: rgba(255,255,255,.08);
+      color: var(--text);
+      border: 1px dashed rgba(255,255,255,.3);
+    }
+
+    .stats { display: grid; grid-template-columns: repeat(4,1fr); gap: var(--space-1); }
+    .stat { padding: var(--space-1); border-radius: 12px; background: rgba(11,11,16,.45); border: 1px solid rgba(255,255,255,.14); }
+    .stat .k { color: var(--muted); font-size: .8rem; }
+    .stat .v { font-weight: 800; margin-top: 2px; }
+
+    .list { display: grid; gap: var(--space-1); }
+    .item {
+      padding: var(--space-1);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(11,11,16,.45);
+      display: grid;
+      gap: 6px;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .top { display: flex; justify-content: space-between; gap: var(--space-1); }
+    .amount { color: var(--neu-pink); font-weight: 800; }
+    .meta { color: var(--muted); font-size: .82rem; }
+    .actions { display: flex; justify-content: flex-end; gap: 6px; }
+    .actions button { width: auto; padding: 6px 10px; font-size: .8rem; }
+
+    .ai {
+      border: 1px solid rgba(162,155,254,.45);
+      border-radius: 12px;
+      padding: 12px;
+      background: linear-gradient(130deg, rgba(162,155,254,.13), rgba(255,143,171,.12));
+      position: relative;
+      overflow: hidden;
+    }
+    .ai::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -150%;
+      width: 120%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.2), transparent);
+      animation: shimmer 4.5s linear infinite;
+    }
+
+    @keyframes shimmer {
+      to { left: 180%; }
+    }
+
+    .danger { animation: shake .34s linear 1; }
+    @keyframes shake {
+      25% { transform: translateX(-3px); }
+      50% { transform: translateX(3px); }
+      75% { transform: translateX(-2px); }
+    }
+
+    @media (max-width: 840px) {
+      .stats { grid-template-columns: repeat(2,1fr); }
+      .row { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="app">
+    <header class="hero">
+      <h1>🧠 NeuroX Finance</h1>
+      <p class="signature">NeuroX — Neuro: thần kinh, não bộ · X: đột phá → Trí tuệ não bộ vượt giới hạn</p>
+      <p class="slogan">✨ Quản trị bằng Logic — Thưởng thức bằng Tâm hồn</p>
+    </header>
 
-<h1>NeuroX Finance</h1>
-<div class="signature">
-NeuroX — Neuro: thần kinh, não bộ; X: đột phá → Trí tuệ não bộ vượt giới hạn
-</div>
+    <section class="card grid">
+      <h2>⚙️ Điều hướng tinh gọn</h2>
+      <div class="row-wrap">
+        <input id="income" type="number" min="0" step="1000" placeholder="Nhập thu nhập" style="flex:1 1 220px;">
+        <button id="saveIncome" type="button" style="width:auto;padding-inline:16px;">✅ Lưu thu nhập</button>
+      </div>
+      <div class="row-wrap">
+        <select id="category" style="flex:2 1 260px;"></select>
+        <input id="amount" type="number" min="0" step="1000" placeholder="Số tiền" style="flex:1 1 140px;">
+        <button id="addExpense" type="button" style="width:auto;padding-inline:16px;">➕ Thêm</button>
+      </div>
+      <div class="row-wrap">
+        <button id="toggleCustom" class="ghost" type="button" style="width:auto;">🧩 Danh mục tùy chỉnh</button>
+        <button id="toggleSound" class="ghost" type="button" style="width:auto;">🔊 Sound: On</button>
+      </div>
+      <div id="customBox" style="display:none;" class="row-wrap">
+        <input id="customCategory" type="text" placeholder="Tên danh mục mới..." style="flex:1 1 220px;">
+        <button id="addCustom" type="button" style="width:auto;padding-inline:16px;">💾 Lưu danh mục</button>
+      </div>
+    </section>
 
-<div class="card">
-<div class="zen-picker">
-<div class="wheel" id="wheel"></div>
-</div>
+    <section class="card grid">
+      <h2>📊 Trạng thái nhận thức tài chính</h2>
+      <div class="stats">
+        <div class="stat"><div class="k">Thu nhập</div><div class="v" id="incomeView">0 ₫</div></div>
+        <div class="stat"><div class="k">Tổng chi</div><div class="v" id="spentView">0 ₫</div></div>
+        <div class="stat"><div class="k">Số dư</div><div class="v" id="balanceView">0 ₫</div></div>
+        <div class="stat"><div class="k">Tiết kiệm</div><div class="v" id="savePct">0%</div></div>
+      </div>
+      <canvas id="chart" width="900" height="220"></canvas>
+    </section>
 
-<input type="number" id="amt" placeholder="Số tiền">
-<button onclick="addExpense()">Thêm chi tiêu</button>
-</div>
+    <section class="card grid">
+      <h2>🧾 Nhật ký giao dịch</h2>
+      <div id="list" class="list"></div>
+    </section>
 
-<div class="card">
-<div id="list"></div>
-<canvas id="chart" width="380" height="180"></canvas>
-</div>
+    <section class="card">
+      <h2>🤖 NeuroX Auditor</h2>
+      <div id="ai" class="ai">🪷 NeuroX đang lắng nghe dữ liệu của bạn...</div>
+    </section>
+  </div>
 
-<script>
-let data=JSON.parse(localStorage.getItem("nx"))||[];
+  <script>
+    const STORAGE_KEY = 'nx_neurox_v2';
+    const fixedCategories = [
+      '🍱 Ăn uống','☕ Cafe','🛍️ Mua sắm','🚗 Di chuyển',
+      '🎮 Giải trí','📚 Học tập','💊 Sức khỏe','🏠 Nhà cửa','✍️ Khác'
+    ];
 
-const cats=[
-"🍱 Ăn uống","☕ Cafe","🛍️ Mua sắm","🚗 Di chuyển",
-"🎮 Giải trí","📚 Học tập","💊 Sức khỏe","🏠 Nhà cửa","✍️ Khác"
-];
+    const defaultState = {
+      income: 0,
+      expenses: [],
+      customCategories: [],
+      soundOn: true,
+      aiFlags: { low: false, high: {}, good: false }
+    };
 
-const wheel=document.getElementById("wheel");
-let selected=0;
+    const state = loadState();
 
-cats.forEach((c,i)=>{
-  const el=document.createElement("div");
-  el.textContent=c;
-  if(i===selected) el.classList.add('active');
-  el.onclick=()=>{
-    selected=i;
-    document.querySelectorAll('#wheel div').forEach((node)=>node.classList.remove('active'));
-    el.classList.add('active');
-    clickSound();
-  };
-  wheel.appendChild(el);
-});
+    // Design Intent Layer (NeuroX philosophy encoded)
+    const designIntentChecks = [
+      () => 'Giúp người dùng hiểu nhanh hơn?',
+      () => 'Trải nghiệm nhẹ hay nặng?',
+      () => 'Có tạo cảm xúc dễ chịu không?'
+    ];
+    void designIntentChecks;
 
-function play(freq,type="sine"){
-  const ctx=new(window.AudioContext||window.webkitAudioContext)();
-  const o=ctx.createOscillator();
-  const g=ctx.createGain();
-  o.type=type;
-  o.frequency.value=freq;
-  o.connect(g);
-  g.connect(ctx.destination);
-  g.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+.15);
-  o.start();
-  o.stop(ctx.currentTime+.15);
-}
+    const el = {
+      income: document.getElementById('income'),
+      saveIncome: document.getElementById('saveIncome'),
+      category: document.getElementById('category'),
+      amount: document.getElementById('amount'),
+      addExpense: document.getElementById('addExpense'),
+      toggleCustom: document.getElementById('toggleCustom'),
+      customBox: document.getElementById('customBox'),
+      customCategory: document.getElementById('customCategory'),
+      addCustom: document.getElementById('addCustom'),
+      toggleSound: document.getElementById('toggleSound'),
+      list: document.getElementById('list'),
+      chart: document.getElementById('chart'),
+      ai: document.getElementById('ai'),
+      incomeView: document.getElementById('incomeView'),
+      spentView: document.getElementById('spentView'),
+      balanceView: document.getElementById('balanceView'),
+      savePct: document.getElementById('savePct')
+    };
 
-const clickSound=()=>play(1000);
-const addSound=()=>play(600,"triangle");
-const delSound=()=>play(400,"square");
+    bindEvents();
+    renderAll();
 
-function addExpense(){
-  const amt=parseFloat(document.getElementById("amt").value);
-  if(!amt || amt<=0) return;
-  data.push({cat:selected,amt});
-  localStorage.setItem("nx",JSON.stringify(data));
-  addSound();
-  document.getElementById("amt").value='';
-  render();
-}
+    function bindEvents() {
+      el.saveIncome.addEventListener('click', onSaveIncome);
+      el.addExpense.addEventListener('click', onAddExpense);
+      el.toggleCustom.addEventListener('click', () => {
+        const open = el.customBox.style.display !== 'none';
+        el.customBox.style.display = open ? 'none' : 'flex';
+        playSound('click');
+      });
+      el.addCustom.addEventListener('click', onAddCustomCategory);
+      el.toggleSound.addEventListener('click', () => {
+        state.soundOn = !state.soundOn;
+        persist();
+        el.toggleSound.textContent = `🔊 Sound: ${state.soundOn ? 'On' : 'Off'}`;
+        playSound('click');
+      });
+      el.list.addEventListener('click', onListAction);
+      document.addEventListener('click', makeRipple);
+    }
 
-function del(i){
-  data.splice(i,1);
-  localStorage.setItem("nx",JSON.stringify(data));
-  delSound();
-  render();
-}
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return structuredClone(defaultState);
+        const parsed = JSON.parse(raw);
+        return {
+          ...structuredClone(defaultState),
+          ...parsed,
+          aiFlags: { ...structuredClone(defaultState).aiFlags, ...(parsed.aiFlags || {}) }
+        };
+      } catch {
+        return structuredClone(defaultState);
+      }
+    }
 
-function render(){
-  const list=document.getElementById("list");
-  list.innerHTML="";
-  data.forEach((d,i)=>{
-    const div=document.createElement("div");
-    div.className="list-item";
-    div.innerHTML=`
-<span>${cats[d.cat]} — ${d.amt.toLocaleString('vi-VN')} ₫</span>
-<div class="actions">
-<button onclick="del(${i})">Xoá</button>
-</div>`;
-    list.appendChild(div);
-  });
-  draw();
-}
+    function persist() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
 
-function draw(){
-  const canvas=document.getElementById("chart");
-  const ctx=canvas.getContext("2d");
-  ctx.clearRect(0,0,380,180);
-  const totals={};
-  data.forEach(d=>totals[d.cat]=(totals[d.cat]||0)+d.amt);
-  const keys=Object.keys(totals);
-  if(!keys.length)return;
-  const max=Math.max(...Object.values(totals));
-  keys.forEach((k,i)=>{
-    const h=totals[k]/max*140;
-    ctx.fillStyle=`hsl(${i*40},80%,60%)`;
-    ctx.fillRect(30+i*40,160-h,26,h);
-  });
-}
+    function getCategories() {
+      return [...fixedCategories, ...state.customCategories];
+    }
 
-render();
-</script>
+    function onSaveIncome() {
+      const value = Number(el.income.value);
+      if (!Number.isFinite(value) || value <= 0) {
+        setAI('⚠️ Thu nhập cần lớn hơn 0 để bắt đầu hành trình NeuroX.', 'warning');
+        pulseDanger(el.income);
+        playSound('error');
+        return;
+      }
+      state.income = value;
+      state.expenses = [];
+      state.aiFlags = { low: false, high: {}, good: false };
+      persist();
+      renderAll();
+      setAI('🌟 Thu nhập đã được xác lập. Bạn vừa tạo một nền móng rất vững.', 'success');
+      playSound('success');
+    }
 
+    function onAddCustomCategory() {
+      const name = el.customCategory.value.trim();
+      if (!name) {
+        setAI('⚠️ Vui lòng nhập tên danh mục tùy chỉnh.', 'warning');
+        pulseDanger(el.customCategory);
+        playSound('warning');
+        return;
+      }
+      if (getCategories().includes(name)) {
+        setAI('⚠️ Danh mục này đã tồn tại rồi nha.', 'warning');
+        playSound('warning');
+        return;
+      }
+      state.customCategories.push(name);
+      el.customCategory.value = '';
+      persist();
+      renderCategoryOptions();
+      setAI(`🧩 Đã thêm danh mục "${name}" vào hệ sinh thái của bạn.`, 'success');
+      playSound('add');
+    }
+
+    function onAddExpense() {
+      if (state.income <= 0) {
+        setAI('🚫 Hãy lưu thu nhập trước để tránh lệch cấu trúc tài chính.', 'warning');
+        playSound('error');
+        return;
+      }
+
+      const amount = Number(el.amount.value);
+      const category = el.category.value;
+      if (!Number.isFinite(amount) || amount <= 0) {
+        setAI('⚠️ Số tiền cần lớn hơn 0.', 'warning');
+        pulseDanger(el.amount);
+        playSound('warning');
+        return;
+      }
+
+      const balance = getBalance();
+      if (amount > balance) {
+        setAI('🚫 Khoản này vượt số dư hiện tại. NeuroX đã chặn để bảo vệ bạn.', 'warning');
+        pulseDanger(el.amount);
+        playSound('error');
+        return;
+      }
+
+      state.expenses.push({
+        id: Date.now(),
+        category,
+        amount,
+        createdAt: new Date().toISOString()
+      });
+      state.aiFlags.good = false;
+      el.amount.value = '';
+      persist();
+      renderAll();
+      runAuditor();
+      playSound('add');
+    }
+
+    function onListAction(event) {
+      const btn = event.target.closest('button[data-action]');
+      if (!btn) return;
+      const id = Number(btn.dataset.id);
+      if (btn.dataset.action === 'del') {
+        const row = btn.closest('.item');
+        if (row) {
+          row.style.opacity = '.35';
+          row.style.transform = 'translateX(8px)';
+          setTimeout(() => {
+            state.expenses = state.expenses.filter((item) => item.id !== id);
+            persist();
+            renderAll();
+            runAuditor();
+            setAI('🗑️ Giao dịch đã được xoá gọn gàng.', 'default');
+            playSound('delete');
+          }, 150);
+        }
+      }
+      if (btn.dataset.action === 'edit') {
+        const current = state.expenses.find((item) => item.id === id);
+        if (!current) return;
+        const next = Number(prompt('Sửa số tiền mới (VNĐ):', String(current.amount)));
+        if (!Number.isFinite(next) || next <= 0) {
+          setAI('⚠️ Giá trị sửa không hợp lệ.', 'warning');
+          playSound('warning');
+          return;
+        }
+        const spentExcluding = state.expenses.filter((item) => item.id !== id).reduce((sum, item) => sum + item.amount, 0);
+        if (next > state.income - spentExcluding) {
+          setAI('🚫 Số tiền sửa vượt giới hạn số dư.', 'warning');
+          playSound('error');
+          return;
+        }
+        current.amount = next;
+        persist();
+        renderAll();
+        runAuditor();
+        setAI('✏️ Đã cập nhật giao dịch thành công.', 'success');
+        playSound('success');
+      }
+    }
+
+    function renderAll() {
+      renderCategoryOptions();
+      renderStats();
+      renderList();
+      renderChart();
+      el.income.value = state.income || '';
+      el.toggleSound.textContent = `🔊 Sound: ${state.soundOn ? 'On' : 'Off'}`;
+    }
+
+    function renderCategoryOptions() {
+      const fixed = fixedCategories.map((cat) => `<option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>`).join('');
+      const custom = state.customCategories.length
+        ? `<optgroup label="🧩 Danh mục tùy chỉnh">${state.customCategories.map((cat) => `<option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>`).join('')}</optgroup>`
+        : '';
+      el.category.innerHTML = fixed + custom;
+    }
+
+    function renderStats() {
+      const spent = getSpent();
+      const balance = getBalance();
+      const pct = state.income > 0 ? (balance / state.income) * 100 : 0;
+      el.incomeView.textContent = fmtMoney(state.income);
+      el.spentView.textContent = fmtMoney(spent);
+      el.balanceView.textContent = fmtMoney(balance);
+      el.savePct.textContent = `${pct.toFixed(1)}%`;
+    }
+
+    function renderList() {
+      if (!state.expenses.length) {
+        el.list.innerHTML = '<div class="item"><span class="meta">Chưa có giao dịch nào 🌿</span></div>';
+        return;
+      }
+      const rows = [...state.expenses].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      el.list.innerHTML = rows.map((item) => `
+        <div class="item">
+          <div class="top">
+            <strong>${escapeHtml(item.category)}</strong>
+            <span class="amount">${fmtMoney(item.amount)}</span>
+          </div>
+          <div class="meta">🕒 ${new Date(item.createdAt).toLocaleString('vi-VN')}</div>
+          <div class="actions">
+            <button class="ghost" data-action="edit" data-id="${item.id}" type="button">✏️ Sửa</button>
+            <button class="ghost" data-action="del" data-id="${item.id}" type="button">🗑️ Xóa</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderChart() {
+      const c = el.chart;
+      const ctx = c.getContext('2d');
+      ctx.clearRect(0,0,c.width,c.height);
+      const totals = state.expenses.reduce((acc, item) => {
+        acc[item.category] = (acc[item.category] || 0) + item.amount;
+        return acc;
+      }, {});
+      const keys = Object.keys(totals);
+      if (!keys.length) return;
+
+      const max = Math.max(...Object.values(totals));
+      const barWidth = Math.max(28, Math.floor((c.width - 80) / keys.length) - 8);
+      keys.forEach((k, i) => {
+        const value = totals[k];
+        const h = (value / max) * 150;
+        const x = 40 + i * (barWidth + 8);
+        const y = 190 - h;
+
+        const grad = ctx.createLinearGradient(x, y, x, 190);
+        grad.addColorStop(0, '#a29bfe');
+        grad.addColorStop(1, '#ff8fab');
+
+        ctx.fillStyle = grad;
+        ctx.shadowColor = 'rgba(162,155,254,.45)';
+        ctx.shadowBlur = 12;
+        roundRect(ctx, x, y, barWidth, h, 8);
+        ctx.fill();
+
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = '#d8d4ff';
+        ctx.font = '11px system-ui';
+        ctx.textAlign = 'center';
+        ctx.fillText(k.slice(0, 8), x + barWidth / 2, 208);
+      });
+    }
+
+    function runAuditor() {
+      if (state.income <= 0 || state.expenses.length === 0) return;
+      const spent = getSpent();
+      const balance = getBalance();
+      const balancePct = (balance / state.income) * 100;
+
+      if (balancePct < 20 && !state.aiFlags.low) {
+        state.aiFlags.low = true;
+        persist();
+        setAI('⚠️ Ví đang kêu cứu nhẹ đó 🚑 Giảm tốc một nhịp nhé.', 'warning');
+        playSound('warning');
+        return;
+      }
+
+      const totals = state.expenses.reduce((acc, item) => {
+        acc[item.category] = (acc[item.category] || 0) + item.amount;
+        return acc;
+      }, {});
+      for (const [cat, value] of Object.entries(totals)) {
+        const ratio = (value / spent) * 100;
+        if (ratio > 40 && !state.aiFlags.high[cat]) {
+          state.aiFlags.high[cat] = true;
+          persist();
+          setAI(`🤨 Danh mục "${cat}" đang chiếm spotlight quá mạnh. Cân bằng lại nhé.`, 'warning');
+          playSound('ai');
+          return;
+        }
+      }
+
+      const spentPct = (spent / state.income) * 100;
+      if (spentPct >= 30 && spentPct <= 70 && state.expenses.length >= 3 && !state.aiFlags.good) {
+        state.aiFlags.good = true;
+        persist();
+        setAI('🌟 Cấu trúc tài chính rất đẹp. Bạn đang đi đúng nhịp NeuroX.', 'success');
+        playSound('success');
+      }
+    }
+
+    function setAI(message, type='default') {
+      el.ai.textContent = message;
+      el.ai.style.borderColor = type === 'warning' ? 'rgba(255,209,102,.6)' : type === 'success' ? 'rgba(133,242,195,.6)' : 'rgba(162,155,254,.45)';
+    }
+
+    function getSpent() {
+      return state.expenses.reduce((sum, item) => sum + item.amount, 0);
+    }
+
+    function getBalance() {
+      return Math.max(0, state.income - getSpent());
+    }
+
+    function fmtMoney(value) {
+      return Number(value || 0).toLocaleString('vi-VN') + ' ₫';
+    }
+
+    function roundRect(ctx, x, y, width, height, radius) {
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.arcTo(x + width, y, x + width, y + height, radius);
+      ctx.arcTo(x + width, y + height, x, y + height, radius);
+      ctx.arcTo(x, y + height, x, y, radius);
+      ctx.arcTo(x, y, x + width, y, radius);
+      ctx.closePath();
+    }
+
+    function pulseDanger(node) {
+      node.classList.add('danger');
+      setTimeout(() => node.classList.remove('danger'), 350);
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    }
+
+    function playSound(type) {
+      if (!state.soundOn) return;
+      const map = {
+        success: { f: 820, wave: 'sine', d: .08 },
+        add: { f: 610, wave: 'triangle', d: .08 },
+        delete: { f: 390, wave: 'square', d: .08 },
+        warning: { f: 300, wave: 'sawtooth', d: .1 },
+        error: { f: 220, wave: 'square', d: .11 },
+        ai: { f: 700, wave: 'triangle', d: .07 },
+        click: { f: 980, wave: 'sine', d: .04 }
+      };
+      const tone = map[type] || map.click;
+      const audio = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = audio.createOscillator();
+      const gain = audio.createGain();
+      osc.type = tone.wave;
+      osc.frequency.value = tone.f;
+      gain.gain.value = .03;
+      osc.connect(gain);
+      gain.connect(audio.destination);
+      osc.start();
+      osc.stop(audio.currentTime + tone.d);
+    }
+
+    function makeRipple(event) {
+      const target = event.target.closest('button');
+      if (!target) return;
+      const circle = document.createElement('span');
+      const rect = target.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      circle.style.position = 'absolute';
+      circle.style.width = `${size}px`;
+      circle.style.height = `${size}px`;
+      circle.style.left = `${event.clientX - rect.left - size / 2}px`;
+      circle.style.top = `${event.clientY - rect.top - size / 2}px`;
+      circle.style.borderRadius = '50%';
+      circle.style.background = 'rgba(255,255,255,.3)';
+      circle.style.transform = 'scale(0)';
+      circle.style.animation = 'ripple .45s ease-out';
+      circle.style.pointerEvents = 'none';
+      target.appendChild(circle);
+      setTimeout(() => circle.remove(), 460);
+    }
+
+    const rippleStyle = document.createElement('style');
+    rippleStyle.textContent = '@keyframes ripple { to { transform: scale(3); opacity: 0; } }';
+    document.head.appendChild(rippleStyle);
+  </script>
 </body>
 </html>
