@@ -80,7 +80,7 @@
       border: 1px solid var(--border);
       border-radius: 18px;
       padding: 16px;
-      backdrop-filter: blur(14px);
+      backdrop-filter: blur(10px);
       box-shadow: 0 10px 35px rgba(0, 0, 0, .22);
       margin-bottom: 14px;
       position: relative;
@@ -186,6 +186,10 @@
     }
 
     .custom-label { color: var(--muted); font-size: .85rem; margin: 8px 0 4px; }
+
+    @supports not (backdrop-filter: blur(2px)) {
+      .card { backdrop-filter: none; background: color-mix(in oklab, var(--bg-soft) 88%, transparent); }
+    }
 
     @media (max-width: 900px) {
       .grid { grid-template-columns: 1fr; }
@@ -294,10 +298,14 @@
     let state = loadState();
     let chartRef = null;
 
-    bindEvents();
-    applyTheme();
-    applyColors();
-    renderAll();
+    window.addEventListener('DOMContentLoaded', () => {
+      window.requestAnimationFrame(() => {
+        bindEvents();
+        applyTheme();
+        applyColors();
+        renderAll();
+      });
+    });
 
     function bindEvents() {
       document.getElementById('saveIncome').addEventListener('click', saveIncome);
