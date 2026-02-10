@@ -1,194 +1,774 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>NeuroX Zen Interface</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>NeuroX Cognitive Zen Finance</title>
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --bg-2: #111111;
+      --glass: rgba(255,255,255,.08);
+      --glass-strong: rgba(255,255,255,.12);
+      --accent: #a29bfe;
+      --pink: #ff8fab;
+      --text: #f6f7ff;
+      --muted: #b4b0d4;
+      --ok: #85f2c3;
+      --warn: #ffd166;
+      --danger: #ff8fab;
+      --s1: 8px;
+      --s2: 16px;
+      --s3: 24px;
+      --s4: 32px;
+    }
 
-<style>
-:root{
---bg:#0a0a0a;
---glass:rgba(255,255,255,0.08);
---accent:#a29bfe;
---pink:#ff8fab;
---text:#f6f7ff;
-}
+    [data-theme="light"] {
+      --bg: #eceeff;
+      --bg-2: #f8f9ff;
+      --glass: rgba(255,255,255,.75);
+      --glass-strong: rgba(255,255,255,.9);
+      --text: #1d1b2c;
+      --muted: #5f5c7a;
+    }
 
-*{box-sizing:border-box;margin:0;padding:0}
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-body{
-font-family:system-ui;
-background:
-radial-gradient(circle at 20% 20%,rgba(162,155,254,.25),transparent 40%),
-radial-gradient(circle at 80% 80%,rgba(255,143,171,.25),transparent 40%),
-var(--bg);
-color:var(--text);
-min-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-padding:32px;
-}
+    body {
+      min-height: 100vh;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 12%, color-mix(in oklab, var(--accent) 35%, transparent), transparent 40%),
+        radial-gradient(circle at 88% 88%, color-mix(in oklab, var(--pink) 34%, transparent), transparent 40%),
+        linear-gradient(150deg, var(--bg), var(--bg-2));
+      padding: var(--s3) var(--s2);
+      transition: background .3s ease-in-out, color .3s ease-in-out;
+    }
 
-.app{
-width:900px;
-display:grid;
-gap:24px;
-}
+    .app {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: grid;
+      gap: var(--s2);
+    }
 
-.card{
-background:var(--glass);
-border:1px solid rgba(255,255,255,.18);
-border-radius:20px;
-padding:24px;
-backdrop-filter:blur(18px);
-box-shadow:0 12px 40px rgba(0,0,0,.5);
-transition:.3s ease-in-out;
-position:relative;
-overflow:hidden;
-}
+    .hero {
+      text-align: center;
+      animation: breathe 5s ease-in-out infinite;
+    }
 
-.card:hover{
-transform:translateY(-4px);
-box-shadow:0 20px 60px rgba(0,0,0,.7);
-}
+    .hero h1 {
+      font-size: clamp(2.1rem, 5vw, 3.2rem);
+      letter-spacing: .03em;
+      background: linear-gradient(120deg, var(--accent), var(--pink));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 25px color-mix(in oklab, var(--accent) 40%, transparent);
+    }
 
-.card::after{
-content:"";
-position:absolute;
-inset:0;
-background:linear-gradient(120deg,rgba(162,155,254,.15),rgba(255,143,171,.1));
-opacity:.6;
-pointer-events:none;
-}
+    .hero p { color: var(--muted); margin-top: var(--s1); }
 
-h1{
-font-size:3rem;
-background:linear-gradient(120deg,var(--accent),var(--pink));
--webkit-background-clip:text;
-color:transparent;
-text-align:center;
-}
+    .slogan {
+      margin-top: var(--s1);
+      color: var(--pink);
+      font-weight: 700;
+      font-size: 1.02rem;
+    }
 
-.subtitle{
-text-align:center;
-opacity:.7;
-margin-top:8px;
-}
+    @keyframes breathe {
+      0%,100% { filter: drop-shadow(0 0 0 rgba(162,155,254,.15)); }
+      50% { filter: drop-shadow(0 0 14px rgba(162,155,254,.35)); }
+    }
 
-button{
-padding:14px;
-border-radius:14px;
-border:none;
-cursor:pointer;
-font-weight:700;
-color:#140f2a;
-background:linear-gradient(135deg,var(--accent),var(--pink));
-transition:.2s ease;
-position:relative;
-overflow:hidden;
-}
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: var(--s2);
+    }
 
-button:hover{
-transform:translateY(-2px);
-filter:saturate(1.1);
-}
+    .card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,.22);
+      background: var(--glass);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 16px 48px rgba(0,0,0,.35);
+      padding: var(--s2);
+      transition: transform .24s ease-in-out, box-shadow .24s ease-in-out, border-color .24s ease-in-out;
+    }
 
-.ripple{
-position:absolute;
-border-radius:50%;
-background:rgba(255,255,255,.4);
-transform:scale(0);
-animation:ripple .5s ease-out;
-pointer-events:none;
-}
+    .card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(130deg, color-mix(in oklab, var(--accent) 12%, transparent), color-mix(in oklab, var(--pink) 12%, transparent));
+      opacity: .55;
+    }
 
-@keyframes ripple{
-to{transform:scale(3);opacity:0}
-}
+    .card > * { position: relative; z-index: 1; }
 
-.glow{
-animation:glow 4s ease-in-out infinite;
-}
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 56px rgba(0,0,0,.45), 0 0 26px color-mix(in oklab, var(--accent) 22%, transparent);
+      border-color: rgba(255,255,255,.35);
+    }
 
-@keyframes glow{
-0%,100%{box-shadow:0 0 0 rgba(162,155,254,.2)}
-50%{box-shadow:0 0 30px rgba(162,155,254,.5)}
-}
+    h2 { color: var(--accent); margin-bottom: var(--s2); font-size: 1.12rem; }
 
-.status{
-padding:16px;
-border-radius:14px;
-background:rgba(0,0,0,.35);
-text-align:center;
-font-weight:600;
-}
+    .row, .row-wrap {
+      display: flex;
+      align-items: center;
+      gap: var(--s1);
+    }
 
-@media (max-width: 960px){
-  .app{width:100%}
-  .card[style]{display:grid !important; grid-template-columns:1fr;}
-}
-</style>
+    .row { flex-wrap: nowrap; }
+    .row-wrap { flex-wrap: wrap; }
+
+    input, select, button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.22);
+      background: color-mix(in oklab, var(--glass-strong) 55%, transparent);
+      color: var(--text);
+      font-weight: 600;
+      outline: none;
+      transition: box-shadow .2s ease-in-out, border-color .2s ease-in-out;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px color-mix(in oklab, var(--accent) 35%, transparent);
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      color: #1a1433;
+      background: linear-gradient(135deg, var(--accent), var(--pink));
+      position: relative;
+      overflow: hidden;
+      transition: transform .16s ease-in-out, filter .16s ease-in-out;
+    }
+
+    button:hover { transform: translateY(-1px); filter: saturate(1.08); }
+    .btn-ghost {
+      border: 1px dashed rgba(255,255,255,.34);
+      color: var(--text);
+      background: rgba(255,255,255,.08);
+    }
+
+    .stats {
+      margin-top: var(--s2);
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: var(--s1);
+    }
+
+    .stat {
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.2);
+      background: rgba(12,12,18,.35);
+      padding: 10px;
+      text-align: center;
+    }
+
+    .stat .k { color: var(--muted); font-size: .8rem; }
+    .stat .v { margin-top: 2px; font-weight: 800; }
+
+    .list { display: grid; gap: var(--s1); }
+
+    .item {
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.2);
+      background: rgba(12,12,18,.35);
+      padding: 10px;
+      display: grid;
+      gap: 5px;
+      transition: opacity .2s ease-in-out, transform .2s ease-in-out;
+    }
+
+    .item-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--s1);
+    }
+
+    .money { color: var(--pink); font-weight: 800; }
+    .meta { color: var(--muted); font-size: .82rem; }
+
+    .item-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .item-actions button {
+      width: auto;
+      padding: 6px 10px;
+      font-size: .8rem;
+    }
+
+    .ai {
+      border-radius: 12px;
+      border: 1px solid color-mix(in oklab, var(--accent) 45%, transparent);
+      background: linear-gradient(130deg, color-mix(in oklab, var(--accent) 12%, transparent), color-mix(in oklab, var(--pink) 12%, transparent));
+      padding: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ai::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -150%;
+      width: 120%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
+      animation: shimmer 4.5s linear infinite;
+    }
+
+    @keyframes shimmer { to { left: 180%; } }
+
+    .shake { animation: shake .35s linear 1; }
+    @keyframes shake {
+      20% { transform: translateX(-3px); }
+      40% { transform: translateX(3px); }
+      70% { transform: translateX(-2px); }
+    }
+
+    canvas {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.2);
+      background: rgba(10,10,16,.42);
+    }
+
+    @media (max-width: 920px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: repeat(2,1fr); }
+      .row { flex-wrap: wrap; }
+    }
+  </style>
 </head>
-
 <body>
+  <main class="app">
+    <header class="hero">
+      <h1>🧠 NeuroX Cognitive Zen Finance</h1>
+      <p>NeuroX — Neuro: thần kinh, não bộ · X: đột phá → Trí tuệ não bộ vượt giới hạn</p>
+      <p class="slogan">✨ Quản trị bằng Logic — Thưởng thức bằng Tâm hồn</p>
+    </header>
 
-<div class="app">
+    <section class="grid-2">
+      <div class="card">
+        <h2>💰 Khởi tạo hệ tài chính</h2>
+        <div class="row">
+          <input id="incomeInput" type="number" min="0" step="1000" placeholder="Nhập thu nhập" />
+          <button id="saveIncomeBtn" type="button" style="width:auto;min-width:140px;">✅ Lưu thu nhập</button>
+        </div>
 
-<div class="card glow">
-<h1>🧠 NeuroX</h1>
-<p class="subtitle">Zen Logic Interface — Trải nghiệm nhận thức mượt ✨</p>
-</div>
+        <div class="stats">
+          <div class="stat"><div class="k">Thu nhập</div><div class="v" id="incomeView">0 ₫</div></div>
+          <div class="stat"><div class="k">Tổng chi</div><div class="v" id="spentView">0 ₫</div></div>
+          <div class="stat"><div class="k">Số dư</div><div class="v" id="balanceView">0 ₫</div></div>
+          <div class="stat"><div class="k">Tiết kiệm</div><div class="v" id="savingView">0%</div></div>
+        </div>
+      </div>
 
-<div class="card">
-<div class="status" id="status">
-🌿 Hệ thống đang ở trạng thái bình tĩnh
-</div>
-</div>
+      <div class="card">
+        <h2>⚙️ Điều khiển nhận thức</h2>
+        <div class="row-wrap">
+          <button id="toggleCustomBtn" class="btn-ghost" type="button" style="width:auto;">🧩 Danh mục tùy chỉnh</button>
+          <button id="toggleThemeBtn" class="btn-ghost" type="button" style="width:auto;">🌓 Theme</button>
+          <button id="toggleSoundBtn" class="btn-ghost" type="button" style="width:auto;">🔊 Sound: On</button>
+        </div>
+        <div id="customBox" style="display:none;margin-top:8px;" class="row">
+          <input id="customInput" type="text" placeholder="Nhập danh mục mới..." />
+          <button id="saveCustomBtn" type="button" style="width:auto;min-width:120px;">💾 Lưu</button>
+        </div>
+      </div>
+    </section>
 
-<div class="card" style="display:flex;gap:16px">
-<button onclick="action('success',event)">✨ Thành công</button>
-<button onclick="action('warning',event)">⚠️ Cảnh báo</button>
-<button onclick="action('reset',event)">🌙 Reset</button>
-</div>
+    <section class="card">
+      <h2>🧾 Ghi giao dịch</h2>
+      <div class="row-wrap">
+        <select id="categorySelect" style="flex:2 1 260px;"></select>
+        <input id="amountInput" type="number" min="0" step="1000" placeholder="Số tiền" style="flex:1 1 160px;" />
+        <button id="addExpenseBtn" type="button" style="width:auto;min-width:120px;">➕ Thêm</button>
+      </div>
+    </section>
 
-</div>
+    <section class="grid-2">
+      <div class="card">
+        <h2>📊 Bản đồ chi tiêu</h2>
+        <canvas id="chartCanvas" width="900" height="250"></canvas>
+      </div>
 
-<script>
-function ripple(e){
-const btn=e.currentTarget;
-const circle=document.createElement("span");
-const rect=btn.getBoundingClientRect();
-const size=Math.max(rect.width,rect.height);
-circle.className="ripple";
-circle.style.width=size+"px";
-circle.style.height=size+"px";
-circle.style.left=e.clientX-rect.left-size/2+"px";
-circle.style.top=e.clientY-rect.top-size/2+"px";
-btn.appendChild(circle);
-setTimeout(()=>circle.remove(),500);
-}
+      <div class="card">
+        <h2>🤖 NeuroX Auditor</h2>
+        <div id="aiBox" class="ai">🪷 NeuroX đang chờ dữ liệu để soi chiếu nhẹ nhàng cho bạn...</div>
+      </div>
+    </section>
 
-function action(type,e){
-ripple(e);
-const status=document.getElementById("status");
+    <section class="card">
+      <h2>📜 Lịch sử giao dịch</h2>
+      <div id="list" class="list"></div>
+    </section>
+  </main>
 
-if(type==="success"){
-status.textContent="🌸 Trạng thái thành công — hệ thống sáng lên";
-status.style.border="1px solid #85f2c3";
-}
+  <script>
+    const AppState = {
+      storageKey: 'neurox-cognitive-zen-v3',
+      fixedCategories: ['🍱 Ăn uống','☕ Cafe','🛍️ Mua sắm','🚗 Di chuyển','🎮 Giải trí','📚 Học tập','💊 Sức khỏe','🏠 Nhà cửa','✍️ Khác'],
+      defaultData: {
+        income: 0,
+        expenses: [],
+        customCategories: [],
+        theme: 'dark',
+        soundOn: true,
+        aiFlags: { low: false, high: {}, good: false }
+      },
+      data: null,
+      load() {
+        try {
+          const raw = localStorage.getItem(this.storageKey);
+          if (!raw) {
+            this.data = structuredClone(this.defaultData);
+            return;
+          }
+          const parsed = JSON.parse(raw);
+          this.data = {
+            ...structuredClone(this.defaultData),
+            ...parsed,
+            aiFlags: { ...structuredClone(this.defaultData).aiFlags, ...(parsed.aiFlags || {}) }
+          };
+        } catch {
+          this.data = structuredClone(this.defaultData);
+        }
+      },
+      save() {
+        localStorage.setItem(this.storageKey, JSON.stringify(this.data));
+      },
+      getSpent() {
+        return this.data.expenses.reduce((sum, item) => sum + item.amount, 0);
+      },
+      getBalance() {
+        return Math.max(0, this.data.income - this.getSpent());
+      },
+      getCategories() {
+        return [...this.fixedCategories, ...this.data.customCategories];
+      }
+    };
 
-if(type==="warning"){
-status.textContent="⚠️ Cảnh báo mềm — điều chỉnh nhẹ";
-status.style.border="1px solid #ffd166";
-}
+    const ThemeManager = {
+      apply() {
+        document.documentElement.setAttribute('data-theme', AppState.data.theme === 'light' ? 'light' : 'dark');
+      },
+      toggle() {
+        AppState.data.theme = AppState.data.theme === 'dark' ? 'light' : 'dark';
+        AppState.save();
+        this.apply();
+      }
+    };
 
-if(type==="reset"){
-status.textContent="🌿 Trở lại trạng thái bình tĩnh";
-status.style.border="none";
-}
-}
-</script>
+    const SoundEngine = {
+      map: {
+        success: { f: 820, wave: 'sine', d: .08 },
+        add: { f: 610, wave: 'triangle', d: .08 },
+        delete: { f: 390, wave: 'square', d: .08 },
+        warning: { f: 300, wave: 'sawtooth', d: .1 },
+        error: { f: 220, wave: 'square', d: .11 },
+        ai: { f: 700, wave: 'triangle', d: .07 },
+        click: { f: 980, wave: 'sine', d: .04 }
+      },
+      play(type) {
+        if (!AppState.data.soundOn) return;
+        const t = this.map[type] || this.map.click;
+        const audio = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audio.createOscillator();
+        const gain = audio.createGain();
+        osc.type = t.wave;
+        osc.frequency.value = t.f;
+        gain.gain.value = .03;
+        osc.connect(gain);
+        gain.connect(audio.destination);
+        osc.start();
+        osc.stop(audio.currentTime + t.d);
+      }
+    };
 
+    const AIChecks = {
+      run() {
+        if (AppState.data.income <= 0 || AppState.data.expenses.length === 0) return;
+
+        const spent = AppState.getSpent();
+        const balance = AppState.getBalance();
+        const balancePct = (balance / AppState.data.income) * 100;
+
+        if (balancePct < 20 && !AppState.data.aiFlags.low) {
+          AppState.data.aiFlags.low = true;
+          AppState.save();
+          Rendering.setAI('⚠️ Ví đang kêu cứu nhẹ đó 🚑 Giảm nhịp chi một chút nhé.', 'warning');
+          SoundEngine.play('warning');
+          return;
+        }
+
+        const totals = {};
+        AppState.data.expenses.forEach((item) => {
+          totals[item.category] = (totals[item.category] || 0) + item.amount;
+        });
+
+        for (const [cat, amount] of Object.entries(totals)) {
+          const pct = (amount / spent) * 100;
+          if (pct > 40 && !AppState.data.aiFlags.high[cat]) {
+            AppState.data.aiFlags.high[cat] = true;
+            AppState.save();
+            Rendering.setAI(`🤨 Danh mục "${cat}" đang chiếm spotlight lớn, cân bằng lại nhé.`, 'warning');
+            SoundEngine.play('ai');
+            return;
+          }
+        }
+
+        const spentPct = (spent / AppState.data.income) * 100;
+        if (spentPct >= 30 && spentPct <= 70 && AppState.data.expenses.length >= 3 && !AppState.data.aiFlags.good) {
+          AppState.data.aiFlags.good = true;
+          AppState.save();
+          Rendering.setAI('🌟 Cấu trúc tài chính đẹp và có nhịp, NeuroX khen bạn thật lòng!', 'success');
+          SoundEngine.play('success');
+        }
+      }
+    };
+
+    const Rendering = {
+      el: {
+        incomeInput: document.getElementById('incomeInput'),
+        saveIncomeBtn: document.getElementById('saveIncomeBtn'),
+        categorySelect: document.getElementById('categorySelect'),
+        amountInput: document.getElementById('amountInput'),
+        addExpenseBtn: document.getElementById('addExpenseBtn'),
+        list: document.getElementById('list'),
+        chart: document.getElementById('chartCanvas'),
+        aiBox: document.getElementById('aiBox'),
+        incomeView: document.getElementById('incomeView'),
+        spentView: document.getElementById('spentView'),
+        balanceView: document.getElementById('balanceView'),
+        savingView: document.getElementById('savingView'),
+        toggleCustomBtn: document.getElementById('toggleCustomBtn'),
+        toggleThemeBtn: document.getElementById('toggleThemeBtn'),
+        toggleSoundBtn: document.getElementById('toggleSoundBtn'),
+        customBox: document.getElementById('customBox'),
+        customInput: document.getElementById('customInput'),
+        saveCustomBtn: document.getElementById('saveCustomBtn')
+      },
+      money(n) {
+        return Number(n || 0).toLocaleString('vi-VN') + ' ₫';
+      },
+      setAI(text, type = 'default') {
+        this.el.aiBox.textContent = text;
+        const border = type === 'warning'
+          ? 'color-mix(in oklab, var(--warn) 55%, transparent)'
+          : type === 'success'
+            ? 'color-mix(in oklab, var(--ok) 55%, transparent)'
+            : 'color-mix(in oklab, var(--accent) 45%, transparent)';
+        this.el.aiBox.style.borderColor = border;
+      },
+      renderCategories() {
+        const fixed = AppState.fixedCategories
+          .map((cat) => `<option value="${this.escape(cat)}">${this.escape(cat)}</option>`)
+          .join('');
+        const custom = AppState.data.customCategories.length
+          ? `<optgroup label="🧩 Danh mục tùy chỉnh">${AppState.data.customCategories.map((cat) => `<option value="${this.escape(cat)}">${this.escape(cat)}</option>`).join('')}</optgroup>`
+          : '';
+        this.el.categorySelect.innerHTML = fixed + custom;
+      },
+      renderStats() {
+        const spent = AppState.getSpent();
+        const balance = AppState.getBalance();
+        const savePct = AppState.data.income > 0 ? (balance / AppState.data.income) * 100 : 0;
+        this.el.incomeInput.value = AppState.data.income || '';
+        this.el.incomeView.textContent = this.money(AppState.data.income);
+        this.el.spentView.textContent = this.money(spent);
+        this.el.balanceView.textContent = this.money(balance);
+        this.el.savingView.textContent = `${savePct.toFixed(1)}%`;
+      },
+      renderList() {
+        if (!AppState.data.expenses.length) {
+          this.el.list.innerHTML = '<div class="item"><span class="meta">Chưa có giao dịch nào 🌿</span></div>';
+          return;
+        }
+        const rows = [...AppState.data.expenses].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        this.el.list.innerHTML = rows.map((item) => `
+          <div class="item" data-id="${item.id}">
+            <div class="item-top">
+              <strong>${this.escape(item.category)}</strong>
+              <span class="money">${this.money(item.amount)}</span>
+            </div>
+            <div class="meta">🕒 ${new Date(item.createdAt).toLocaleString('vi-VN')}</div>
+            <div class="item-actions">
+              <button class="btn-ghost" data-action="edit" data-id="${item.id}" type="button">✏️ Sửa</button>
+              <button class="btn-ghost" data-action="del" data-id="${item.id}" type="button">🗑️ Xóa</button>
+            </div>
+          </div>
+        `).join('');
+      },
+      renderChart() {
+        const ctx = this.el.chart.getContext('2d');
+        const width = this.el.chart.width;
+        const height = this.el.chart.height;
+        ctx.clearRect(0, 0, width, height);
+
+        const totals = {};
+        AppState.data.expenses.forEach((item) => {
+          totals[item.category] = (totals[item.category] || 0) + item.amount;
+        });
+
+        const labels = Object.keys(totals);
+        if (!labels.length) return;
+
+        const max = Math.max(...Object.values(totals));
+        const barWidth = Math.max(26, Math.floor((width - 90) / labels.length) - 8);
+
+        labels.forEach((label, i) => {
+          const value = totals[label];
+          const barHeight = (value / max) * (height - 78);
+          const x = 40 + i * (barWidth + 8);
+          const y = height - 42 - barHeight;
+
+          const grad = ctx.createLinearGradient(x, y, x, height - 42);
+          grad.addColorStop(0, '#a29bfe');
+          grad.addColorStop(1, '#ff8fab');
+
+          ctx.fillStyle = grad;
+          ctx.shadowColor = 'rgba(162,155,254,.38)';
+          ctx.shadowBlur = 10;
+          this.roundRect(ctx, x, y, barWidth, barHeight, 8);
+          ctx.fill();
+
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = getComputedStyle(document.body).color;
+          ctx.font = '11px system-ui';
+          ctx.textAlign = 'center';
+          ctx.fillText(label.slice(0, 8), x + barWidth / 2, height - 22);
+        });
+      },
+      roundRect(ctx, x, y, w, h, r) {
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.arcTo(x + w, y, x + w, y + h, r);
+        ctx.arcTo(x + w, y + h, x, y + h, r);
+        ctx.arcTo(x, y + h, x, y, r);
+        ctx.arcTo(x, y, x + w, y, r);
+        ctx.closePath();
+      },
+      escape(str) {
+        return String(str)
+          .replaceAll('&', '&amp;')
+          .replaceAll('<', '&lt;')
+          .replaceAll('>', '&gt;')
+          .replaceAll('"', '&quot;')
+          .replaceAll("'", '&#39;');
+      },
+      renderAll() {
+        ThemeManager.apply();
+        this.renderCategories();
+        this.renderStats();
+        this.renderList();
+        this.renderChart();
+        this.el.toggleSoundBtn.textContent = `🔊 Sound: ${AppState.data.soundOn ? 'On' : 'Off'}`;
+      }
+    };
+
+    const Handlers = {
+      bind() {
+        Rendering.el.saveIncomeBtn.addEventListener('click', this.saveIncome.bind(this));
+        Rendering.el.addExpenseBtn.addEventListener('click', this.addExpense.bind(this));
+        Rendering.el.saveCustomBtn.addEventListener('click', this.addCustomCategory.bind(this));
+        Rendering.el.toggleCustomBtn.addEventListener('click', this.toggleCustomBox.bind(this));
+        Rendering.el.toggleThemeBtn.addEventListener('click', this.toggleTheme.bind(this));
+        Rendering.el.toggleSoundBtn.addEventListener('click', this.toggleSound.bind(this));
+        Rendering.el.list.addEventListener('click', this.listActions.bind(this));
+        document.addEventListener('click', this.rippleEffect.bind(this));
+      },
+      saveIncome() {
+        const val = Number(Rendering.el.incomeInput.value);
+        if (!Number.isFinite(val) || val <= 0) {
+          this.markDanger(Rendering.el.incomeInput);
+          Rendering.setAI('⚠️ Thu nhập phải lớn hơn 0 để khởi tạo hệ tài chính.', 'warning');
+          SoundEngine.play('error');
+          return;
+        }
+        AppState.data.income = val;
+        AppState.data.expenses = [];
+        AppState.data.aiFlags = { low: false, high: {}, good: false };
+        AppState.save();
+        Rendering.renderAll();
+        Rendering.setAI('🌟 Thu nhập đã được lưu. Nền móng đã sẵn sàng!', 'success');
+        SoundEngine.play('success');
+      },
+      addCustomCategory() {
+        const name = Rendering.el.customInput.value.trim();
+        if (!name) {
+          this.markDanger(Rendering.el.customInput);
+          Rendering.setAI('⚠️ Danh mục tùy chỉnh cần có tên hợp lệ.', 'warning');
+          SoundEngine.play('warning');
+          return;
+        }
+        if (AppState.getCategories().includes(name)) {
+          Rendering.setAI('⚠️ Danh mục này đã tồn tại rồi nha.', 'warning');
+          SoundEngine.play('warning');
+          return;
+        }
+        AppState.data.customCategories.push(name);
+        Rendering.el.customInput.value = '';
+        AppState.save();
+        Rendering.renderCategories();
+        Rendering.setAI(`🧩 Đã thêm danh mục "${name}" thành công.`, 'success');
+        SoundEngine.play('add');
+      },
+      addExpense() {
+        if (AppState.data.income <= 0) {
+          Rendering.setAI('🚫 Hãy lưu thu nhập trước để tránh sai cấu trúc.', 'warning');
+          SoundEngine.play('error');
+          return;
+        }
+
+        const amount = Number(Rendering.el.amountInput.value);
+        const category = Rendering.el.categorySelect.value;
+
+        if (!Number.isFinite(amount) || amount <= 0) {
+          this.markDanger(Rendering.el.amountInput);
+          Rendering.setAI('⚠️ Số tiền phải lớn hơn 0.', 'warning');
+          SoundEngine.play('warning');
+          return;
+        }
+
+        if (amount > AppState.getBalance()) {
+          this.markDanger(Rendering.el.amountInput);
+          Rendering.setAI('🚫 Khoản này vượt số dư hiện tại. Đã chặn để bảo vệ bạn.', 'warning');
+          SoundEngine.play('error');
+          return;
+        }
+
+        AppState.data.expenses.push({
+          id: Date.now(),
+          category,
+          amount,
+          createdAt: new Date().toISOString()
+        });
+
+        AppState.data.aiFlags.good = false;
+        Rendering.el.amountInput.value = '';
+        AppState.save();
+        Rendering.renderAll();
+        AIChecks.run();
+        SoundEngine.play('add');
+      },
+      listActions(event) {
+        const btn = event.target.closest('button[data-action]');
+        if (!btn) return;
+        const id = Number(btn.dataset.id);
+
+        if (btn.dataset.action === 'del') {
+          const row = btn.closest('.item');
+          if (row) {
+            row.style.opacity = '.3';
+            row.style.transform = 'translateX(8px)';
+          }
+          setTimeout(() => {
+            AppState.data.expenses = AppState.data.expenses.filter((e) => e.id !== id);
+            AppState.save();
+            Rendering.renderAll();
+            AIChecks.run();
+            Rendering.setAI('🗑️ Đã xóa giao dịch.', 'default');
+            SoundEngine.play('delete');
+          }, 150);
+        }
+
+        if (btn.dataset.action === 'edit') {
+          const item = AppState.data.expenses.find((e) => e.id === id);
+          if (!item) return;
+          const next = Number(prompt('Sửa số tiền mới (VNĐ):', String(item.amount)));
+          if (!Number.isFinite(next) || next <= 0) {
+            Rendering.setAI('⚠️ Giá trị sửa không hợp lệ.', 'warning');
+            SoundEngine.play('warning');
+            return;
+          }
+
+          const spentExcluding = AppState.data.expenses
+            .filter((e) => e.id !== id)
+            .reduce((sum, e) => sum + e.amount, 0);
+
+          if (next > AppState.data.income - spentExcluding) {
+            Rendering.setAI('🚫 Giá trị sửa vượt số dư khả dụng.', 'warning');
+            SoundEngine.play('error');
+            return;
+          }
+
+          item.amount = next;
+          AppState.save();
+          Rendering.renderAll();
+          AIChecks.run();
+          Rendering.setAI('✏️ Đã cập nhật giao dịch.', 'success');
+          SoundEngine.play('success');
+        }
+      },
+      toggleCustomBox() {
+        const open = Rendering.el.customBox.style.display !== 'none';
+        Rendering.el.customBox.style.display = open ? 'none' : 'flex';
+        SoundEngine.play('click');
+      },
+      toggleTheme() {
+        ThemeManager.toggle();
+        Rendering.renderChart();
+        SoundEngine.play('click');
+      },
+      toggleSound() {
+        AppState.data.soundOn = !AppState.data.soundOn;
+        AppState.save();
+        Rendering.el.toggleSoundBtn.textContent = `🔊 Sound: ${AppState.data.soundOn ? 'On' : 'Off'}`;
+        SoundEngine.play('click');
+      },
+      markDanger(node) {
+        node.classList.add('shake');
+        setTimeout(() => node.classList.remove('shake'), 360);
+      },
+      rippleEffect(event) {
+        const target = event.target.closest('button');
+        if (!target) return;
+
+        const ripple = document.createElement('span');
+        const rect = target.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+
+        ripple.style.position = 'absolute';
+        ripple.style.width = `${size}px`;
+        ripple.style.height = `${size}px`;
+        ripple.style.left = `${event.clientX - rect.left - size / 2}px`;
+        ripple.style.top = `${event.clientY - rect.top - size / 2}px`;
+        ripple.style.borderRadius = '50%';
+        ripple.style.background = 'rgba(255,255,255,.3)';
+        ripple.style.transform = 'scale(0)';
+        ripple.style.animation = 'ripple .45s ease-out';
+        ripple.style.pointerEvents = 'none';
+
+        target.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 460);
+      }
+    };
+
+    const rippleStyle = document.createElement('style');
+    rippleStyle.textContent = '@keyframes ripple { to { transform: scale(3); opacity: 0; } }';
+    document.head.appendChild(rippleStyle);
+
+    AppState.load();
+    Handlers.bind();
+    Rendering.renderAll();
+  </script>
 </body>
 </html>
