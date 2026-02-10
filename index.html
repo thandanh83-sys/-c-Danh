@@ -243,37 +243,21 @@
       </div>
 
       <div class="card">
-        <h2>📥 Ghi nhận chi tiêu</h2>
-        <label for="category">Danh mục</label>
-        <select id="category">
-          <option>🍱 Ăn uống</option>
-          <option>☕ Cafe & Trà</option>
-          <option>🛍️ Mua sắm</option>
-          <option>🚗 Di chuyển</option>
-          <option>🎮 Giải trí</option>
-          <option>📚 Học tập</option>
-          <option>💊 Sức khỏe</option>
-          <option>🏠 Nhà cửa</option>
-          <option value="__other__">⭐ Mục khác</option>
-        </select>
+        <h2>📝 Ghi Chi Tiêu</h2>
 
-        <div id="otherCategoryWrap" style="display:none;margin-top:10px;">
-          <label for="otherCategory">Tên danh mục mới</label>
-          <input id="otherCategory" type="text" placeholder="Ví dụ: Quà tặng" />
-        </div>
+        <div class="category-list" id="categoryList"></div>
 
-        <div class="row" style="margin-top:10px;">
-          <div>
-            <label for="amount">Số tiền</label>
-            <input id="amount" type="number" min="0" step="1000" placeholder="Nhập số tiền" />
-          </div>
-          <div>
-            <label for="time">Thời điểm</label>
-            <input id="time" type="datetime-local" />
+        <div style="margin-top:20px;border-top:2px dashed var(--border);padding-top:16px;">
+          <button class="toggle" id="addCategoryBtn" type="button">➕ Danh Mục Khác (Tùy chỉnh)</button>
+
+          <div id="addCategoryForm" style="display:none;margin-top:12px;">
+            <input type="text" id="newCategoryInput" placeholder="🧩 Nhập danh mục của bạn (vd: Quà tặng, Từ thiện...)" />
+            <div class="row" style="margin-top:8px;">
+              <button id="saveCategoryBtn" type="button">✅ Lưu danh mục</button>
+              <button id="cancelCategoryBtn" class="delete-btn" type="button">❌ Hủy</button>
+            </div>
           </div>
         </div>
-
-        <button id="addExpenseBtn" type="button" style="margin-top:10px;">💾 Lưu khoản chi</button>
       </div>
     </div>
 
@@ -301,6 +285,17 @@
   const defaultState = {
     income: 0,
     expenses: [],
+    categories: [
+      '🍱 Ăn uống',
+      '☕ Cafe & Trà',
+      '🛍️ Mua sắm',
+      '🚗 Di chuyển',
+      '🎮 Giải trí',
+      '📚 Học tập',
+      '💊 Sức khỏe',
+      '🏠 Nhà cửa'
+    ],
+    customCategories: [],
     theme: 'light',
     primary: '#6BB6FF',
     soundOn: false,
@@ -322,9 +317,10 @@
     document.getElementById('primaryColor').addEventListener('input', onPrimaryColorChange);
     document.getElementById('audioToggle').addEventListener('change', onAudioToggle);
     document.getElementById('saveIncomeBtn').addEventListener('click', saveIncome);
-    document.getElementById('addExpenseBtn').addEventListener('click', addExpense);
     document.getElementById('chartType').addEventListener('change', renderChart);
-    document.getElementById('category').addEventListener('change', onCategoryChange);
+    document.getElementById('addCategoryBtn').addEventListener('click', toggleAddCategory);
+    document.getElementById('saveCategoryBtn').addEventListener('click', addCustomCategory);
+    document.getElementById('cancelCategoryBtn').addEventListener('click', toggleAddCategory);
   }
 
   function loadState() {
@@ -392,34 +388,50 @@
     renderAll();
   }
 
-  // ===== Expense Input =====
-  function onCategoryChange(e) {
-    const isOther = e.target.value === '__other__';
-    document.getElementById('otherCategoryWrap').style.display = isOther ? 'block' : 'none';
+  // ===== Category Input =====
+  function toggleAddCategory() {
+    const form = document.getElementById('addCategoryForm');
+    const btn = document.getElementById('addCategoryBtn');
+    const isVisible = form.style.display !== 'none';
+    form.style.display = isVisible ? 'none' : 'block';
+    btn.style.display = isVisible ? 'block' : 'none';
+    if (!isVisible) {
+      document.getElementById('newCategoryInput').focus();
+    }
   }
 
-  function resolveCategory() {
-    const selected = document.getElementById('category').value;
-    if (selected !== '__other__') return selected;
-    const custom = document.getElementById('otherCategory').value.trim();
-    return custom || '';
+  function addCustomCategory() {
+    const input = document.getElementById('newCategoryInput');
+    const name = input.value.trim();
+    if (!name) {
+      setAI('⚠️', 'Vui lòng nhập tên danh mục để lưu tùy chỉnh.');
+      return;
+    }
+
+    const all = [...state.categories, ...state.customCategories];
+    if (all.includes(name)) {
+      setAI('⚠️', 'Danh mục này đã tồn tại, bạn thử tên khác nha.');
+      return;
+    }
+
+    state.customCategories.push(name);
+    input.value = '';
+    toggleAddCategory();
+    persist();
+    renderCategories();
+    setAI('✨', `Đã thêm danh mục tùy chỉnh: ${name}`);
   }
 
-  function addExpense() {
+  function addExpense(category) {
     if (state.income <= 0) {
       setAI('⚠️', 'Bạn cần lưu thu nhập trước để hệ thống bảo vệ số dư đúng logic.');
       return;
     }
 
-    const category = resolveCategory();
-    const amount = Number(document.getElementById('amount').value);
-    const timeRaw = document.getElementById('time').value;
+    const slug = slugCategory(category);
+    const amount = Number(document.getElementById(`amount-${slug}`)?.value);
+    const timeRaw = document.getElementById(`time-${slug}`)?.value;
     const time = timeRaw ? new Date(timeRaw) : new Date();
-
-    if (!category) {
-      setAI('⚠️', 'Mục khác cần có tên danh mục để ghi nhận chính xác.');
-      return;
-    }
 
     if (!Number.isFinite(amount) || amount <= 0) {
       setAI('⚠️', 'Số tiền cần lớn hơn 0 để lưu khoản chi.');
@@ -443,8 +455,8 @@
     persist();
     playTone(528, 0.08);
 
-    document.getElementById('amount').value = '';
-    document.getElementById('otherCategory').value = '';
+    const amountInput = document.getElementById(`amount-${slug}`);
+    if (amountInput) amountInput.value = '';
 
     renderAll();
     runAuditor();
@@ -471,8 +483,40 @@
     document.getElementById('balanceView').textContent = fmtMoney(balance);
     document.getElementById('savingView').textContent = `${savingPct.toFixed(1)}%`;
 
+    renderCategories();
     renderList();
     renderChart();
+  }
+
+
+  function renderCategories() {
+    const container = document.getElementById('categoryList');
+    const fixedCategories = state.categories;
+    const customCategories = state.customCategories;
+
+    const renderCat = (cat) => {
+      const safeId = slugCategory(cat);
+      const current = new Date();
+      current.setMinutes(current.getMinutes() - current.getTimezoneOffset());
+      const defaultTime = current.toISOString().slice(0, 16);
+      return `
+      <div class="expense-item">
+        <div class="expense-row">
+          <strong>${escapeHtml(cat)}</strong>
+          <span class="meta">Nhập chi tiêu cho danh mục này</span>
+        </div>
+        <div class="row" style="margin-top:8px;">
+          <input id="amount-${safeId}" type="number" min="0" step="1000" placeholder="Số tiền" />
+          <input id="time-${safeId}" type="datetime-local" value="${defaultTime}" />
+        </div>
+        <button type="button" style="margin-top:8px;" onclick="addExpense('${escapeJs(cat)}')">💾 Lưu</button>
+      </div>`;
+    };
+
+    container.innerHTML =
+      fixedCategories.map(renderCat).join('') +
+      (customCategories.length ? '<div class="meta" style="margin-top:8px;">🧩 Danh mục tùy chỉnh</div>' : '') +
+      customCategories.map(renderCat).join('');
   }
 
   function renderList() {
@@ -600,10 +644,14 @@
     return Number(value || 0).toLocaleString('vi-VN') + ' ₫';
   }
 
-  function hydrateFormDefaults() {
-    const now = new Date();
-    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-    document.getElementById('time').value = now.toISOString().slice(0, 16);
+  function hydrateFormDefaults() {}
+
+  function slugCategory(category) {
+    return category.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-');
+  }
+
+  function escapeJs(str) {
+    return str.replaceAll('\\', '\\\\').replaceAll("'", "\\'");
   }
 
   function escapeHtml(str) {
