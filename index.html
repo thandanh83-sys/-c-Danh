@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeuroX Finance</title>
+  <style>
+    :root {
+      --bg: #08070f;
+      --bg2: #1c1236;
+      --panel: rgba(19, 15, 38, 0.78);
+      --text: #f8f3ff;
+      --muted: #c8bfe3;
+      --line: #ff70cf;
+      --line2: #89e8ff;
+      --ok: #73ffd1;
+      --warn: #ff88d8;
+      --danger: #ff4f86;
+      --shadow: 0 0 0.9rem rgba(255, 112, 207, .55), 0 0 2rem rgba(137, 232, 255, .35);
+      --r: 16px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, "Segoe UI", Roboto, system-ui, sans-serif;
+      background:
+        radial-gradient(900px 600px at -10% -10%, #5329a4 0%, transparent 58%),
+        radial-gradient(850px 580px at 110% 120%, #0f7697 0%, transparent 62%),
+        linear-gradient(135deg, var(--bg), #121022 40%, var(--bg2));
+      color: var(--text);
+      min-height: 100dvh;
+      padding: 22px;
+    }
+
+    .app {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      gap: 16px;
+      grid-template-columns: 1.05fr 1.45fr;
+    }
+
+    @media (max-width: 980px) { .app { grid-template-columns: 1fr; } }
+
+    .card {
+      background: var(--panel);
+      border: 1.5px solid var(--line);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      padding: 14px;
+    }
+
+    .hero { grid-column: 1 / -1; }
+    .badge {
+      display: inline-block;
+      border: 1.5px solid var(--line2);
+      border-radius: 999px;
+      padding: 6px 10px;
+      box-shadow: var(--shadow);
+      margin-bottom: 8px;
+      font-size: .88rem;
+    }
+
+    h1 { margin: 4px 0 8px; font-size: clamp(1.5rem, 2.7vw, 2.5rem); }
+    h2 { margin: 0 0 10px; font-size: 1.02rem; }
+    p { margin: 0; }
+    .muted { color: var(--muted); }
+
+    .field { margin-bottom: 10px; }
+    label { display: block; margin-bottom: 6px; color: var(--muted); font-size: .93rem; }
+
+    .input, .btn, .toggle {
+      width: 100%;
+      border: 1.5px solid var(--line);
+      border-radius: 12px;
+      background: rgba(11, 9, 22, 0.92);
+      color: var(--text);
+      box-shadow: 0 0 .8rem rgba(255,112,207,.32);
+      font-size: .95rem;
+    }
+
+    .input { padding: 10px 12px; }
+    .input:focus, .btn:focus, .toggle:focus {
+      outline: none;
+      border-color: var(--line2);
+      box-shadow: 0 0 .85rem rgba(137,232,255,.65);
+    }
+
+    .row { display: grid; gap: 8px; grid-template-columns: 1fr 1fr; }
+    .btn {
+      padding: 10px 12px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: .15s ease;
+      background: linear-gradient(135deg, rgba(255,112,207,.92), rgba(137,232,255,.92));
+      color: #1f0b29;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn.subtle { background: rgba(16,13,29,.92); color: var(--text); }
+    .btn.danger { background: linear-gradient(135deg, #ff5b90, #ff2e6a); color: #fff; }
+
+    .picker-wrap {
+      position: relative;
+      height: 208px;
+      border: 1.5px solid var(--line2);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-bottom: 10px;
+      background: rgba(255,255,255,.04);
+    }
+
+    .picker {
+      position: absolute;
+      inset: 0;
+      overflow-y: auto;
+      scroll-snap-type: y mandatory;
+      padding: 78px 10px;
+    }
+    .picker::-webkit-scrollbar { width: 0; }
+
+    .picker-item {
+      height: 50px;
+      margin: 5px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      scroll-snap-align: center;
+      opacity: .48;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      transition: .18s;
+    }
+
+    .picker-item.active {
+      opacity: 1;
+      border-color: var(--line);
+      box-shadow: var(--shadow);
+      background: rgba(255,255,255,.06);
+      transform: scale(1.02);
+    }
+
+    .picker-focus {
+      position: absolute;
+      left: 10px; right: 10px; top: 78px;
+      height: 50px;
+      border: 1.5px solid var(--line);
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      pointer-events: none;
+    }
+
+    .status {
+      border: 1.5px solid var(--line2);
+      border-radius: 12px;
+      padding: 11px;
+      line-height: 1.45;
+      box-shadow: var(--shadow);
+      background: rgba(9, 18, 31, 0.6);
+    }
+    .status.ok { border-color: var(--ok); box-shadow: 0 0 1rem rgba(115,255,209,.6); }
+    .status.warn { border-color: var(--warn); box-shadow: 0 0 1rem rgba(255,136,216,.65); }
+    .status.danger { border-color: var(--danger); box-shadow: 0 0 1rem rgba(255,79,134,.75); }
+
+    .list { display: grid; gap: 8px; max-height: 340px; overflow: auto; }
+    .expense {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 8px;
+      border: 1.5px solid var(--line2);
+      border-radius: 12px;
+      padding: 10px;
+      background: rgba(8,9,20,.86);
+      align-items: center;
+    }
+    .expense small { color: var(--muted); display: block; margin-top: 4px; }
+
+    .toolbar { display: flex; gap: 8px; margin-bottom: 10px; }
+    .toggle { cursor: pointer; padding: 9px 11px; background: rgba(14,12,26,.92); }
+    .toggle.active { border-color: var(--line2); box-shadow: 0 0 .9rem rgba(137,232,255,.65); }
+
+    canvas {
+      width: 100%;
+      border-radius: 12px;
+      border: 1.5px solid var(--line);
+      background: radial-gradient(circle at 50% -30%, rgba(255,255,255,.1), rgba(255,255,255,.02));
+      box-shadow: var(--shadow);
+    }
+
+    .prompt-box {
+      white-space: pre-wrap;
+      max-height: 300px;
+      overflow: auto;
+      border: 1.5px solid var(--line2);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      padding: 12px;
+      font-size: .88rem;
+      background: rgba(13,10,25,.92);
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="card hero">
+      <span class="badge">🧠 Signature: NeuroX — Neuro + X = Trí tuệ não bộ vượt giới hạn</span>
+      <h1>NeuroX Finance ✨</h1>
+      <p class="muted">Một trang duy nhất tích hợp <strong>Prompt + Code</strong>, giao diện glow/zen hiện đại, quản lý chi tiêu bằng Picker View, biểu đồ cột/tròn và AI Auditor rule-based rõ ràng, khả thi, logic.</p>
+    </section>
+
+    <section>
+      <div class="card" style="margin-bottom:16px;">
+        <h2>💸 Thu nhập hàng tháng</h2>
+        <div class="field">
+          <label for="incomeInput">Thu nhập (VND)</label>
+          <input id="incomeInput" class="input" type="number" min="0" step="1000" placeholder="Ví dụ: 18000000" />
+        </div>
+        <div class="row">
+          <button id="saveIncomeBtn" class="btn">💾 Lưu / cập nhật</button>
+          <button id="resetBtn" class="btn subtle">♻️ Reset dữ liệu</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h2>🧩 Picker View danh mục</h2>
+        <div class="picker-wrap">
+          <div id="picker" class="picker"></div>
+          <div class="picker-focus"></div>
+        </div>
+
+        <div class="field">
+          <label for="otherInput">Danh mục tuỳ chỉnh (khi chọn ✍️ Mục khác)</label>
+          <input id="otherInput" class="input" type="text" placeholder="Ví dụ: 🐾 Thú cưng" />
+        </div>
+
+        <div class="field">
+          <label for="amountInput">Số tiền chi</label>
+          <input id="amountInput" class="input" type="number" min="0" step="1000" placeholder="Ví dụ: 350000" />
+        </div>
+
+        <div class="row">
+          <button id="addBtn" class="btn">➕ Thêm khoản chi</button>
+          <button id="cancelEditBtn" class="btn subtle" disabled>❎ Hủy sửa</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>🤖 AI cảnh báo & phân tích</h2>
+        <div id="aiStatus" class="status">AI đang chờ dữ liệu… 🌿</div>
+        <p id="summary" class="muted" style="margin-top:10px;">Chưa có dữ liệu để phân tích.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="card" style="margin-bottom:16px;">
+        <h2>🗂️ Danh sách khoản chi (sửa/xoá)</h2>
+        <div id="expenseList" class="list"></div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h2>📊 Biểu đồ so sánh</h2>
+        <div class="toolbar">
+          <button class="toggle active" data-mode="bar">📶 Cột</button>
+          <button class="toggle" data-mode="pie">🥧 Tròn</button>
+          <button id="soundBtn" class="toggle active" type="button">🔊 Âm thanh: Bật</button>
+        </div>
+        <canvas id="chart" width="920" height="350"></canvas>
+      </div>
+
+      <div class="card">
+        <h2>🧾 Prompt hoàn chỉnh (Claude-friendly, không @github)</h2>
+        <div id="promptBox" class="prompt-box"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const STORAGE_KEY = "neurox-finance-v3";
+    const CATEGORIES = [
+      "🍱 Ăn uống", "☕ Cafe", "🛍️ Mua sắm", "🚗 Di chuyển", "🎮 Giải trí",
+      "📚 Học tập", "💊 Sức khỏe", "🏠 Nhà cửa", "✍️ Mục khác"
+    ];
+
+    const state = {
+      income: 0,
+      expenses: [],
+      chartMode: "bar",
+      selectedCategoryIndex: 0,
+      editingId: null,
+      soundOn: true,
+      lastAuditLevel: "none"
+    };
+
+    const el = {
+      incomeInput: document.getElementById("incomeInput"),
+      saveIncomeBtn: document.getElementById("saveIncomeBtn"),
+      resetBtn: document.getElementById("resetBtn"),
+      picker: document.getElementById("picker"),
+      otherInput: document.getElementById("otherInput"),
+      amountInput: document.getElementById("amountInput"),
+      addBtn: document.getElementById("addBtn"),
+      cancelEditBtn: document.getElementById("cancelEditBtn"),
+      aiStatus: document.getElementById("aiStatus"),
+      summary: document.getElementById("summary"),
+      expenseList: document.getElementById("expenseList"),
+      chart: document.getElementById("chart"),
+      soundBtn: document.getElementById("soundBtn"),
+      promptBox: document.getElementById("promptBox")
+    };
+
+    const masterPrompt = `🌌 NEUROX FINANCE — MASTER PROMPT (VI, CLAUDE-FRIENDLY)
+
+Bạn là chuyên gia phân tích tài chính hành vi theo tinh thần NeuroX:
+- Neuro: tối ưu nhận thức, giảm xung động chi tiêu.
+- X: đột phá logic ra quyết định.
+
+🎯 Mục tiêu:
+1) Thu thập dữ liệu gồm: thu nhập tháng, danh mục chi, số tiền, thời gian.
+2) Lưu dữ liệu bền vững để so sánh về sau.
+3) Cho sửa/xoá khoản chi và thay đổi thu nhập tức thời.
+4) Trực quan dữ liệu bằng biểu đồ cột + biểu đồ tròn.
+5) AI Auditor bắt buộc dùng thuật toán:
+   idealBudgetPerCategory = income / existingCategoryCount
+   - Nếu danh mục vượt ngưỡng -> cảnh báo hồng.
+   - Nếu tổng chi vượt thu nhập -> cảnh báo đỏ.
+6) Phản hồi giàu động viên, rõ hành động, không phán xét.
+
+🎨 Thiết kế:
+- Modern zen + glow + border nổi đồng nhất.
+- Toggle/nút/input có viền sáng rõ ràng.
+- Màu cảnh báo hồng/đỏ nổi bật.
+- Font đẹp, cân đối, không tràn viền.
+
+✅ Output:
+Một trang hoàn chỉnh chứa cả Prompt và Code, chạy offline, logic chặt chẽ, UX mượt, dễ mở rộng.`;
+
+    function fmt(v) { return Number(v || 0).toLocaleString("vi-VN") + " đ"; }
+    function id() { return crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`; }
+
+    function save() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        income: state.income,
+        expenses: state.expenses,
+        chartMode: state.chartMode,
+        soundOn: state.soundOn
+      }));
+    }
+
+    function load() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      try {
+        const data = JSON.parse(raw);
+        state.income = Number(data.income || 0);
+        state.expenses = Array.isArray(data.expenses) ? data.expenses : [];
+        state.chartMode = data.chartMode === "pie" ? "pie" : "bar";
+        state.soundOn = data.soundOn !== false;
+      } catch {
+        console.warn("Bad localStorage data");
+      }
+    }
+
+    function beep(type) {
+      if (!state.soundOn) return;
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      const map = {
+        ok: [710, 0.06],
+        warn: [340, 0.11],
+        danger: [180, 0.15],
+        delete: [250, 0.08],
+        ai: [500, 0.07]
+      };
+      const [freq, dur] = map[type] || map.ai;
+      osc.frequency.value = freq;
+      gain.gain.value = 0.035;
+      osc.start();
+      osc.stop(ctx.currentTime + dur);
+    }
+
+    function buildPicker() {
+      el.picker.innerHTML = "";
+      CATEGORIES.forEach((cat, i) => {
+        const item = document.createElement("div");
+        item.className = "picker-item";
+        item.textContent = cat;
+        item.addEventListener("click", () => scrollToCategory(i));
+        el.picker.appendChild(item);
+      });
+      scrollToCategory(state.selectedCategoryIndex, false);
+    }
+
+    function scrollToCategory(i, smooth = true) {
+      const h = 55;
+      const target = Math.max(0, i * h);
+      el.picker.scrollTo({ top: target, behavior: smooth ? "smooth" : "auto" });
+      state.selectedCategoryIndex = i;
+      updatePickerActive();
+    }
+
+    function updatePickerActive() {
+      const h = 55;
+      const i = Math.round(el.picker.scrollTop / h);
+      state.selectedCategoryIndex = Math.max(0, Math.min(CATEGORIES.length - 1, i));
+      [...el.picker.children].forEach((n, idx) => n.classList.toggle("active", idx === state.selectedCategoryIndex));
+    }
+
+    function currentCategory() {
+      const base = CATEGORIES[state.selectedCategoryIndex] || CATEGORIES[0];
+      if (base !== "✍️ Mục khác") return base;
+      const custom = el.otherInput.value.trim();
+      return custom ? `✍️ ${custom}` : "✍️ Mục khác";
+    }
+
+    function grouped() {
+      return state.expenses.reduce((acc, x) => {
+        acc[x.category] = (acc[x.category] || 0) + Number(x.amount || 0);
+        return acc;
+      }, {});
+    }
+
+    function audit() {
+      const income = Number(state.income || 0);
+      const per = grouped();
+      const cats = Object.keys(per);
+      const total = Object.values(per).reduce((a, b) => a + b, 0);
+      const count = cats.length;
+      const ideal = count > 0 ? income / count : 0;
+
+      let level = "ok";
+      let msg = "🌿 Thêm dữ liệu để AI đánh giá và đưa khuyến nghị chi tiêu.";
+
+      if (income <= 0) {
+        level = "warn";
+        msg = "🩷 Hãy nhập thu nhập tháng để khởi tạo mô hình cảnh báo theo thuật toán.";
+      } else if (count === 0) {
+        level = "warn";
+        msg = "🧩 Chưa có danh mục chi tiêu nào. Vui lòng thêm để so sánh và phân tích.";
+      } else if (total > income) {
+        level = "danger";
+        msg = `🚨 Tổng chi vượt thu nhập ${fmt(total - income)}. Hãy ưu tiên giảm các danh mục lớn nhất trước.`;
+      } else {
+        const over = cats.filter(cat => per[cat] > ideal);
+        if (over.length) {
+          level = "warn";
+          msg = `⚠️ Vượt ngưỡng trung bình (${fmt(ideal)}/danh mục): ${over.join(", ")}. Gợi ý chia trần chi tiêu theo tuần.`;
+        } else {
+          level = "ok";
+          msg = `✅ Cân bằng tốt! Mỗi danh mục đều trong ngưỡng ${fmt(ideal)}. Tiếp tục duy trì nhé ✨`;
+        }
+      }
+
+      el.aiStatus.className = `status ${level}`;
+      el.aiStatus.textContent = msg;
+      el.summary.textContent = `Thu nhập: ${fmt(income)} • Tổng chi: ${fmt(total)} • Còn lại: ${fmt(Math.max(0, income - total))} • Số danh mục hiện có: ${count}`;
+
+      if (state.lastAuditLevel !== level) {
+        if (level === "danger") beep("danger");
+        else if (level === "warn") beep("warn");
+        else beep("ai");
+        state.lastAuditLevel = level;
+      }
+    }
+
+    function drawChart() {
+      const ctx = el.chart.getContext("2d");
+      const W = el.chart.width;
+      const H = el.chart.height;
+      ctx.clearRect(0, 0, W, H);
+
+      const obj = grouped();
+      const labels = Object.keys(obj);
+      const vals = Object.values(obj);
+
+      if (!labels.length) {
+        ctx.fillStyle = "#ebe2ff";
+        ctx.font = "20px Inter";
+        ctx.fillText("Chưa có dữ liệu biểu đồ 🌙", 24, 42);
+        return;
+      }
+
+      const colors = labels.map((_, i) => `hsl(${(i * 53) % 360} 85% 66%)`);
+
+      if (state.chartMode === "bar") {
+        const max = Math.max(...vals, 1);
+        const left = 60, top = 22, cw = W - 90, ch = H - 88;
+
+        ctx.strokeStyle = "rgba(255,255,255,.20)";
+        for (let i = 0; i < 5; i++) {
+          const y = top + (ch / 4) * i;
+          ctx.beginPath(); ctx.moveTo(left, y); ctx.lineTo(left + cw, y); ctx.stroke();
+        }
+
+        labels.forEach((lb, i) => {
+          const x = left + (i * cw) / labels.length + 12;
+          const bw = Math.max(28, cw / labels.length - 18);
+          const h = (vals[i] / max) * (ch - 8);
+          const y = top + ch - h;
+
+          const g = ctx.createLinearGradient(0, y, 0, top + ch);
+          g.addColorStop(0, colors[i]);
+          g.addColorStop(1, "rgba(255,255,255,.2)");
+          ctx.fillStyle = g;
+          ctx.fillRect(x, y, bw, h);
+
+          ctx.fillStyle = "#fbf6ff";
+          ctx.font = "12px Inter";
+          ctx.fillText(vals[i].toLocaleString("vi-VN"), x, y - 6);
+          ctx.fillText(lb.slice(0, 12), x, top + ch + 18);
+        });
+      } else {
+        const total = vals.reduce((a, b) => a + b, 0);
+        let start = -Math.PI / 2;
+        const cx = W * .34, cy = H * .53, r = Math.min(W, H) * .28;
+
+        vals.forEach((v, i) => {
+          const a = (v / total) * Math.PI * 2;
+          ctx.beginPath();
+          ctx.moveTo(cx, cy);
+          ctx.fillStyle = colors[i];
+          ctx.arc(cx, cy, r, start, start + a);
+          ctx.closePath(); ctx.fill();
+          start += a;
+        });
+
+        ctx.beginPath();
+        ctx.fillStyle = "rgba(7,6,16,.72)";
+        ctx.arc(cx, cy, r * .5, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = "#fff";
+        ctx.font = "bold 14px Inter";
+        ctx.fillText("Tổng chi", cx - 28, cy - 3);
+        ctx.fillText(fmt(total), cx - 52, cy + 18);
+
+        labels.forEach((lb, i) => {
+          const y = 36 + i * 27;
+          const lx = W * .62;
+          ctx.fillStyle = colors[i]; ctx.fillRect(lx, y, 14, 14);
+          ctx.fillStyle = "#f7f1ff";
+          ctx.font = "13px Inter";
+          const pct = ((vals[i] / total) * 100).toFixed(1);
+          ctx.fillText(`${lb} — ${pct}% (${vals[i].toLocaleString("vi-VN")})`, lx + 20, y + 12);
+        });
+      }
+    }
+
+    function renderList() {
+      el.expenseList.innerHTML = "";
+      if (!state.expenses.length) {
+        el.expenseList.innerHTML = `<div class="status">Chưa có khoản chi. Thêm dữ liệu để AI phân tích nhé 💫</div>`;
+        return;
+      }
+
+      state.expenses.slice().sort((a, b) => b.createdAt - a.createdAt).forEach(x => {
+        const node = document.createElement("article");
+        node.className = "expense";
+        node.innerHTML = `
+          <div>
+            <strong>${x.category}</strong>
+            <small>${new Date(x.createdAt).toLocaleString("vi-VN")}</small>
+          </div>
+          <div><strong>${fmt(x.amount)}</strong></div>
+          <div class="row" style="grid-template-columns:1fr 1fr;">
+            <button class="btn subtle" data-action="edit" data-id="${x.id}">✏️</button>
+            <button class="btn danger" data-action="delete" data-id="${x.id}">🗑️</button>
+          </div>
+        `;
+        el.expenseList.appendChild(node);
+      });
+    }
+
+    function resetEditor() {
+      state.editingId = null;
+      el.addBtn.textContent = "➕ Thêm khoản chi";
+      el.cancelEditBtn.disabled = true;
+      el.amountInput.value = "";
+      el.otherInput.value = "";
+      state.selectedCategoryIndex = 0;
+      scrollToCategory(0, false);
+    }
+
+    function addOrUpdate() {
+      const income = Number(state.income || 0);
+      if (income <= 0) return alert("Vui lòng nhập thu nhập hợp lệ trước.");
+
+      const amount = Number(el.amountInput.value || 0);
+      if (amount <= 0) return alert("Số tiền phải lớn hơn 0.");
+
+      const category = currentCategory();
+      const now = Date.now();
+
+      if (state.editingId) {
+        const item = state.expenses.find(x => x.id === state.editingId);
+        if (!item) return;
+        item.amount = amount;
+        item.category = category;
+        item.createdAt = now;
+      } else {
+        state.expenses.push({ id: id(), category, amount, createdAt: now });
+      }
+
+      beep("ok");
+      save();
+      resetEditor();
+      render();
+    }
+
+    function editExpense(expenseId) {
+      const item = state.expenses.find(x => x.id === expenseId);
+      if (!item) return;
+      state.editingId = expenseId;
+      el.addBtn.textContent = "✅ Cập nhật khoản chi";
+      el.cancelEditBtn.disabled = false;
+      el.amountInput.value = item.amount;
+
+      if (item.category.startsWith("✍️")) {
+        state.selectedCategoryIndex = CATEGORIES.indexOf("✍️ Mục khác");
+        el.otherInput.value = item.category.replace(/^✍️\s*/, "");
+      } else {
+        const idx = CATEGORIES.indexOf(item.category);
+        state.selectedCategoryIndex = idx >= 0 ? idx : 0;
+        el.otherInput.value = "";
+      }
+      scrollToCategory(state.selectedCategoryIndex);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function removeExpense(expenseId) {
+      state.expenses = state.expenses.filter(x => x.id !== expenseId);
+      beep("delete");
+      save();
+      render();
+    }
+
+    function syncToggles() {
+      document.querySelectorAll(".toggle[data-mode]").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.mode === state.chartMode);
+      });
+      el.soundBtn.textContent = state.soundOn ? "🔊 Âm thanh: Bật" : "🔇 Âm thanh: Tắt";
+      el.soundBtn.classList.toggle("active", state.soundOn);
+    }
+
+    function render() {
+      el.incomeInput.value = state.income || "";
+      el.promptBox.textContent = masterPrompt;
+      renderList();
+      drawChart();
+      audit();
+      syncToggles();
+    }
+
+    function bind() {
+      el.saveIncomeBtn.addEventListener("click", () => {
+        const value = Number(el.incomeInput.value || 0);
+        if (value < 0) return alert("Thu nhập không được âm.");
+        state.income = value;
+        beep("ok");
+        save();
+        render();
+      });
+
+      el.resetBtn.addEventListener("click", () => {
+        if (!confirm("Bạn chắc chắn muốn reset toàn bộ dữ liệu?")) return;
+        state.income = 0;
+        state.expenses = [];
+        state.lastAuditLevel = "none";
+        resetEditor();
+        beep("delete");
+        save();
+        render();
+      });
+
+      el.picker.addEventListener("scroll", updatePickerActive);
+      el.addBtn.addEventListener("click", addOrUpdate);
+      el.cancelEditBtn.addEventListener("click", resetEditor);
+
+      document.querySelectorAll(".toggle[data-mode]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          state.chartMode = btn.dataset.mode;
+          beep("ai");
+          save();
+          render();
+        });
+      });
+
+      el.soundBtn.addEventListener("click", () => {
+        state.soundOn = !state.soundOn;
+        save();
+        render();
+      });
+
+      el.expenseList.addEventListener("click", (e) => {
+        const btn = e.target.closest("button[data-action]");
+        if (!btn) return;
+        const id = btn.dataset.id;
+        if (btn.dataset.action === "edit") editExpense(id);
+        if (btn.dataset.action === "delete") removeExpense(id);
+      });
+    }
+
+    load();
+    buildPicker();
+    bind();
+    render();
+  </script>
+</body>
+</html>
