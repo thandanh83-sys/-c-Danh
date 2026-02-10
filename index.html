@@ -3,772 +3,1399 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zen Finance</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<title>🪷 Zen Finance - Quản Trị Tài Chính Có Tâm Hồn</title>
 <style>
+/* ===== RESET ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+/* ===== ZEN FINANCE COLORS ===== */
 :root{
-  --bg:#ffffff;
-  --text:#000000;
-  --primary:#4da6ff;
-  --secondary:#ff69b4;
-  --card:#ffffff;
-  --border:#000000;
-  --muted:rgba(0,0,0,0.65);
-  --shadow:0 12px 28px rgba(0,0,0,0.08);
+  --zen-white:#ffffff;
+  --zen-black:#000000;
+  --zen-blue:#6BB6FF;
+  --zen-pink:#FFB3D9;
+  --pastel-blue:#E3F4FF;
+  --pastel-pink:#FFE8F5;
 }
 
-[data-theme="dark"]{
-  --bg:#000000;
-  --text:#ffffff;
-  --primary:#4da6ff;
-  --secondary:#ff69b4;
-  --card:#000000;
-  --border:#ffffff;
-  --muted:rgba(255,255,255,0.7);
-  --shadow:0 12px 28px rgba(255,255,255,0.08);
-}
-
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
-
+/* ===== LIGHT MODE (DEFAULT) ===== */
 body{
+  --bg:var(--zen-white);
+  --text:var(--zen-black);
+  --text-light:#4A4A4A;
+  --card-bg:var(--zen-white);
+  --card-border:#E8E8E8;
+  --shadow:0 4px 20px rgba(0,0,0,.06);
+  --hover-shadow:0 8px 32px rgba(107,182,255,.15);
+}
+
+/* ===== DARK MODE ===== */
+body.dark-mode{
+  --bg:var(--zen-black);
+  --text:var(--zen-white);
+  --text-light:#B8B8B8;
+  --card-bg:#1A1A1A;
+  --card-border:#2A2A2A;
+  --shadow:0 4px 20px rgba(255,255,255,.03);
+  --hover-shadow:0 8px 32px rgba(107,182,255,.25);
+}
+
+/* ===== BASE ===== */
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
   background:var(--bg);
   color:var(--text);
   min-height:100vh;
-  padding:24px 16px 64px;
-  transition:background 0.3s ease,color 0.3s ease;
-  word-break:break-word;
-  overflow-wrap:anywhere;
+  padding:20px;
+  transition:background .4s ease,color .4s ease;
+  line-height:1.6;
 }
 
 .container{
   max-width:1200px;
   margin:0 auto;
-  display:flex;
-  flex-direction:column;
-  gap:20px;
 }
 
-header{
+/* ===== HEADER ===== */
+.header{
   text-align:center;
+  margin-bottom:40px;
+  padding-bottom:30px;
+  border-bottom:1px solid var(--card-border);
+}
+
+.logo{
+  font-size:clamp(2rem,5vw,2.5rem);
+  margin-bottom:8px;
+  font-weight:900;
+  letter-spacing:-1px;
+  background:linear-gradient(135deg,var(--zen-blue),var(--zen-pink));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.tagline{
+  font-size:clamp(0.9rem,2vw,1.05rem);
+  color:var(--text-light);
+  font-weight:500;
+  font-style:italic;
+}
+
+/* ===== THEME TOGGLE ===== */
+.theme-toggle-wrap{
   display:flex;
-  flex-direction:column;
-  gap:12px;
+  justify-content:center;
+  align-items:center;
+  gap:16px;
+  margin-top:20px;
 }
 
-header h1{
-  font-size:clamp(2rem,4vw,3rem);
+.theme-icon{
+  font-size:1.5rem;
+  opacity:0.3;
+  transition:all .3s;
+  cursor:pointer;
+}
+
+.theme-icon.active{
+  opacity:1;
+  transform:scale(1.15);
+}
+
+.toggle-btn{
+  position:relative;
+  width:60px;
+  height:32px;
+  background:var(--card-border);
+  border-radius:32px;
+  cursor:pointer;
+  transition:background .3s;
+  border:none;
+  padding:0;
+}
+
+.toggle-btn:hover{
+  background:var(--zen-blue);
+}
+
+.toggle-slider{
+  position:absolute;
+  top:4px;
+  left:4px;
+  width:24px;
+  height:24px;
+  background:var(--zen-white);
+  border-radius:50%;
+  transition:transform .3s ease;
+  box-shadow:0 2px 8px rgba(0,0,0,.2);
+}
+
+body.dark-mode .toggle-slider{
+  transform:translateX(28px);
+}
+
+/* ===== CARDS ===== */
+.card{
+  background:var(--card-bg);
+  border:2px solid var(--card-border);
+  border-radius:20px;
+  padding:28px;
+  box-shadow:var(--shadow);
+  transition:all .3s ease;
+  margin-bottom:24px;
+}
+
+.card:hover{
+  transform:translateY(-4px);
+  box-shadow:var(--hover-shadow);
+}
+
+.card-title{
+  font-size:clamp(1.15rem,2.5vw,1.35rem);
   font-weight:800;
-  letter-spacing:1px;
-}
-
-header p{
-  font-size:clamp(1rem,2.6vw,1.2rem);
-  color:var(--muted);
-}
-
-.slogan{
-  font-size:clamp(1.2rem,3vw,1.6rem);
-  font-weight:800;
-  color:var(--secondary);
-  border:2px solid var(--secondary);
-  padding:12px 16px;
-  border-radius:999px;
-  display:inline-flex;
-  align-self:center;
+  margin-bottom:20px;
+  color:var(--zen-blue);
+  display:flex;
+  align-items:center;
   gap:8px;
-  animation:breathe 4s ease-in-out infinite;
 }
 
-@keyframes breathe{
-  0%,100%{opacity:0.7;letter-spacing:0.5px;}
-  50%{opacity:1;letter-spacing:2px;}
+/* ===== INCOME CARD ===== */
+.income-card{
+  background:linear-gradient(135deg,var(--pastel-pink),var(--pastel-blue));
+  border-color:var(--zen-pink);
 }
 
-.grid{
+body.dark-mode .income-card{
+  background:linear-gradient(135deg,rgba(255,179,217,.15),rgba(107,182,255,.15));
+}
+
+.income-label{
+  display:block;
+  font-size:1.05rem;
+  font-weight:700;
+  color:var(--zen-pink);
+  margin-bottom:10px;
+}
+
+.income-group{
   display:flex;
-  flex-wrap:wrap;
+  gap:12px;
+  margin-bottom:24px;
+}
+
+.income-input{
+  flex:1;
+  padding:16px 20px;
+  font-size:1.1rem;
+  font-weight:600;
+  border:2px solid var(--card-border);
+  border-radius:12px;
+  background:var(--card-bg);
+  color:var(--text);
+  transition:all .3s;
+}
+
+.income-input:focus{
+  outline:none;
+  border-color:var(--zen-pink);
+  box-shadow:0 0 20px rgba(255,179,217,.3);
+}
+
+/* ===== BALANCE ===== */
+.balance-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
   gap:16px;
 }
 
-.card{
-  background:var(--card);
-  border:2px solid var(--border);
-  border-radius:18px;
-  padding:20px;
-  box-shadow:var(--shadow);
-  flex:1 1 320px;
-  min-width:280px;
+.balance-box{
+  text-align:center;
+  padding:24px;
+  border-radius:16px;
+  border:3px solid;
+  transition:all .3s;
 }
 
-.card h2{
-  font-size:clamp(1.2rem,2.6vw,1.45rem);
-  margin-bottom:16px;
-  color:var(--primary);
-  font-weight:800;
+.balance-box.income-box{
+  background:rgba(255,179,217,.1);
+  border-color:var(--zen-pink);
 }
 
-.row-nowrap{
-  display:flex;
-  flex-wrap:nowrap;
+body.dark-mode .balance-box.income-box{
+  background:rgba(255,179,217,.15);
 }
 
-.stats{
-  display:flex;
-  flex-wrap:wrap;
-  gap:12px;
+.balance-box.remaining-box{
+  background:rgba(107,182,255,.1);
+  border-color:var(--zen-blue);
 }
 
-.stat-box{
-  flex:1 1 160px;
-  border:2px solid var(--border);
-  border-radius:14px;
-  padding:14px;
-  background:var(--card);
+body.dark-mode .balance-box.remaining-box{
+  background:rgba(107,182,255,.15);
 }
 
-.stat-label{
-  font-size:0.9rem;
-  color:var(--muted);
-  margin-bottom:6px;
+.balance-box.danger{
+  background:rgba(255,82,82,.15);
+  border-color:#FF5252;
+  animation:shake .6s;
 }
 
-.stat-value{
-  font-size:clamp(1.2rem,2.8vw,1.5rem);
-  font-weight:800;
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  25%{transform:translateX(-6px)}
+  75%{transform:translateX(6px)}
 }
 
-input,button,select{
-  width:100%;
-  padding:12px 14px;
-  border-radius:12px;
-  border:2px solid var(--border);
-  background:var(--card);
+.balance-label{
+  font-size:0.85rem;
+  text-transform:uppercase;
+  letter-spacing:1.2px;
+  opacity:.7;
+  margin-bottom:8px;
+  font-weight:700;
+}
+
+.balance-value{
+  font-size:clamp(1.8rem,4vw,2.2rem);
+  font-weight:900;
   color:var(--text);
-  font-size:clamp(0.95rem,2.4vw,1.05rem);
+}
+
+/* ===== AI FEEDBACK ===== */
+.ai-feedback{
+  margin-top:20px;
+  padding:20px;
+  border-radius:16px;
+  background:linear-gradient(135deg,rgba(107,182,255,.08),rgba(255,179,217,.08));
+  border:2px solid var(--zen-blue);
+  display:none;
+  align-items:start;
+  gap:12px;
+  animation:slideIn .5s ease;
+}
+
+@keyframes slideIn{
+  from{transform:translateY(-10px);opacity:0}
+  to{transform:translateY(0);opacity:1}
+}
+
+.ai-feedback.show{
+  display:flex;
+}
+
+.ai-icon{
+  font-size:2.5rem;
+  flex-shrink:0;
+  animation:bounce 2s infinite;
+}
+
+@keyframes bounce{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-8px)}
+}
+
+.ai-message{
+  font-size:1.05rem;
+  line-height:1.6;
+  color:var(--text);
+  font-weight:500;
+}
+
+/* ===== BUTTONS ===== */
+button{
+  padding:14px 28px;
+  border:none;
+  border-radius:12px;
+  font-size:1rem;
+  font-weight:700;
+  cursor:pointer;
+  transition:all .3s;
+  text-transform:uppercase;
+  letter-spacing:0.5px;
+}
+
+button:hover{
+  transform:translateY(-2px);
+}
+
+button:active{
+  transform:scale(0.98);
+}
+
+.btn-blue{
+  background:linear-gradient(135deg,var(--zen-blue),#4DA6FF);
+  color:var(--zen-white);
+  box-shadow:0 6px 20px rgba(107,182,255,.4);
+}
+
+.btn-blue:hover{
+  box-shadow:0 10px 30px rgba(107,182,255,.6);
+}
+
+.btn-pink{
+  background:linear-gradient(135deg,var(--zen-pink),#FF94D4);
+  color:var(--zen-white);
+  box-shadow:0 6px 20px rgba(255,179,217,.4);
+}
+
+.btn-pink:hover{
+  box-shadow:0 10px 30px rgba(255,179,217,.6);
+}
+
+.btn-small{
+  padding:10px 20px;
+  font-size:0.9rem;
+}
+
+.btn-outline{
+  background:transparent;
+  color:var(--zen-blue);
+  border:2px dashed var(--zen-blue);
+}
+
+.btn-cancel{
+  background:transparent;
+  color:var(--text-light);
+  border:2px solid var(--card-border);
+}
+
+/* ===== INPUTS ===== */
+input[type="text"],input[type="number"]{
+  width:100%;
+  padding:14px 18px;
+  border:2px solid var(--card-border);
+  border-radius:10px;
+  background:var(--card-bg);
+  color:var(--text);
+  font-size:1rem;
+  font-weight:600;
+  margin-bottom:14px;
+  transition:all .3s;
 }
 
 input:focus{
   outline:none;
-  border-color:var(--primary);
+  border-color:var(--zen-blue);
+  box-shadow:0 0 20px rgba(107,182,255,.3);
 }
 
-button{
-  background:var(--primary);
-  color:var(--bg);
-  cursor:pointer;
-  font-weight:800;
-  transition:transform 0.2s ease,opacity 0.2s ease;
+input::placeholder{
+  color:var(--text-light);
+  opacity:.6;
 }
 
-button:hover{transform:translateY(-2px)}
-
-button.secondary{
-  background:var(--secondary);
+/* ===== GRID ===== */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:24px;
+  margin-bottom:24px;
 }
 
-.form-row{
-  display:flex;
-  flex-wrap:wrap;
-  gap:12px;
+/* ===== CATEGORY ITEMS ===== */
+.category-list{
+  margin-top:16px;
 }
 
-.form-row > *{
-  flex:1 1 160px;
-}
-
-.expense-list{
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  max-height:360px;
-  overflow:auto;
-}
-
-.expense-item{
-  border:2px solid var(--border);
+.category-item{
+  padding:16px 20px;
+  border:2px solid var(--card-border);
   border-radius:14px;
-  padding:12px;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
+  margin-bottom:12px;
+  transition:all .3s;
 }
 
-.expense-top{
+.category-item:hover{
+  border-color:var(--zen-blue);
+  transform:translateY(-2px);
+  box-shadow:0 4px 16px rgba(107,182,255,.15);
+}
+
+.category-name{
+  font-size:1.15rem;
+  font-weight:700;
+  color:var(--zen-blue);
+  margin-bottom:10px;
+  display:block;
+}
+
+.category-actions{
+  display:flex;
+  gap:10px;
+}
+
+.category-actions input{
+  margin:0;
+  flex:1;
+}
+
+/* ===== EXPENSE GRID ===== */
+.expense-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:16px;
+  margin-top:16px;
+}
+
+.expense-card{
+  padding:20px;
+  border:2px solid var(--card-border);
+  border-radius:16px;
+  background:var(--card-bg);
+  transition:all .3s;
+  position:relative;
+  overflow:hidden;
+}
+
+.expense-card::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  width:5px;
+  height:100%;
+  background:linear-gradient(180deg,var(--zen-pink),var(--zen-blue));
+  opacity:0;
+  transition:opacity .3s;
+}
+
+.expense-card:hover{
+  border-color:var(--zen-pink);
+  transform:translateY(-4px);
+  box-shadow:0 8px 24px rgba(255,179,217,.25);
+}
+
+.expense-card:hover::before{
+  opacity:1;
+}
+
+.expense-header{
   display:flex;
   justify-content:space-between;
-  gap:8px;
-  flex-wrap:wrap;
+  align-items:start;
+  margin-bottom:12px;
+  gap:10px;
+}
+
+.expense-category{
+  font-size:1.1rem;
+  font-weight:700;
+  color:var(--zen-blue);
 }
 
 .expense-amount{
-  color:var(--primary);
-  font-weight:800;
+  font-size:1.5rem;
+  font-weight:900;
+  color:var(--zen-pink);
+  margin-bottom:8px;
 }
 
-.expense-meta{
+.expense-date{
   font-size:0.85rem;
-  color:var(--muted);
+  color:var(--text-light);
 }
 
-.filter-row{
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-bottom:12px;
+.btn-delete{
+  background:transparent;
+  color:#FF5252;
+  padding:8px 14px;
+  font-size:0.85rem;
+  border:2px solid transparent;
+  border-radius:8px;
 }
 
-.settings-row{
+.btn-delete:hover{
+  background:rgba(255,82,82,.1);
+  border-color:#FF5252;
+}
+
+/* ===== CHART ===== */
+.chart-controls{
   display:flex;
-  gap:16px;
-  align-items:center;
   justify-content:space-between;
-  flex-wrap:nowrap;
-  overflow-x:auto;
-}
-
-.settings-group{
-  display:flex;
   align-items:center;
-  gap:10px;
-  white-space:nowrap;
-}
-
-.settings-group label{
-  font-weight:700;
-}
-
-.settings-group input[type="color"]{
-  width:56px;
-  height:42px;
-  padding:0;
-  border-radius:10px;
-  border:2px solid var(--border);
-}
-
-.toggle{
-  position:relative;
-  width:64px;
-  height:34px;
-  flex-shrink:0;
-}
-
-.toggle input{opacity:0;width:0;height:0;position:absolute;}
-
-.toggle span{
-  position:absolute;
-  inset:0;
-  background:var(--border);
-  border-radius:999px;
-  transition:background 0.3s ease;
-}
-
-.toggle span::before{
-  content:"";
-  position:absolute;
-  width:24px;
-  height:24px;
-  background:var(--bg);
-  border-radius:50%;
-  top:4px;
-  left:6px;
-  transition:transform 0.3s ease;
-}
-
-.toggle input:checked + span{
-  background:var(--primary);
-}
-
-.toggle input:checked + span::before{
-  transform:translateX(28px);
-}
-
-.charts{
-  display:flex;
+  margin-bottom:20px;
   flex-wrap:wrap;
-  gap:16px;
-}
-
-.chart-card{
-  flex:1 1 320px;
-  min-width:280px;
-}
-
-.chart-wrap{
-  height:300px;
-}
-
-.modal-overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.55);
-  backdrop-filter:blur(10px);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:999;
-}
-
-.modal-overlay.show{display:flex;}
-
-.modal{
-  background:rgba(255,255,255,0.15);
-  border:3px solid var(--secondary);
-  border-radius:18px;
-  padding:24px;
-  width:min(420px,90vw);
-  text-align:center;
-  display:flex;
-  flex-direction:column;
   gap:12px;
-  box-shadow:0 18px 40px rgba(0,0,0,0.25);
 }
 
-.modal h3{
-  font-size:1.3rem;
+.chart-controls h2{
+  margin:0;
 }
 
-.modal p{
-  color:var(--muted);
+.chart-toggle{
+  display:flex;
+  gap:8px;
 }
 
-@media(max-width:700px){
-  .settings-row{
-    gap:12px;
+.chart-toggle button{
+  padding:8px 16px;
+  font-size:0.9rem;
+  border:2px solid var(--zen-blue);
+}
+
+.chart-toggle button.active{
+  background:var(--zen-blue);
+  color:white;
+}
+
+.chart-toggle button:not(.active){
+  background:transparent;
+  color:var(--text);
+}
+
+.chart-wrapper{
+  position:relative;
+  height:320px;
+}
+
+#chart{
+  width:100%;
+  height:100%;
+  border-radius:12px;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state{
+  text-align:center;
+  padding:60px 20px;
+  color:var(--text-light);
+  font-size:1.05rem;
+  font-style:italic;
+  grid-column:1/-1;
+}
+
+/* ===== PRESET BUTTONS ===== */
+.preset-btn:hover{
+  transform:translateY(-2px) scale(1.05);
+  border-color:var(--zen-blue)!important;
+  box-shadow:0 8px 24px rgba(0,0,0,.2);
+}
+
+.preset-btn:active{
+  transform:scale(0.98);
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+  body{padding:16px}
+  .card{padding:20px}
+  .grid{grid-template-columns:1fr}
+  .balance-grid{grid-template-columns:1fr}
+  .income-group{flex-direction:column}
+  .category-actions{flex-direction:column}
+  .expense-grid{grid-template-columns:1fr}
+  .theme-toggle-wrap{
+    flex-wrap:wrap;
+  }
+  input[type="color"]{
+    width:50px!important;
+    height:36px!important;
   }
 }
 </style>
 </head>
 <body>
-<div class="container" id="app">
-  <header>
-    <h1>Zen Finance</h1>
-    <div class="slogan">✨ Quản trị bằng Logic – Thưởng thức bằng Tâm hồn</div>
-    <p>Modern · Clean · Zen · Pastel · Logic‑Driven</p>
-  </header>
 
-  <div class="card">
-    <h2>💰 Thu nhập & Thống kê</h2>
-    <div class="form-row">
-      <input type="number" id="incomeInput" min="0" placeholder="Nhập thu nhập ban đầu" />
-      <button id="setIncomeBtn">Lưu thu nhập</button>
+<div class="container">
+  
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo">🪷 Zen Finance</div>
+    <div class="tagline">Dòng tiền tĩnh lặng — Ví tiền vững vàng — Tâm hồn tự tại</div>
+  </div>
+
+  <!-- INCOME & BALANCE -->
+  <div class="card income-card">
+    <div class="card-title">📥 Thu Nhập & Số Dư</div>
+    
+    <label class="income-label">💵 Nhập thu nhập tháng này</label>
+    <div class="income-group">
+      <input type="number" id="incomeInput" class="income-input" placeholder="Nhập số tiền..." min="0" step="1000"/>
+      <button class="btn-pink" onclick="setIncome()">✅ Xác Lập</button>
     </div>
-    <div class="stats" style="margin-top:16px;">
-      <div class="stat-box">
-        <div class="stat-label">Tổng thu nhập</div>
-        <div class="stat-value" id="totalIncome">0</div>
+    
+    <div class="balance-grid">
+      <div class="balance-box income-box">
+        <div class="balance-label">💰 Thu Nhập</div>
+        <div class="balance-value" id="incomeDisplay">0 ₫</div>
       </div>
-      <div class="stat-box">
-        <div class="stat-label">Tổng chi tiêu</div>
-        <div class="stat-value" id="totalExpense">0</div>
+      <div class="balance-box remaining-box" id="remainingBox">
+        <div class="balance-label">💵 Còn Lại</div>
+        <div class="balance-value" id="remainingDisplay">0 ₫</div>
       </div>
-      <div class="stat-box">
-        <div class="stat-label">Số dư</div>
-        <div class="stat-value" id="balance">0</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-label">Tỷ lệ tiết kiệm</div>
-        <div class="stat-value" id="savingRate">0%</div>
-      </div>
+    </div>
+
+    <!-- AI FEEDBACK -->
+    <div class="ai-feedback" id="aiFeedback">
+      <div class="ai-icon" id="aiIcon">🌿</div>
+      <div class="ai-message" id="aiMessage"></div>
     </div>
   </div>
 
+  <!-- GRID -->
   <div class="grid">
+    
+    <!-- GHI CHI TIÊU -->
     <div class="card">
-      <h2>➕ Thêm chi tiêu</h2>
-      <div class="form-row">
-        <input type="text" id="categoryInput" placeholder="Tên danh mục" />
-        <input type="number" id="amountInput" min="0" placeholder="Số tiền" />
-      </div>
-      <button class="secondary" id="addExpenseBtn" style="margin-top:12px;">Thêm chi tiêu</button>
-    </div>
-
-    <div class="card">
-      <h2>📋 Danh sách chi tiêu</h2>
-      <div class="filter-row">
-        <input type="text" id="filterInput" placeholder="Lọc theo danh mục..." />
-      </div>
-      <div class="expense-list" id="expenseList"></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>🎨 Tùy chỉnh giao diện</h2>
-    <div class="settings-row row-nowrap">
-      <div class="settings-group">
-        <label for="primaryColor">🎨 Màu</label>
-        <input type="color" id="primaryColor" value="#4da6ff" />
-      </div>
-      <div class="settings-group">
-        <span>☀️</span>
-        <label class="toggle">
-          <input type="checkbox" id="themeToggle" />
-          <span></span>
-        </label>
-        <span>🌙</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>📊 Biểu đồ</h2>
-    <div class="charts">
-      <div class="chart-card">
-        <div class="chart-wrap">
-          <canvas id="doughnutChart"></canvas>
-        </div>
-      </div>
-      <div class="chart-card">
-        <div class="chart-wrap">
-          <canvas id="barChart"></canvas>
+      <div class="card-title">📝 Ghi Chi Tiêu</div>
+      <div class="category-list" id="categoryList"></div>
+      <button class="btn-outline" id="addCategoryBtn" onclick="toggleAddCategory()">
+        ➕ Thêm Danh Mục Mới
+      </button>
+      <div id="addCategoryForm" style="display:none;margin-top:16px;">
+        <input type="text" id="newCategoryInput" placeholder="Tên danh mục mới..."/>
+        <div style="display:flex;gap:10px;">
+          <button class="btn-blue btn-small" onclick="addCustomCategory()">✅ Thêm</button>
+          <button class="btn-cancel btn-small" onclick="toggleAddCategory()">❌ Hủy</button>
         </div>
       </div>
     </div>
-  </div>
-</div>
 
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal" id="modalBox">
-    <div id="modalIcon">⚠️</div>
-    <h3 id="modalTitle">Cảnh báo</h3>
-    <p id="modalMessage"></p>
-    <button id="modalClose">Đã hiểu</button>
+    <!-- LỊCH SỬ -->
+    <div class="card">
+      <div class="card-title">📊 Lịch Sử Chi Tiêu</div>
+      <div class="expense-grid" id="expenseList">
+        <div class="empty-state">Chưa có khoản chi nào 🍃</div>
+      </div>
+    </div>
+
   </div>
+
+  <!-- BIỂU ĐỒ -->
+  <div class="card" id="chartCard" style="display:none;">
+    <div class="chart-controls">
+      <h2 class="card-title" id="chartTitle" style="margin:0;">🥧 Biểu Đồ Phân Bổ</h2>
+      <div class="chart-toggle">
+        <button onclick="switchChart('pie')" id="pieBtnChart" class="active">🥧</button>
+        <button onclick="switchChart('bar')" id="barBtnChart">📊</button>
+      </div>
+    </div>
+    <div class="chart-wrapper">
+      <canvas id="chart"></canvas>
+    </div>
+  </div>
+
+  <!-- TÙY CHỈNH -->
+  <div class="card">
+    <div class="card-title">🎨 Tùy Chỉnh Giao Diện</div>
+    
+    <!-- DARK MODE TOGGLE -->
+    <div style="margin-bottom:30px;">
+      <label style="display:block;font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:12px;">
+        🌓 Chế Độ Hiển Thị
+      </label>
+      <div class="theme-toggle-wrap" style="justify-content:flex-start;">
+        <span class="theme-icon sun-icon active" id="sunIcon">☀️</span>
+        <button class="toggle-btn" onclick="toggleTheme()" aria-label="Toggle theme">
+          <div class="toggle-slider"></div>
+        </button>
+        <span class="theme-icon moon-icon" id="moonIcon">🌙</span>
+      </div>
+    </div>
+
+    <!-- COLOR PRESETS -->
+    <div style="margin-bottom:30px;">
+      <label style="display:block;font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:12px;">
+        🎨 Theme Có Sẵn
+      </label>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;">
+        <button class="preset-btn" onclick="applyPreset('default', this)" style="background:linear-gradient(135deg,#6BB6FF,#FFB3D9);color:white;border:3px solid transparent;padding:16px;border-radius:12px;font-weight:700;cursor:pointer;transition:all .3s;">
+          Mặc Định
+        </button>
+        <button class="preset-btn" onclick="applyPreset('ocean', this)" style="background:linear-gradient(135deg,#4ECDC4,#556270);color:white;border:3px solid transparent;padding:16px;border-radius:12px;font-weight:700;cursor:pointer;transition:all .3s;">
+          Đại Dương
+        </button>
+        <button class="preset-btn" onclick="applyPreset('sunset', this)" style="background:linear-gradient(135deg,#FF6B6B,#FFE66D);color:white;border:3px solid transparent;padding:16px;border-radius:12px;font-weight:700;cursor:pointer;transition:all .3s;">
+          Hoàng Hôn
+        </button>
+        <button class="preset-btn" onclick="applyPreset('forest', this)" style="background:linear-gradient(135deg,#56AB2F,#A8E6CF);color:white;border:3px solid transparent;padding:16px;border-radius:12px;font-weight:700;cursor:pointer;transition:all .3s;">
+          Rừng Xanh
+        </button>
+        <button class="preset-btn" onclick="applyPreset('purple', this)" style="background:linear-gradient(135deg,#A770EF,#FDB99B);color:white;border:3px solid transparent;padding:16px;border-radius:12px;font-weight:700;cursor:pointer;transition:all .3s;">
+          Tím Hồng
+        </button>
+        <button class="preset-btn" onclick="applyPreset('minimal', this)" style="background:linear-gradient(135deg,#333,#999);color:white;border:3px solid transparent;padding:16px;border-radius:12px;font-weight:700;cursor:pointer;transition:all .3s;">
+          Tối Giản
+        </button>
+      </div>
+    </div>
+
+    <!-- CUSTOM COLORS -->
+    <div style="margin-bottom:20px;">
+      <label style="display:block;font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:12px;">
+        🎨 Tùy Chỉnh Màu Sắc Riêng
+      </label>
+      
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;">
+        <div>
+          <label style="display:block;font-size:0.9rem;font-weight:600;color:var(--text-light);margin-bottom:8px;">
+            💙 Màu Chủ Đạo 1 (Logic)
+          </label>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <input type="color" id="colorBlue" value="#6BB6FF" onchange="updateCustomColors()" style="width:60px;height:40px;border:2px solid var(--card-border);border-radius:8px;cursor:pointer;"/>
+            <input type="text" id="colorBlueHex" value="#6BB6FF" onchange="updateColorFromHex('blue')" style="flex:1;padding:10px;border:2px solid var(--card-border);border-radius:8px;background:var(--card-bg);color:var(--text);font-weight:600;text-transform:uppercase;"/>
+          </div>
+        </div>
+        
+        <div>
+          <label style="display:block;font-size:0.9rem;font-weight:600;color:var(--text-light);margin-bottom:8px;">
+            💖 Màu Chủ Đạo 2 (Cảm Xúc)
+          </label>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <input type="color" id="colorPink" value="#FFB3D9" onchange="updateCustomColors()" style="width:60px;height:40px;border:2px solid var(--card-border);border-radius:8px;cursor:pointer;"/>
+            <input type="text" id="colorPinkHex" value="#FFB3D9" onchange="updateColorFromHex('pink')" style="flex:1;padding:10px;border:2px solid var(--card-border);border-radius:8px;background:var(--card-bg);color:var(--text);font-weight:600;text-transform:uppercase;"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESET BUTTON -->
+    <button class="btn-outline" onclick="resetToDefault()" style="width:100%;">
+      🔄 Khôi Phục Mặc Định
+    </button>
+  </div>
+
 </div>
 
 <script>
-const AppState = {
-  key: "zenFinanceState",
-  data: {
-    income: 0,
-    expenses: [],
-    theme: "light",
-    primary: "#4da6ff",
-    aiFlags: {
-      lowBalance: false,
-      highCategory: false,
-      reward: false
-    }
-  },
-  load(){
-    const raw = localStorage.getItem(this.key);
-    if(raw){
-      try{
-        const parsed = JSON.parse(raw);
-        this.data = {
-          ...this.data,
-          ...parsed,
-          aiFlags: { ...this.data.aiFlags, ...(parsed.aiFlags || {}) }
-        };
-      } catch (error){
-        console.warn("Load state failed", error);
-      }
-    }
-  },
-  save(){
-    localStorage.setItem(this.key, JSON.stringify(this.data));
-  },
-  resetExpenses(){
-    this.data.expenses = [];
-    this.data.aiFlags = { lowBalance: false, highCategory: false, reward: false };
-    this.save();
+// ===== ZEN FINANCE CORE ENGINE =====
+
+// ===== STATE =====
+let state = {
+  income: 0,
+  balance: 0,
+  expenses: [],
+  categories: [
+    '🍱 Ăn uống',
+    '☕ Cafe & Trà',
+    '🛍️ Mua sắm',
+    '🚗 Di chuyển',
+    '🎮 Giải trí',
+    '📚 Học tập',
+    '💊 Sức khỏe',
+    '🏠 Nhà cửa'
+  ],
+  customCategories: [],
+  chartType: 'pie',
+  customColors: {
+    blue: '#6BB6FF',
+    pink: '#FFB3D9'
   }
 };
 
-const ThemeManager = {
-  init(){
-    Rendering.applyTheme(AppState.data.theme, AppState.data.primary);
-    document.getElementById("themeToggle").checked = AppState.data.theme === "dark";
-    document.getElementById("primaryColor").value = AppState.data.primary;
-  },
-  toggleTheme(){
-    const root = document.documentElement;
-    const current = root.getAttribute("data-theme");
-    const nextTheme = current === "dark" ? "light" : "dark";
-    AppState.data.theme = nextTheme;
-    AppState.save();
-    Rendering.applyTheme(AppState.data.theme, AppState.data.primary);
-    document.getElementById("themeToggle").checked = nextTheme === "dark";
-  },
-  syncToggle(isDark){
-    AppState.data.theme = isDark ? "dark" : "light";
-    AppState.save();
-    Rendering.applyTheme(AppState.data.theme, AppState.data.primary);
-  },
-  updatePrimary(color){
-    AppState.data.primary = color;
-    AppState.save();
-    Rendering.applyTheme(AppState.data.theme, AppState.data.primary);
-  }
+// ===== COLOR PRESETS =====
+const colorPresets = {
+  default: { blue: '#6BB6FF', pink: '#FFB3D9' },
+  ocean: { blue: '#4ECDC4', pink: '#556270' },
+  sunset: { blue: '#FF6B6B', pink: '#FFE66D' },
+  forest: { blue: '#56AB2F', pink: '#A8E6CF' },
+  purple: { blue: '#A770EF', pink: '#FDB99B' },
+  minimal: { blue: '#666666', pink: '#999999' }
 };
 
-const Handlers = {
-  bind(){
-    document.getElementById("setIncomeBtn").addEventListener("click", () => {
-      const input = document.getElementById("incomeInput");
-      const value = Math.max(0, Number(input.value || 0));
-      AppState.data.income = value;
-      AppState.resetExpenses();
-      input.value = value ? value : "";
-      AppState.save();
-      Rendering.renderAll();
-    });
-
-    document.getElementById("addExpenseBtn").addEventListener("click", () => {
-      const category = document.getElementById("categoryInput").value.trim();
-      const amountValue = Number(document.getElementById("amountInput").value || 0);
-
-      if(!category){
-        AIChecks.showModal("⚠️", "Thiếu danh mục", "Vui lòng nhập tên danh mục.", "warn");
-        return;
-      }
-
-      if(amountValue < 0){
-        AIChecks.showModal("⚠️", "Không hợp lệ", "Số tiền không được âm.", "warn");
-        return;
-      }
-
-      const balance = Rendering.getBalance();
-      if(amountValue > balance){
-        AIChecks.showModal("🚫", "Vượt số dư", "Không thể chi vượt số dư hiện tại.", "danger");
-        return;
-      }
-
-      const expense = {
-        id: crypto.randomUUID(),
-        category,
-        amount: amountValue,
-        timestamp: new Date().toLocaleString()
-      };
-
-      AppState.data.expenses.push(expense);
-      AppState.save();
-      Rendering.renderAll();
-      AIChecks.runAll();
-      document.getElementById("categoryInput").value = "";
-      document.getElementById("amountInput").value = "";
-    });
-
-    document.getElementById("filterInput").addEventListener("input", () => {
-      Rendering.renderExpenseList();
-    });
-
-    document.getElementById("themeToggle").addEventListener("change", (event) => {
-      ThemeManager.syncToggle(event.target.checked);
-    });
-
-    document.getElementById("primaryColor").addEventListener("input", (event) => {
-      ThemeManager.updatePrimary(event.target.value);
-    });
-
-    document.getElementById("modalClose").addEventListener("click", () => {
-      AIChecks.closeModal();
-    });
-
-    document.getElementById("modalOverlay").addEventListener("click", (event) => {
-      if(event.target.id === "modalOverlay"){
-        AIChecks.closeModal();
-      }
-    });
-  }
+let aiWarned = {
+  low: false,
+  overspent: false,
+  categoryHigh: new Set()
 };
 
-const Rendering = {
-  doughnutChart: null,
-  barChart: null,
-  renderAll(){
-    this.renderStats();
-    this.renderExpenseList();
-    this.renderCharts();
-  },
-  renderStats(){
-    const income = AppState.data.income;
-    const totalExpense = AppState.data.expenses.reduce((sum, item) => sum + item.amount, 0);
-    const balance = income - totalExpense;
-    const savingRate = income > 0 ? Math.max(0, ((balance / income) * 100)) : 0;
+// ===== INIT =====
+window.addEventListener('DOMContentLoaded', () => {
+  loadData();
+  loadTheme();
+  loadCustomColors();
+  render();
+});
 
-    document.getElementById("totalIncome").textContent = this.formatCurrency(income);
-    document.getElementById("totalExpense").textContent = this.formatCurrency(totalExpense);
-    document.getElementById("balance").textContent = this.formatCurrency(balance);
-    document.getElementById("savingRate").textContent = `${savingRate.toFixed(1)}%`;
-  },
-  renderExpenseList(){
-    const list = document.getElementById("expenseList");
-    const filter = document.getElementById("filterInput").value.trim().toLowerCase();
-    const filtered = AppState.data.expenses.filter(item => item.category.toLowerCase().includes(filter));
+// ===== STORAGE =====
+function saveData() {
+  localStorage.setItem('zenFinanceData', JSON.stringify(state));
+}
 
-    if(filtered.length === 0){
-      list.innerHTML = `<div class="expense-item">Chưa có chi tiêu phù hợp.</div>`;
-      return;
+function loadData() {
+  const saved = localStorage.getItem('zenFinanceData');
+  if (saved) {
+    try {
+      const data = JSON.parse(saved);
+      state = { ...state, ...data };
+      document.getElementById('incomeInput').value = state.income || '';
+    } catch (e) {
+      console.error('Load error:', e);
     }
+  }
+}
 
-    list.innerHTML = filtered.map(item => {
-      return `
-        <div class="expense-item">
-          <div class="expense-top">
-            <strong>${item.category}</strong>
-            <span class="expense-amount">${this.formatCurrency(item.amount)}</span>
-          </div>
-          <div class="expense-meta">${item.timestamp}</div>
-          <button class="secondary" data-id="${item.id}">Xóa</button>
+function saveTheme() {
+  const isDark = document.body.classList.contains('dark-mode');
+  localStorage.setItem('zenTheme', isDark ? 'dark' : 'light');
+}
+
+function loadTheme() {
+  const saved = localStorage.getItem('zenTheme');
+  if (saved === 'dark') {
+    document.body.classList.add('dark-mode');
+    updateThemeIcons();
+  }
+}
+
+// ===== THEME =====
+function toggleTheme() {
+  document.body.classList.toggle('dark-mode');
+  updateThemeIcons();
+  saveTheme();
+  if (state.expenses.length > 0) {
+    drawChart();
+  }
+}
+
+function updateThemeIcons() {
+  const isDark = document.body.classList.contains('dark-mode');
+  document.getElementById('sunIcon').classList.toggle('active', !isDark);
+  document.getElementById('moonIcon').classList.toggle('active', isDark);
+}
+
+// ===== INCOME =====
+function setIncome() {
+  const input = document.getElementById('incomeInput');
+  const value = parseFloat(input.value) || 0;
+  
+  if (value <= 0) {
+    alert('⚠️ Vui lòng nhập thu nhập lớn hơn 0!');
+    return;
+  }
+  
+  state.income = value;
+  state.balance = value;
+  state.expenses = [];
+  aiWarned = {low: false, overspent: false, categoryHigh: new Set()};
+  
+  saveData();
+  render();
+}
+
+// ===== CATEGORIES =====
+function toggleAddCategory() {
+  const form = document.getElementById('addCategoryForm');
+  const btn = document.getElementById('addCategoryBtn');
+  const isVisible = form.style.display !== 'none';
+  
+  form.style.display = isVisible ? 'none' : 'block';
+  btn.style.display = isVisible ? 'block' : 'none';
+  
+  if (!isVisible) {
+    document.getElementById('newCategoryInput').focus();
+  }
+}
+
+function addCustomCategory() {
+  const input = document.getElementById('newCategoryInput');
+  const name = input.value.trim();
+  
+  if (!name) {
+    alert('⚠️ Vui lòng nhập tên danh mục!');
+    return;
+  }
+  
+  const allCategories = [...state.categories, ...state.customCategories];
+  if (allCategories.includes(name)) {
+    alert('⚠️ Danh mục này đã tồn tại!');
+    return;
+  }
+  
+  state.customCategories.push(name);
+  input.value = '';
+  toggleAddCategory();
+  saveData();
+  render();
+}
+
+// ===== EXPENSES =====
+function addExpense(category) {
+  const inputId = `amount-${category.replace(/[^a-zA-Z0-9]/g, '-')}`;
+  const input = document.getElementById(inputId);
+  const amount = parseFloat(input.value) || 0;
+  
+  if (amount <= 0) {
+    alert('⚠️ Vui lòng nhập số tiền lớn hơn 0!');
+    return;
+  }
+  
+  if (amount > state.balance) {
+    alert(`💸 Số tiền ${formatMoney(amount)} vượt số dư ${formatMoney(state.balance)}!`);
+    return;
+  }
+  
+  state.balance -= amount;
+  state.expenses.push({
+    id: Date.now(),
+    category,
+    amount,
+    date: new Date().toLocaleString('vi-VN')
+  });
+  
+  input.value = '';
+  aiWarned = {low: false, overspent: false, categoryHigh: new Set()};
+  
+  saveData();
+  render();
+  analyzeAI();
+}
+
+function deleteExpense(id) {
+  const expense = state.expenses.find(e => e.id === id);
+  if (expense) {
+    state.balance += expense.amount;
+    state.expenses = state.expenses.filter(e => e.id !== id);
+    aiWarned = {low: false, overspent: false, categoryHigh: new Set()};
+    saveData();
+    render();
+  }
+}
+
+// ===== HELPERS =====
+function formatMoney(amount) {
+  return new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND'
+  }).format(amount);
+}
+
+function randomPick(array) {
+  return array[Math.floor(Math.random() * array.length)];
+}
+
+// ===== RENDER =====
+function render() {
+  renderBalances();
+  renderCategories();
+  renderExpenses();
+  renderChart();
+}
+
+function renderBalances() {
+  document.getElementById('incomeDisplay').textContent = formatMoney(state.income);
+  document.getElementById('remainingDisplay').textContent = formatMoney(state.balance);
+  
+  const remainingBox = document.getElementById('remainingBox');
+  remainingBox.classList.toggle('danger', state.balance < 0);
+}
+
+function renderCategories() {
+  const container = document.getElementById('categoryList');
+  const allCategories = [...state.categories, ...state.customCategories];
+  
+  if (allCategories.length === 0) {
+    container.innerHTML = '';
+    return;
+  }
+  
+  container.innerHTML = allCategories.map(cat => {
+    const safeId = 'amount-' + cat.replace(/[^a-zA-Z0-9]/g, '-');
+    const safeCat = cat.replace(/'/g, "\\'");
+    return `
+      <div class="category-item">
+        <span class="category-name">${cat}</span>
+        <div class="category-actions">
+          <input type="number" id="${safeId}" placeholder="Số tiền" min="0" step="1000"/>
+          <button class="btn-pink btn-small" onclick="addExpense('${safeCat}')">💾 Lưu</button>
         </div>
-      `;
-    }).join("");
+      </div>
+    `;
+  }).join('');
+}
 
-    list.querySelectorAll("button[data-id]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const id = btn.getAttribute("data-id");
-        AppState.data.expenses = AppState.data.expenses.filter(item => item.id !== id);
-        AppState.save();
-        this.renderAll();
-        AIChecks.runAll();
-      });
-    });
-  },
-  renderCharts(){
-    const totals = {};
-    AppState.data.expenses.forEach(item => {
-      totals[item.category] = (totals[item.category] || 0) + item.amount;
-    });
-    const labels = Object.keys(totals);
-    const data = Object.values(totals);
-
-    const textColor = getComputedStyle(document.body).color;
-    const primary = AppState.data.primary;
-    const secondary = "#ff69b4";
-    const palette = [primary, secondary, "#4da6ff", "#ff69b4"];
-
-    if(!this.doughnutChart){
-      this.doughnutChart = new Chart(document.getElementById("doughnutChart"), {
-        type: "doughnut",
-        data: { labels, datasets: [{ data, backgroundColor: palette }] },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { labels: { color: textColor } }
-          }
-        }
-      });
-    } else {
-      this.doughnutChart.data.labels = labels;
-      this.doughnutChart.data.datasets[0].data = data;
-      this.doughnutChart.options.plugins.legend.labels.color = textColor;
-      this.doughnutChart.update();
-    }
-
-    if(!this.barChart){
-      this.barChart = new Chart(document.getElementById("barChart"), {
-        type: "bar",
-        data: { labels, datasets: [{ data, backgroundColor: primary }] },
-        options: {
-          responsive: true,
-          scales: {
-            x: { ticks: { color: textColor } },
-            y: { ticks: { color: textColor } }
-          },
-          plugins: {
-            legend: { display: false }
-          }
-        }
-      });
-    } else {
-      this.barChart.data.labels = labels;
-      this.barChart.data.datasets[0].data = data;
-      this.barChart.data.datasets[0].backgroundColor = primary;
-      this.barChart.options.scales.x.ticks.color = textColor;
-      this.barChart.options.scales.y.ticks.color = textColor;
-      this.barChart.update();
-    }
-  },
-  applyTheme(theme, primary){
-    document.documentElement.setAttribute("data-theme", theme);
-    document.documentElement.style.setProperty("--primary", primary);
-    this.renderCharts();
-  },
-  formatCurrency(value){
-    return Number(value).toLocaleString("vi-VN") + " ₫";
-  },
-  getBalance(){
-    const income = AppState.data.income;
-    const totalExpense = AppState.data.expenses.reduce((sum, item) => sum + item.amount, 0);
-    return income - totalExpense;
+function renderExpenses() {
+  const container = document.getElementById('expenseList');
+  
+  if (state.expenses.length === 0) {
+    container.innerHTML = '<div class="empty-state">Chưa có khoản chi nào 🍃</div>';
+    return;
   }
-};
+  
+  container.innerHTML = [...state.expenses].reverse().map(exp => `
+    <div class="expense-card">
+      <div class="expense-header">
+        <span class="expense-category">${exp.category}</span>
+        <button class="btn-delete" onclick="deleteExpense(${exp.id})">🗑️</button>
+      </div>
+      <div class="expense-amount">${formatMoney(exp.amount)}</div>
+      <div class="expense-date">${exp.date}</div>
+    </div>
+  `).join('');
+}
 
-const GenZMessages = {
-  low: [
-    "Ví đang kêu cứu rồi đó, tạm ngưng chốt đơn nha.",
-    "Tài chính hơi căng, cho ví nghỉ ngơi chút nha."
+function renderChart() {
+  const chartCard = document.getElementById('chartCard');
+  
+  if (state.expenses.length === 0) {
+    chartCard.style.display = 'none';
+    return;
+  }
+  
+  chartCard.style.display = 'block';
+  drawChart();
+}
+
+// ===== CHART =====
+function switchChart(type) {
+  state.chartType = type;
+  document.getElementById('pieBtnChart').classList.toggle('active', type === 'pie');
+  document.getElementById('barBtnChart').classList.toggle('active', type === 'bar');
+  
+  const title = type === 'pie' ? '🥧 Biểu Đồ Phân Bổ' : '📊 Chi Tiêu Theo Danh Mục';
+  document.getElementById('chartTitle').textContent = title;
+  
+  drawChart();
+}
+
+function drawChart() {
+  const canvas = document.getElementById('chart');
+  const ctx = canvas.getContext('2d');
+  
+  // Set canvas size
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  ctx.scale(dpr, dpr);
+  
+  // Calculate category totals
+  const categoryTotals = {};
+  state.expenses.forEach(exp => {
+    categoryTotals[exp.category] = (categoryTotals[exp.category] || 0) + exp.amount;
+  });
+  
+  const sortedCategories = Object.entries(categoryTotals).sort((a, b) => b[1] - a[1]);
+  const totalSpent = state.expenses.reduce((sum, exp) => sum + exp.amount, 0);
+  
+  // Generate colors from custom colors
+  const colors = generateColorPalette(state.customColors.pink, state.customColors.blue, sortedCategories.length);
+  const textColor = getComputedStyle(document.body).color;
+  const borderColor = document.body.classList.contains('dark-mode') ? '#000' : '#fff';
+  
+  ctx.clearRect(0, 0, rect.width, rect.height);
+  
+  if (state.chartType === 'pie') {
+    // PIE CHART
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const radius = Math.min(centerX, centerY) - 60;
+    
+    let startAngle = -Math.PI / 2;
+    
+    sortedCategories.forEach(([cat, amount], index) => {
+      const sliceAngle = (amount / totalSpent) * 2 * Math.PI;
+      
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.arc(centerX, centerY, radius, startAngle, startAngle + sliceAngle);
+      ctx.closePath();
+      
+      ctx.fillStyle = colors[index % colors.length];
+      ctx.fill();
+      
+      ctx.strokeStyle = borderColor;
+      ctx.lineWidth = 3;
+      ctx.stroke();
+      
+      // Label
+      const labelAngle = startAngle + sliceAngle / 2;
+      const labelX = centerX + Math.cos(labelAngle) * (radius * 0.7);
+      const labelY = centerY + Math.sin(labelAngle) * (radius * 0.7);
+      
+      ctx.fillStyle = textColor;
+      ctx.font = 'bold 14px system-ui';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      
+      const percent = ((amount / totalSpent) * 100).toFixed(0);
+      ctx.fillText(`${percent}%`, labelX, labelY);
+      
+      startAngle += sliceAngle;
+    });
+    
+    // Legend
+    const legendX = 20;
+    let legendY = rect.height - (sortedCategories.length * 25) - 10;
+    
+    sortedCategories.forEach(([cat, amount], index) => {
+      ctx.fillStyle = colors[index % colors.length];
+      ctx.fillRect(legendX, legendY, 15, 15);
+      
+      ctx.fillStyle = textColor;
+      ctx.font = '13px system-ui';
+      ctx.textAlign = 'left';
+      ctx.fillText(`${cat}: ${formatMoney(amount)}`, legendX + 22, legendY + 11);
+      
+      legendY += 25;
+    });
+    
+  } else {
+    // BAR CHART
+    const maxAmount = Math.max(...sortedCategories.map(([, amt]) => amt));
+    const barWidth = (rect.width - 60) / sortedCategories.length;
+    const maxHeight = rect.height - 100;
+    
+    sortedCategories.forEach(([cat, amount], index) => {
+      const barHeight = (amount / maxAmount) * maxHeight;
+      const x = 30 + index * barWidth;
+      const y = rect.height - 60 - barHeight;
+      
+      // Bar
+      ctx.fillStyle = colors[index % colors.length];
+      ctx.fillRect(x, y, barWidth - 20, barHeight);
+      
+      // Amount on top
+      ctx.fillStyle = textColor;
+      ctx.font = 'bold 12px system-ui';
+      ctx.textAlign = 'center';
+      ctx.fillText(formatMoney(amount), x + (barWidth - 20) / 2, y - 10);
+      
+      // Category label
+      ctx.font = '12px system-ui';
+      ctx.save();
+      ctx.translate(x + (barWidth - 20) / 2, rect.height - 35);
+      ctx.rotate(-Math.PI / 4);
+      ctx.textAlign = 'right';
+      ctx.fillText(cat, 0, 0);
+      ctx.restore();
+    });
+  }
+}
+
+// Generate color palette from two base colors
+function generateColorPalette(color1, color2, count) {
+  const colors = [];
+  
+  for (let i = 0; i < count; i++) {
+    const ratio = i / Math.max(count - 1, 1);
+    colors.push(interpolateColor(color1, color2, ratio));
+  }
+  
+  return colors;
+}
+
+// Interpolate between two hex colors
+function interpolateColor(color1, color2, ratio) {
+  const hex1 = color1.replace('#', '');
+  const hex2 = color2.replace('#', '');
+  
+  const r1 = parseInt(hex1.substring(0, 2), 16);
+  const g1 = parseInt(hex1.substring(2, 4), 16);
+  const b1 = parseInt(hex1.substring(4, 6), 16);
+  
+  const r2 = parseInt(hex2.substring(0, 2), 16);
+  const g2 = parseInt(hex2.substring(2, 4), 16);
+  const b2 = parseInt(hex2.substring(4, 6), 16);
+  
+  const r = Math.round(r1 + (r2 - r1) * ratio);
+  const g = Math.round(g1 + (g2 - g1) * ratio);
+  const b = Math.round(b1 + (b2 - b1) * ratio);
+  
+  return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+}
+
+// ===== AI BEHAVIORAL FEEDBACK ===== 
+const AI_FEEDBACK = {
+  lowBalance: [
+    {icon: '😬', msg: 'Ủa rồi định sống bằng niềm tin thiệt hả? Ví đang kêu cứu 115 kìa 🚑'},
+    {icon: '⚠️', msg: 'Ví sắp cạn rồi bạn êi! Cẩn thận kẻo phải ăn mì tôm cuối tháng đó! 🍜'},
+    {icon: '🤏', msg: 'Còn chưa đầy 20%! Hãy suy nghĩ kỹ trước mỗi lần mở ví nha!'}
   ],
-  heavy: [
-    "Danh mục này đang chiếm spotlight quá rồi.",
-    "Biểu đồ đang nghiêng hẳn về một phía, cân bằng lại."
+  categoryDominant: (cat) => [
+    {icon: '🤨', msg: `"${cat}" đang cân team một mình đó nha. Bao nuôi chủ shop hả?`},
+    {icon: '👀', msg: `Danh mục "${cat}" chiếm hơn 40%! Có vẻ đang ưu ái hơi nhiều rồi đấy!`},
+    {icon: '😅', msg: `"${cat}" đang thống trị ngân sách! Cân nhắc lại chút nha bạn!`}
   ],
-  reward: [
-    "Quản lý tiền rất ổn định.",
-    "Cấu trúc tài chính đẹp."
+  goodBalance: [
+    {icon: '💅', msg: 'Trộm vía, cấu trúc tài chính đẹp như đồ họa game indie ✨'},
+    {icon: '🎉', msg: 'Chi tiêu cân bằng, phân bổ hợp lý! Đỉnh quá! Tiếp tục duy trì nha!'},
+    {icon: '🪷', msg: 'Dòng tiền đang chảy tĩnh lặng và có ý thức. Bạn làm rất tốt!'}
+  ],
+  overspent: [
+    {icon: '💸', msg: 'Chi vượt thu nhập rồi bạn ơi! Tiền không tự sinh ra đâu nha! 😅'},
+    {icon: '🚨', msg: 'Ngân sách âm rồi! Đã đến lúc phải tạm dừng thôi!'},
+    {icon: '😵', msg: 'Số dư âm! Cần xem xét lại toàn bộ kế hoạch chi tiêu đi bạn!'}
   ]
 };
 
-const AIChecks = {
-  showModal(icon, title, message, tone){
-    const overlay = document.getElementById("modalOverlay");
-    const box = document.getElementById("modalBox");
-    const borderColor = tone === "danger" ? "#ff69b4" : tone === "reward" ? "#4da6ff" : "#ff69b4";
-    box.style.borderColor = borderColor;
-    document.getElementById("modalIcon").textContent = icon;
-    document.getElementById("modalTitle").textContent = title;
-    document.getElementById("modalMessage").textContent = message;
-    overlay.classList.add("show");
-  },
-  closeModal(){
-    document.getElementById("modalOverlay").classList.remove("show");
-  },
-  runAll(){
-    const income = AppState.data.income;
-    const balance = Rendering.getBalance();
-    const totalExpense = AppState.data.expenses.reduce((sum, item) => sum + item.amount, 0);
-
-    if(income > 0 && balance / income < 0.2 && !AppState.data.aiFlags.lowBalance){
-      AppState.data.aiFlags.lowBalance = true;
-      AppState.save();
-      const message = GenZMessages.low[Math.floor(Math.random() * GenZMessages.low.length)];
-      this.showModal("⚠️", "Số dư thấp", message, "warn");
+function analyzeAI() {
+  if (state.income === 0 || state.expenses.length === 0) return;
+  
+  const totalSpent = state.expenses.reduce((sum, exp) => sum + exp.amount, 0);
+  const percentRemaining = (state.balance / state.income) * 100;
+  
+  // 1. CHI VƯỢT THU NHẬP
+  if (totalSpent > state.income && !aiWarned.overspent) {
+    aiWarned.overspent = true;
+    const feedback = randomPick(AI_FEEDBACK.overspent);
+    showAIFeedback(feedback.icon, feedback.msg);
+    return;
+  }
+  
+  // 2. SỐ DƯ THẤP (<20%)
+  if (percentRemaining < 20 && state.balance > 0 && !aiWarned.low) {
+    aiWarned.low = true;
+    const feedback = randomPick(AI_FEEDBACK.lowBalance);
+    showAIFeedback(feedback.icon, feedback.msg);
+    return;
+  }
+  
+  // 3. DANH MỤC CHIẾM >40% THU NHẬP
+  const categoryTotals = {};
+  state.expenses.forEach(exp => {
+    categoryTotals[exp.category] = (categoryTotals[exp.category] || 0) + exp.amount;
+  });
+  
+  for (const cat in categoryTotals) {
+    const catPercentIncome = (categoryTotals[cat] / state.income) * 100;
+    if (catPercentIncome > 40 && !aiWarned.categoryHigh.has(cat)) {
+      aiWarned.categoryHigh.add(cat);
+      const feedbacks = AI_FEEDBACK.categoryDominant(cat);
+      const feedback = randomPick(feedbacks);
+      showAIFeedback(feedback.icon, feedback.msg);
       return;
-    }
-
-    const categoryTotals = {};
-    AppState.data.expenses.forEach(item => {
-      categoryTotals[item.category] = (categoryTotals[item.category] || 0) + item.amount;
-    });
-    const hasHighCategory = Object.values(categoryTotals).some(amount => income > 0 && amount / income > 0.4);
-    if(hasHighCategory && !AppState.data.aiFlags.highCategory){
-      AppState.data.aiFlags.highCategory = true;
-      AppState.save();
-      const message = GenZMessages.heavy[Math.floor(Math.random() * GenZMessages.heavy.length)];
-      this.showModal("🧐", "Chi tiêu mất cân bằng", message, "warn");
-      return;
-    }
-
-    const ratio = income > 0 ? totalExpense / income : 0;
-    if(ratio >= 0.3 && ratio <= 0.7 && AppState.data.expenses.length >= 3 && !AppState.data.aiFlags.reward){
-      AppState.data.aiFlags.reward = true;
-      AppState.save();
-      const message = GenZMessages.reward[Math.floor(Math.random() * GenZMessages.reward.length)];
-      this.showModal("🌟", "Tốt lắm!", message, "reward");
     }
   }
-};
+  
+  // 4. KHEN - CÂN BẰNG TỐT (30-70%)
+  const spendRatio = (totalSpent / state.income) * 100;
+  if (spendRatio >= 30 && spendRatio <= 70 && state.expenses.length >= 3) {
+    const feedback = randomPick(AI_FEEDBACK.goodBalance);
+    showAIFeedback(feedback.icon, feedback.msg);
+  }
+}
 
-AppState.load();
-Handlers.bind();
-ThemeManager.init();
-Rendering.renderAll();
-AIChecks.runAll();
+function showAIFeedback(icon, message) {
+  document.getElementById('aiIcon').textContent = icon;
+  document.getElementById('aiMessage').textContent = message;
+  
+  const feedback = document.getElementById('aiFeedback');
+  feedback.classList.add('show');
+  
+  setTimeout(() => {
+    feedback.classList.remove('show');
+  }, 10000);
+}
+
+// ===== RESIZE HANDLER =====
+window.addEventListener('resize', () => {
+  if (state.expenses.length > 0) {
+    drawChart();
+  }
+});
+
+// ===== COLOR CUSTOMIZATION =====
+function updateCustomColors() {
+  const blueInput = document.getElementById('colorBlue');
+  const pinkInput = document.getElementById('colorPink');
+  
+  state.customColors.blue = blueInput.value;
+  state.customColors.pink = pinkInput.value;
+  
+  document.getElementById('colorBlueHex').value = blueInput.value.toUpperCase();
+  document.getElementById('colorPinkHex').value = pinkInput.value.toUpperCase();
+  
+  applyColors();
+  saveData();
+}
+
+function updateColorFromHex(type) {
+  const hexInput = document.getElementById(`color${type.charAt(0).toUpperCase() + type.slice(1)}Hex`);
+  let hex = hexInput.value.trim();
+  
+  // Validate hex
+  if (!hex.startsWith('#')) hex = '#' + hex;
+  if (!/^#[0-9A-F]{6}$/i.test(hex)) {
+    alert('⚠️ Mã màu không hợp lệ! Vui lòng nhập dạng #RRGGBB');
+    return;
+  }
+  
+  state.customColors[type] = hex;
+  document.getElementById(`color${type.charAt(0).toUpperCase() + type.slice(1)}`).value = hex;
+  hexInput.value = hex.toUpperCase();
+  
+  applyColors();
+  saveData();
+}
+
+function applyPreset(presetName, buttonEl) {
+  const preset = colorPresets[presetName];
+  if (!preset) return;
+  
+  state.customColors.blue = preset.blue;
+  state.customColors.pink = preset.pink;
+  
+  document.getElementById('colorBlue').value = preset.blue;
+  document.getElementById('colorPink').value = preset.pink;
+  document.getElementById('colorBlueHex').value = preset.blue.toUpperCase();
+  document.getElementById('colorPinkHex').value = preset.pink.toUpperCase();
+  
+  applyColors();
+  saveData();
+  
+  // Visual feedback
+  const buttons = document.querySelectorAll('.preset-btn');
+  buttons.forEach(btn => {
+    btn.style.transform = 'scale(1)';
+    btn.style.borderColor = 'transparent';
+  });
+  if (buttonEl) {
+    buttonEl.style.transform = 'scale(1.05)';
+    buttonEl.style.borderColor = state.customColors.blue;
+  }
+}
+
+function resetToDefault() {
+  if (confirm('🔄 Khôi phục màu sắc mặc định?')) {
+    applyPreset('default');
+  }
+}
+
+function applyColors() {
+  const root = document.documentElement;
+  root.style.setProperty('--zen-blue', state.customColors.blue);
+  root.style.setProperty('--zen-pink', state.customColors.pink);
+  
+  // Update pastel variants
+  const blueLight = lightenColor(state.customColors.blue, 40);
+  const pinkLight = lightenColor(state.customColors.pink, 40);
+  root.style.setProperty('--pastel-blue', blueLight);
+  root.style.setProperty('--pastel-pink', pinkLight);
+  
+  // Redraw chart if visible
+  if (state.expenses.length > 0) {
+    drawChart();
+  }
+}
+
+function lightenColor(hex, percent) {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const amt = Math.round(2.55 * percent);
+  const r = Math.min(255, (num >> 16) + amt);
+  const g = Math.min(255, ((num >> 8) & 0x00FF) + amt);
+  const b = Math.min(255, (num & 0x0000FF) + amt);
+  return '#' + (
+    (1 << 24) + (r << 16) + (g << 8) + b
+  ).toString(16).slice(1).toUpperCase();
+}
+
+function loadCustomColors() {
+  if (state.customColors) {
+    document.getElementById('colorBlue').value = state.customColors.blue;
+    document.getElementById('colorPink').value = state.customColors.pink;
+    document.getElementById('colorBlueHex').value = state.customColors.blue.toUpperCase();
+    document.getElementById('colorPinkHex').value = state.customColors.pink.toUpperCase();
+    applyColors();
+  }
+}
+
+console.log('✅ Zen Finance Engine Loaded');
+console.log('🪷 Triết lý: Quản trị bằng Logic — Thưởng thức bằng Tâm hồn');
 </script>
+
 </body>
 </html>
