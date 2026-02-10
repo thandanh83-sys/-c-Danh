@@ -1,28 +1,35 @@
 # NeuroX Finance
 
-NeuroX Finance là trang **1 file HTML duy nhất** chứa đầy đủ:
-- Prompt chuyên nghiệp (Claude-friendly, không phụ thuộc @github).
-- Code ứng dụng quản lý chi tiêu hiện đại (Zen + Glow + Logic).
+NeuroX Finance là ứng dụng quản lý chi tiêu 1 file HTML theo phong cách **Modern Zen + Logic + Glow**.
 
 ## Chạy nhanh
 
 ```bash
-python3 -m http.server 4173
+python3 -m http.server 4173 --bind 0.0.0.0
 ```
 
 Mở: `http://localhost:4173`
 
-## Tính năng
+## Tính năng chính
 
-- Picker View danh mục chi tiêu:
+- Signature thương hiệu: **NeuroX** (Neuro + X = tư duy vượt giới hạn).
+- Giao diện viền sáng đồng nhất cho card/input/toggle/button.
+- Picker View danh mục chi tiêu (gọn trang, hiện đại, không dài dòng).
+- Danh mục:
   - 🍱 Ăn uống, ☕ Cafe, 🛍️ Mua sắm, 🚗 Di chuyển, 🎮 Giải trí,
   - 📚 Học tập, 💊 Sức khỏe, 🏠 Nhà cửa, ✍️ Mục khác.
-- Thêm/sửa/xóa khoản chi.
-- Đổi thu nhập bất kỳ lúc nào.
-- Lưu dữ liệu bằng `localStorage`.
-- Biểu đồ cột/tròn để so sánh và phân tích.
-- Cảnh báo AI theo thuật toán:
+- Thêm / sửa / xoá khoản chi.
+- Cập nhật thu nhập linh hoạt.
+- Lưu dữ liệu vào `localStorage`.
+- Biểu đồ 2 chế độ:
+  - 1️⃣ Cột
+  - 2️⃣ Tròn
+- AI Auditor bằng thuật toán:
   - `idealBudgetPerCategory = income / existingCategoryCount`
-  - Cảnh báo hồng khi danh mục vượt ngưỡng.
+  - Cảnh báo hồng khi danh mục vượt chuẩn.
   - Cảnh báo đỏ khi tổng chi vượt thu nhập.
-- Viền sáng + glow đồng bộ cho card/input/button/toggle.
+- Theme Engine “🎨 GIAO DIỆN NeuroX”:
+  - Preset màu,
+  - Tuỳ chỉnh color picker,
+  - Nút dark/light,
+  - Nút âm thanh bật/tắt đặt trong mục giao diện.
