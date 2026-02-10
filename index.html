@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>NeuroX Zen Interface — Advanced Cognitive Prompt Engine</title>
+
+<style>
+/* ================================
+   🌿 NEUROX ZEN DESIGN SYSTEM
+================================ */
+
+:root{
+  --bg:#0a0a0a;
+  --bg2:#111;
+  --glass:rgba(255,255,255,.08);
+  --accent:#a29bfe;
+  --pink:#ff8fab;
+  --text:#f6f7ff;
+  --muted:#b4b0d4;
+  --radius:18px;
+  --s1:8px; --s2:16px; --s3:24px; --s4:32px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:Inter,system-ui;
+  color:var(--text);
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 10% 10%,rgba(162,155,254,.25),transparent 40%),
+    radial-gradient(circle at 90% 90%,rgba(255,143,171,.25),transparent 40%),
+    linear-gradient(160deg,var(--bg),var(--bg2));
+  padding:var(--s3);
+}
+
+/* breathing animation */
+@keyframes breathe{
+  0%,100%{filter:drop-shadow(0 0 0 rgba(162,155,254,.15))}
+  50%{filter:drop-shadow(0 0 18px rgba(162,155,254,.45))}
+}
+
+.app{
+  max-width:1100px;
+  margin:auto;
+  display:grid;
+  gap:var(--s2);
+  animation:breathe 6s ease-in-out infinite;
+}
+
+.card{
+  background:var(--glass);
+  backdrop-filter:blur(14px);
+  border-radius:var(--radius);
+  border:1px solid rgba(255,255,255,.25);
+  padding:var(--s3);
+  box-shadow:0 20px 60px rgba(0,0,0,.4);
+  transition:.25s;
+}
+
+.card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 30px 80px rgba(0,0,0,.5);
+}
+
+h1{
+  font-size:2.8rem;
+  background:linear-gradient(120deg,var(--accent),var(--pink));
+  -webkit-background-clip:text;
+  color:transparent;
+  text-align:center;
+}
+
+h2{
+  color:var(--accent);
+  margin-bottom:var(--s2);
+}
+
+p{color:var(--muted);line-height:1.6}
+
+textarea{
+  width:100%;
+  height:220px;
+  border:none;
+  resize:none;
+  border-radius:12px;
+  padding:14px;
+  font-family:monospace;
+  background:rgba(0,0,0,.35);
+  color:#fff;
+}
+
+button{
+  padding:12px 18px;
+  border-radius:12px;
+  border:none;
+  font-weight:700;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(120deg,var(--accent),var(--pink));
+  color:#111;
+  transition:.2s;
+}
+
+button:hover{transform:translateY(-1px)}
+
+.output{
+  white-space:pre-wrap;
+  font-family:monospace;
+  font-size:.9rem;
+  color:#e8e8ff;
+}
+
+/* ripple */
+@keyframes ripple{
+  to{transform:scale(3);opacity:0}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="card">
+<h1>🧠 NeuroX Cognitive Prompt Engine</h1>
+<p>
+Một hệ thống mô phỏng cách AI tư duy theo triết lý NeuroX:
+logic rõ ràng, giao diện thiền, phản hồi mềm mại.
+Không chỉ là code — đây là trải nghiệm nhận thức 🌿✨
+</p>
+</div>
+
+<div class="card">
+<h2>🌌 MASTER PROMPT — NEUROX ADVANCED STACK</h2>
+<textarea id="promptArea">
+
+NEUROX SYSTEM PROMPT:
+
+Bạn là một AI vận hành theo mô hình nhận thức tối ưu:
+- Logic không dư thừa
+- Giao diện tinh giản
+- Trải nghiệm người dùng là trung tâm
+
+Mọi phản hồi phải:
+🌿 rõ ràng
+🌿 dễ hiểu
+🌿 không gây căng thẳng
+🌿 mang cảm xúc tích cực
+
+Bạn không chỉ trả lời —
+bạn thiết kế không gian nhận thức.
+
+Nếu một thành phần không giúp người dùng hiểu nhanh hơn,
+hãy loại bỏ nó.
+
+Thiết kế phục vụ não bộ.
+Logic phục vụ bình tĩnh.
+Ngôn ngữ phục vụ trải nghiệm.
+
+Signature: NeuroX
+
+</textarea>
+
+<button onclick="generate()">✨ Phân tích Prompt</button>
+</div>
+
+<div class="card">
+<h2>🤖 NeuroX Output</h2>
+<div id="output" class="output">
+NeuroX đang chờ tín hiệu...
+</div>
+</div>
+
+</div>
+
+<script>
+/* ================================
+   🧠 NEUROX LOGIC CORE
+================================ */
+
+function ripple(e){
+  const btn=e.target.closest("button")
+  if(!btn)return
+  const r=document.createElement("span")
+  const rect=btn.getBoundingClientRect()
+  const size=Math.max(rect.width,rect.height)
+  r.style.position="absolute"
+  r.style.width=size+"px"
+  r.style.height=size+"px"
+  r.style.left=(e.clientX-rect.left-size/2)+"px"
+  r.style.top=(e.clientY-rect.top-size/2)+"px"
+  r.style.borderRadius="50%"
+  r.style.background="rgba(255,255,255,.4)"
+  r.style.transform="scale(0)"
+  r.style.animation="ripple .5s"
+  btn.appendChild(r)
+  setTimeout(()=>r.remove(),500)
+}
+
+document.addEventListener("click",ripple)
+
+/* NeuroX semantic parser */
+function analyze(text){
+
+  const lines=text.split("\n").filter(x=>x.trim())
+  let score=0
+
+  lines.forEach(line=>{
+    const normalized=line.toLowerCase()
+    if(normalized.includes("logic"))score++
+    if(normalized.includes("thiết kế"))score++
+    if(normalized.includes("người dùng"))score++
+    if(normalized.includes("trải nghiệm"))score++
+  })
+
+  return {
+    lines:lines.length,
+    clarity:score,
+    mood: score>2 ? "🌟 Ổn định" : "🌫 Cần tinh chỉnh",
+    verdict: score>3 ? "NeuroX Compatible" : "Needs Refinement"
+  }
+}
+
+function generate(){
+
+  const text=document.getElementById("promptArea").value
+  const result=analyze(text)
+
+  document.getElementById("output").textContent=
+`🧠 NeuroX Cognitive Scan Complete
+
+Số dòng phân tích: ${result.lines}
+Chỉ số rõ ràng: ${result.clarity}
+Trạng thái nhận thức: ${result.mood}
+
+Kết luận:
+${result.verdict}
+
+✨ Prompt đã được đưa qua bộ lọc logic — 
+không phát hiện xung đột cấu trúc lớn.
+`
+
+}
+</script>
+
+</body>
+</html>
