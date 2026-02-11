@@ -354,18 +354,23 @@
       border: 1px solid color-mix(in srgb, var(--cyan), transparent 62%);
       padding: 12px;
       background: rgba(10,16,32,.5);
-      display: flex;
-      align-items: center;
+      display: grid;
+      grid-template-columns: minmax(0,1fr) 230px;
+      gap: 12px;
+      align-items: stretch;
     }
 
     #chartCanvas { width: 100%; height: 100%; }
 
     .legend-chips {
-      margin-top: 12px;
+      margin-top: 0;
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
+      align-content: flex-start;
       min-height: 34px;
+      overflow: auto;
+      padding-right: 4px;
     }
 
     .legend-chip {
@@ -518,6 +523,7 @@
           "leftBottom"
           "rightBottom";
       }
+      .chart-wrap { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -582,8 +588,7 @@
           <button class="tab" data-mode="doughnut">Tròn</button>
         </div>
       </div>
-      <div class="chart-wrap"><canvas id="chartCanvas"></canvas></div>
-      <div id="legendChips" class="legend-chips"></div>
+      <div class="chart-wrap"><canvas id="chartCanvas"></canvas><div id="legendChips" class="legend-chips"></div></div>
     </section>
 
     <section class="card card-pink box-theme">
@@ -906,14 +911,14 @@
           datasets: [{
             data: values,
             backgroundColor: colors,
-            borderColor: 'rgba(255,255,255,.15)',
-            borderWidth: state.chartMode === 'doughnut' ? 2 : 0,
+            borderColor: state.chartMode === 'doughnut' ? '#050505' : 'rgba(255,255,255,.15)',
+            borderWidth: state.chartMode === 'doughnut' ? 2.5 : 0,
             borderRadius: state.chartMode === 'bar' ? 999 : 0,
             barPercentage: 0.4,
             categoryPercentage: 0.6,
             hoverBackgroundColor: colors,
             hoverBorderWidth: 0,
-            spacing: state.chartMode === 'doughnut' ? 2 : 0,
+            spacing: state.chartMode === 'doughnut' ? 0 : 0,
             cutout: state.chartMode === 'doughnut' ? '0%' : undefined,
             radius: state.chartMode === 'doughnut' ? '86%' : undefined
           }]
