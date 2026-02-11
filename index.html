@@ -914,7 +914,8 @@
             hoverBackgroundColor: colors,
             hoverBorderWidth: 0,
             spacing: state.chartMode === 'doughnut' ? 2 : 0,
-            cutout: state.chartMode === 'doughnut' ? '0%' : undefined
+            cutout: state.chartMode === 'doughnut' ? '0%' : undefined,
+            radius: state.chartMode === 'doughnut' ? '86%' : undefined
           }]
         },
         options: {
