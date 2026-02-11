@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeuroX Finance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg-1:#05070f; /* đen chủ đạo */
+      --bg-2:#0fb8ff; /* xanh da trời chủ đạo */
+      --bg-3:#ff5ec4; /* hồng sáng chủ đạo */
+      --bg-4:#f4f7ff; /* trắng chủ đạo */
+      --text:#f7fbff;
+      --muted:#b7c1da;
+      --card:rgba(12,16,27,.72);
+      --line:rgba(100,190,255,.35);
+      --cyan:#47d7ff;
+      --pink:#ff4dbd;
+      --red:#ff486d;
+      --amber:#ffbb4a;
+      --green:#5eff9a;
+      --radius:22px;
+      --gap:20px;
+      --blur:15px;
+      --chip-c1:#ff4dbd;
+      --chip-c2:#47d7ff;
+      --chip-glow:rgba(71,215,255,.45);
+      --t:.4s cubic-bezier(.2,.8,.2,1);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { margin: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 14% 14%, color-mix(in srgb, var(--bg-2), transparent 74%), transparent 52%),
+        radial-gradient(circle at 86% 20%, color-mix(in srgb, var(--bg-3), transparent 76%), transparent 52%),
+        radial-gradient(circle at 65% 84%, color-mix(in srgb, var(--bg-4), transparent 84%), transparent 48%),
+        linear-gradient(140deg, var(--bg-1) 0%, color-mix(in srgb, var(--bg-1), var(--bg-2) 36%) 42%, color-mix(in srgb, var(--bg-1), var(--bg-3) 32%) 100%);
+      min-height: 100vh;
+      padding: 20px;
+      transition: background var(--t), color var(--t);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      border: 2px solid transparent;
+      transition: border-color .35s ease, box-shadow .35s ease;
+      z-index: 40;
+    }
+
+    body.red-pulse::before {
+      border-color: rgba(255,72,109,.7);
+      box-shadow: inset 0 0 38px rgba(255,72,109,.55);
+      animation: pulse .55s ease 3;
+    }
+
+    @keyframes pulse {
+      0%,100% { opacity:.45; }
+      50% { opacity:1; }
+    }
+
+    .top-controls {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 50;
+    }
+
+    .round-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--cyan), transparent 45%);
+      background: rgba(12,16,30,.85);
+      color: var(--text);
+      cursor: pointer;
+      box-shadow: 0 0 14px color-mix(in srgb, var(--pink), transparent 65%);
+      transition: transform .2s ease, box-shadow .3s ease, border-color .3s ease;
+      will-change: transform;
+      transform: translateZ(0);
+    }
+
+    .round-btn:hover {
+      border-color: var(--pink);
+      box-shadow: 0 0 20px color-mix(in srgb, var(--pink), transparent 50%);
+    }
+
+    .round-btn:active,
+    .btn:active,
+    .chip:active,
+    .wheel-arrow:active,
+    .tab:active,
+    .toggle-btn:active { transform: scale(.95); }
+
+    .dashboard {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      gap: var(--gap);
+      grid-template-areas:
+        "header header"
+        "leftTop rightTop"
+        "leftMid rightMid"
+        "leftBottom rightBottom";
+      grid-template-columns: 1fr 1fr;
+      align-items: stretch;
+    }
+
+    .header { grid-area: header; text-align: center; }
+    .box-income { grid-area: leftTop; }
+    .box-warning { grid-area: rightTop; }
+    .box-entry { grid-area: leftMid; }
+    .box-history { grid-area: rightMid; }
+    .box-chart { grid-area: leftBottom; display:flex; flex-direction:column; }
+    .box-theme { grid-area: rightBottom; }
+
+    .title {
+      margin: 0;
+      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: .8px;
+      color: white;
+      text-shadow: 0 0 22px color-mix(in srgb, var(--pink), transparent 45%), 0 0 28px color-mix(in srgb, var(--cyan), transparent 58%);
+    }
+
+    .signature { margin-top: 8px; font-weight: 700; }
+    .slogan { margin-top: 6px; color: var(--muted); }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      backdrop-filter: blur(var(--blur));
+      padding: 20px;
+      box-shadow: 0 0 16px color-mix(in srgb, var(--cyan), transparent 70%);
+      transition: border-color var(--t), box-shadow var(--t), background var(--t), transform .25s ease;
+      will-change: transform, opacity;
+      transform: translateZ(0);
+    }
+
+    .card:hover { transform: translateY(-2px); }
+
+    .card-cyan { border-color: color-mix(in srgb, var(--cyan), transparent 55%); box-shadow: 0 0 20px color-mix(in srgb, var(--cyan), transparent 70%); }
+    .card-pink { border-color: color-mix(in srgb, var(--pink), transparent 55%); box-shadow: 0 0 20px color-mix(in srgb, var(--pink), transparent 72%); }
+    .card-red { border-color: color-mix(in srgb, var(--red), transparent 45%); box-shadow: 0 0 20px color-mix(in srgb, var(--red), transparent 70%); }
+    .card-amber { border-color: color-mix(in srgb, var(--amber), transparent 55%); box-shadow: 0 0 20px color-mix(in srgb, var(--amber), transparent 72%); }
+
+    .section-title { margin: 0 0 14px; font-size: 1.05rem; }
+
+    .field-label { display: block; margin: 0 0 8px; color: var(--muted); font-size: .92rem; }
+
+    .input, .btn, .tab {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid color-mix(in srgb, var(--cyan), transparent 55%);
+      color: var(--text);
+      background: rgba(15,23,42,.65);
+      font: inherit;
+      transition: all .3s ease;
+    }
+
+    .input {
+      padding: 11px 12px;
+      box-shadow: inset 0 0 16px color-mix(in srgb, var(--cyan), transparent 88%);
+      outline: none;
+    }
+
+    .input:focus { border-color: var(--pink); box-shadow: inset 0 0 16px color-mix(in srgb, var(--pink), transparent 80%); }
+
+    .btn {
+      margin-top: 10px;
+      padding: 11px 14px;
+      cursor: pointer;
+      background: linear-gradient(120deg, var(--chip-c1), var(--chip-c2));
+      font-weight: 700;
+      border: none;
+      will-change: transform;
+      transform: translateZ(0);
+    }
+
+    .btn[disabled] { opacity:.45; cursor:not-allowed; }
+
+    .summary-grid {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(3,minmax(0,1fr));
+      gap: 10px;
+    }
+
+    .summary-item {
+      border-radius: 14px;
+      border: 1px solid color-mix(in srgb, var(--cyan), transparent 65%);
+      padding: 10px;
+      background: rgba(10,16,30,.55);
+    }
+
+    .summary-item b { display:block; margin-top:4px; font-size:1.01rem; }
+
+    .wheel {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+      border: 1px solid color-mix(in srgb, var(--pink), transparent 58%);
+      border-radius: 14px;
+      padding: 10px;
+      background: rgba(12,20,36,.62);
+    }
+
+    .wheel-arrow {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--cyan), transparent 55%);
+      background: rgba(14,24,44,.8);
+      color: var(--text);
+      cursor: pointer;
+      flex: 0 0 34px;
+    }
+
+    .wheel-text {
+      flex: 1;
+      text-align: center;
+      font-weight: 700;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      transform: translateX(0);
+      transition: transform .25s ease, opacity .25s ease;
+      will-change: transform, opacity;
+    }
+
+    .wheel-text.slide-left { transform: translateX(-10px); opacity: .35; }
+    .wheel-text.slide-right { transform: translateX(10px); opacity: .35; }
+
+    .other-wrap {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows .3s ease;
+    }
+
+    .other-wrap.open { grid-template-rows: 1fr; }
+    .other-inner { overflow: hidden; }
+
+    .warning-panel {
+      border-radius: 14px;
+      padding: 12px;
+      border: 1px solid color-mix(in srgb, var(--red), transparent 60%);
+      background: rgba(38,10,20,.45);
+      min-height: 92px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      transition: border-color .35s ease, box-shadow .35s ease, background .35s ease;
+    }
+
+    .status-msg {
+      font-size: .92rem;
+      line-height: 1.4;
+      color: color-mix(in srgb, var(--bg-4), #dbe7ff 45%);
+    }
+
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 120px;
+      justify-content: flex-end;
+    }
+
+    .badge-circle,
+    .badge-triangle {
+      width: 34px;
+      height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      opacity: .32;
+      transform: scale(.94);
+      transition: opacity .3s ease, transform .3s ease, box-shadow .3s ease, border-color .3s ease, background .3s ease;
+      will-change: transform, opacity;
+    }
+
+    .badge-circle {
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.24);
+      background: rgba(255,255,255,.05);
+    }
+
+    .badge-triangle {
+      clip-path: polygon(50% 0, 100% 100%, 0 100%);
+      background: rgba(255,255,255,.08);
+      position: relative;
+      width: 36px;
+      height: 34px;
+      font-size: .85rem;
+    }
+
+    .badge-triangle span {
+      position: relative;
+      top: 3px;
+    }
+
+    .warning-panel.level-good {
+      border-color: color-mix(in srgb, #35ff98, transparent 45%);
+      box-shadow: 0 0 18px color-mix(in srgb, #35ff98, transparent 72%);
+      background: rgba(10,42,28,.36);
+    }
+
+    .warning-panel.level-good .badge-ok {
+      opacity: 1;
+      transform: scale(1);
+      color: #22e685;
+      border-color: rgba(34,230,133,.8);
+      box-shadow: 0 0 16px rgba(34,230,133,.6);
+      animation: softPulse 1.6s ease-in-out infinite;
+    }
+
+    .warning-panel.level-bad {
+      border-color: color-mix(in srgb, #ff5a6a, transparent 42%);
+      box-shadow: 0 0 18px color-mix(in srgb, #ff5a6a, transparent 70%);
+      background: rgba(48,8,20,.45);
+    }
+
+    .warning-panel.level-bad .badge-bad {
+      opacity: 1;
+      transform: scale(1);
+      color: #ff4e63;
+      border-color: rgba(255,78,99,.82);
+      box-shadow: 0 0 16px rgba(255,78,99,.68);
+      animation: softPulse 1.45s ease-in-out infinite;
+    }
+
+    .warning-panel.level-bad .badge-alert {
+      opacity: 1;
+      transform: scale(1);
+      color: #ffe476;
+      box-shadow: 0 0 18px rgba(255,228,118,.75);
+      animation: softPulse 1.25s ease-in-out infinite;
+    }
+
+    .warning-panel.level-warn {
+      border-color: color-mix(in srgb, #ffcf66, transparent 42%);
+      box-shadow: 0 0 18px color-mix(in srgb, #ffcf66, transparent 72%);
+      background: rgba(42,30,8,.35);
+    }
+
+    .warning-panel.level-warn .badge-alert {
+      opacity: 1;
+      transform: scale(1);
+      color: #ffd760;
+      box-shadow: 0 0 16px rgba(255,215,96,.72);
+      animation: softPulse 1.35s ease-in-out infinite;
+    }
+
+    @keyframes softPulse {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    .history-list {
+      max-height: 220px;
+      overflow: auto;
+      display: grid;
+      gap: 10px;
+      padding-right: 4px;
+      scrollbar-width: thin;
+      scrollbar-color: color-mix(in srgb, var(--pink), transparent 30%) transparent;
+    }
+
+    .history-list::-webkit-scrollbar { width: 8px; }
+    .history-list::-webkit-scrollbar-thumb {
+      background: linear-gradient(var(--pink), var(--cyan));
+      border-radius: 999px;
+    }
+
+    .history-item {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) auto auto;
+      align-items: center;
+      gap: 8px;
+      border-radius: 12px;
+      border: 1px solid color-mix(in srgb, var(--amber), transparent 60%);
+      padding: 10px;
+      background: rgba(20,18,10,.4);
+    }
+
+    .history-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .history-cat {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 700;
+    }
+
+    .history-amount {
+      white-space: nowrap;
+      font-weight: 700;
+      color: #f7fbff;
+    }
+
+    .mini-btn {
+      border: none;
+      border-radius: 10px;
+      padding: 6px 9px;
+      cursor: pointer;
+      color: #fff;
+    }
+    .mini-edit { background: linear-gradient(120deg,#3f88ff,#47d7ff); }
+    .mini-del { background: linear-gradient(120deg,#ff5d8f,#ff3f60); }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .tabs { display: flex; gap: 8px; }
+
+    .tab {
+      width: auto;
+      min-width: 66px;
+      padding: 7px 11px;
+      cursor: pointer;
+      background: rgba(16,24,45,.75);
+      font-weight: 700;
+    }
+
+    .tab.active {
+      background: linear-gradient(120deg, var(--chip-c1), var(--chip-c2));
+      border-color: transparent;
+    }
+
+    .chart-wrap {
+      flex-grow: 1;
+      min-height: 340px;
+      border-radius: 16px;
+      border: 1px solid color-mix(in srgb, var(--cyan), transparent 62%);
+      padding: 12px;
+      background: rgba(10,16,32,.5);
+      display: flex;
+      align-items: stretch;
+    }
+
+    #chartCanvas { width: 100%; height: 100%; }
+
+    .legend-box {
+      margin-top: 12px;
+      border-radius: 14px;
+      border: 1px solid color-mix(in srgb, var(--pink), transparent 60%);
+      background: rgba(16,22,42,.52);
+      padding: 10px;
+      box-shadow: 0 0 16px color-mix(in srgb, var(--pink), transparent 72%);
+    }
+
+    .legend-title {
+      margin: 0 0 8px;
+      font-size: .92rem;
+      color: color-mix(in srgb, var(--bg-4), var(--cyan) 26%);
+      font-weight: 700;
+    }
+
+    .legend-chips {
+      margin-top: 0;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      min-height: 34px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .legend-chip {
+      border-radius: 999px;
+      padding: 7px 11px;
+      background: rgba(14,24,42,.7);
+      border: 1px solid color-mix(in srgb, var(--cyan), transparent 58%);
+      font-size: .85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dot { width: 10px; height: 10px; border-radius: 999px; display:inline-block; }
+
+    .theme-grid {
+      display: grid;
+      grid-template-columns: repeat(3,minmax(0,1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .chip {
+      border: none;
+      border-radius: 12px;
+      padding: 10px 8px;
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      transition: filter .3s ease, transform .2s ease, box-shadow .3s ease;
+      will-change: transform;
+    }
+
+    .chip:hover, .chip.active { filter: brightness(1.2); }
+
+    .chip-default{background:linear-gradient(120deg,#ff4dbd,#47d7ff); box-shadow:0 0 16px rgba(71,215,255,.48)}
+    .chip-ocean{background:linear-gradient(120deg,#0049c6,#1dd6ff); box-shadow:0 0 16px rgba(29,214,255,.55)}
+    .chip-sunset{background:linear-gradient(120deg,#ff7a18,#c748ff); box-shadow:0 0 16px rgba(255,122,24,.52)}
+    .chip-forest{background:linear-gradient(120deg,#0e623e,#43ffb1); box-shadow:0 0 16px rgba(67,255,177,.5)}
+    .chip-violet{background:linear-gradient(120deg,#7d37ff,#ff4dbd); box-shadow:0 0 16px rgba(125,55,255,.55)}
+    .chip-carbon{background:linear-gradient(120deg,#5c6678,#111217); box-shadow:0 0 16px rgba(245,250,255,.26)}
+
+    .footer-ctrls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .toggle-box {
+      border-radius: 14px;
+      border: 1px solid color-mix(in srgb, var(--cyan), transparent 60%);
+      padding: 10px;
+      background: rgba(10,16,30,.55);
+    }
+
+    .toggle-line {
+      display:flex;
+      align-items:center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .mode-icon {
+      font-size: 1rem;
+      filter: saturate(.7);
+      opacity: .55;
+      transition: opacity .25s ease, filter .25s ease, text-shadow .25s ease;
+    }
+
+    .mode-icon.active {
+      opacity: 1;
+      filter: saturate(1.2);
+      text-shadow: 0 0 12px color-mix(in srgb, var(--chip-c2), transparent 40%);
+    }
+
+    .toggle-btn {
+      width: 56px;
+      height: 30px;
+      border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--pink), transparent 50%);
+      background: #0f131c;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .toggle-btn::after {
+      content: "";
+      width: 24px;
+      height: 24px;
+      position: absolute;
+      top: 2px;
+      left: 3px;
+      border-radius: 50%;
+      background: linear-gradient(120deg, var(--chip-c1), var(--chip-c2));
+      transition: transform .25s ease;
+    }
+
+    .toggle-btn.on::after { transform: translateX(25px); }
+
+    .custom-grid {
+      margin-top: 12px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .custom-row {
+      display: grid;
+      grid-template-columns: 84px 1fr;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .color-box {
+      width: 84px;
+      height: 34px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.45);
+      background: transparent;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .hex { color: var(--muted); font-weight: 600; }
+
+    .danger-btn {
+      margin-top: 12px;
+      background: linear-gradient(120deg,#ff5d8f,#ff3f60);
+    }
+
+    .shake { animation: shake .35s linear 2; }
+    @keyframes shake {
+      0%,100%{transform:translateX(0)}
+      25%{transform:translateX(-4px)}
+      75%{transform:translateX(4px)}
+    }
+
+    @media (max-width: 900px) {
+      body { padding: 10px; }
+      .top-controls { right: 10px; top: 10px; }
+      .dashboard {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "header"
+          "leftTop"
+          "leftMid"
+          "rightTop"
+          "rightMid"
+          "leftBottom"
+          "rightBottom";
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-controls">
+    <button id="modeTop" class="round-btn" title="Chế độ">🌙</button>
+    <button id="soundTop" class="round-btn" title="Âm thanh">🔊</button>
+  </div>
+
+  <main class="dashboard">
+    <section class="header">
+      <h1 class="title">NeuroX Finance</h1>
+      <div class="signature">Neuro: thần kinh, não bộ &nbsp;&nbsp;&nbsp; X: đột phá<br>→ Trí tuệ não bộ vượt giới hạn</div>
+      <div class="slogan">Chi thông minh, sống nhẹ nhàng ✨</div>
+    </section>
+
+    <section class="card card-cyan box-income">
+      <h2 class="section-title">💰 Thu nhập</h2>
+      <label class="field-label" for="incomeInput">Nhập thu nhập tháng</label>
+      <input id="incomeInput" class="input" type="number" min="0" step="1000" placeholder="Ví dụ: 18,000,000" />
+      <button id="saveIncomeBtn" class="btn">Lưu thu nhập</button>
+      <div class="summary-grid">
+        <div class="summary-item"><small>Thu nhập</small><b id="sumIncome">0 đ</b></div>
+        <div class="summary-item"><small>Đã chi</small><b id="sumSpent">0 đ</b></div>
+        <div class="summary-item"><small>Còn lại</small><b id="sumRemain">0 đ</b></div>
+      </div>
+    </section>
+
+    <section class="card card-red box-warning">
+      <h2 class="section-title">🚨 Cảnh báo</h2>
+      <div id="warningPanel" class="warning-panel level-warn">
+        <div id="statusMsg" class="status-msg">Nhập dữ liệu để bắt đầu phân tích tài chính.</div>
+        <div class="status-icons" aria-hidden="true">
+          <span id="badgeOk" class="badge-circle badge-ok">✓</span>
+          <span id="badgeBad" class="badge-circle badge-bad">✕</span>
+          <span id="badgeAlert" class="badge-triangle badge-alert"><span>!</span></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card card-pink box-entry">
+      <h2 class="section-title">🧁 Nhập khoản chi</h2>
+      <div class="wheel">
+        <button id="prevCat" class="wheel-arrow">‹</button>
+        <div id="wheelText" class="wheel-text">🍱 Ăn uống</div>
+        <button id="nextCat" class="wheel-arrow">›</button>
+      </div>
+      <div id="otherWrap" class="other-wrap">
+        <div class="other-inner">
+          <label class="field-label" for="otherInput">Mục khác</label>
+          <input id="otherInput" class="input" type="text" placeholder="Nhập danh mục riêng" />
+        </div>
+      </div>
+      <label class="field-label" for="amountInput">Số tiền chi</label>
+      <input id="amountInput" class="input" type="number" min="0" step="1000" placeholder="Ví dụ: 320,000" />
+      <button id="saveExpenseBtn" class="btn">Thêm khoản chi</button>
+    </section>
+
+    <section class="card card-amber box-history">
+      <h2 class="section-title">📒 Lịch sử khoản chi</h2>
+      <div id="historyList" class="history-list"></div>
+    </section>
+
+    <section class="card card-cyan box-chart">
+      <div class="chart-header">
+        <h2 class="section-title" style="margin:0">Biểu đồ phân tích</h2>
+        <div class="tabs">
+          <button class="tab active" data-mode="bar">Cột</button>
+          <button class="tab" data-mode="doughnut">Tròn</button>
+        </div>
+      </div>
+      <div class="chart-wrap"><canvas id="chartCanvas"></canvas></div>
+      <div class="legend-box">
+        <h3 class="legend-title">🧾 Ghi chú biểu đồ</h3>
+        <div id="legendChips" class="legend-chips"></div>
+      </div>
+    </section>
+
+    <section class="card card-pink box-theme">
+      <h2 class="section-title">🎨 Giao diện NeuroX</h2>
+      <div class="footer-ctrls">
+        <div class="toggle-box">
+          <small>Sáng tối</small>
+          <div class="toggle-line"><span id="sunIcon" class="mode-icon">☀️</span> <button id="modeToggle" class="toggle-btn" aria-label="Đổi sáng tối"></button> <span id="moonIcon" class="mode-icon">🌙</span></div>
+        </div>
+        <div class="toggle-box">
+          <small>Âm thanh</small>
+          <div class="toggle-line"><button id="soundToggle" class="btn" style="margin:0;padding:8px 10px">Bật</button></div>
+        </div>
+      </div>
+
+      <div class="theme-grid" id="themeGrid">
+        <button class="chip chip-default" data-theme="default">Mặc định</button>
+        <button class="chip chip-ocean" data-theme="ocean">Đại dương</button>
+        <button class="chip chip-sunset" data-theme="sunset">Hoàng hôn</button>
+        <button class="chip chip-forest" data-theme="forest">Rừng xanh</button>
+        <button class="chip chip-violet" data-theme="violet">Tím hồng</button>
+        <button class="chip chip-carbon" data-theme="carbon">Xám tối</button>
+      </div>
+
+      <h3 style="margin:14px 0 8px;font-size:1rem">Tùy chỉnh màu</h3>
+      <div class="custom-grid">
+        <div class="custom-row">
+          <input id="colorOne" class="color-box" type="color" />
+          <span id="hexOne" class="hex">#000000</span>
+        </div>
+        <div class="custom-row">
+          <input id="colorTwo" class="color-box" type="color" />
+          <span id="hexTwo" class="hex">#ffffff</span>
+        </div>
+      </div>
+
+      <button id="resetAllBtn" class="btn danger-btn">Xóa toàn bộ dữ liệu</button>
+    </section>
+  </main>
+
+  <script>
+    const STORAGE_KEY = 'neurox-finance-dashboard-v2';
+    const CATS = ['🍱 Ăn uống','☕ Cafe','🛍️ Mua sắm','🚗 Di chuyển','🎮 Giải trí','📚 Học tập','💊 Sức khỏe','🏠 Nhà cửa','✍️ Mục khác'];
+    const THEMES = {
+      default: {bg1:'#05070f', bg2:'#0a1f36', bg3:'#291034', c1:'#ff4dbd', c2:'#47d7ff'},
+      ocean: {bg1:'#031024', bg2:'#053b70', bg3:'#001b35', c1:'#00b8ff', c2:'#53e0ff'},
+      sunset:{bg1:'#1f0f10', bg2:'#572436', bg3:'#25102c', c1:'#ff7a18', c2:'#d347ff'},
+      forest:{bg1:'#07160e', bg2:'#0e3e2a', bg3:'#13241d', c1:'#2adf95', c2:'#85ffbf'},
+      violet:{bg1:'#11071d', bg2:'#2c1350', bg3:'#211038', c1:'#7d37ff', c2:'#ff4dbd'},
+      carbon:{bg1:'#08090f', bg2:'#1c232f', bg3:'#111317', c1:'#8f9aac', c2:'#dfe7ff'}
+    };
+
+    const state = {
+      income: 0,
+      expenses: [],
+      catIndex: 0,
+      mode: 'dark',
+      sound: true,
+      chartMode: 'bar',
+      theme: 'default',
+      customColors: ['#ff4dbd','#47d7ff']
+    };
+
+    const el = {
+      body: document.body,
+      modeTop: document.getElementById('modeTop'),
+      soundTop: document.getElementById('soundTop'),
+      modeToggle: document.getElementById('modeToggle'),
+      soundToggle: document.getElementById('soundToggle'),
+      incomeInput: document.getElementById('incomeInput'),
+      saveIncomeBtn: document.getElementById('saveIncomeBtn'),
+      amountInput: document.getElementById('amountInput'),
+      saveExpenseBtn: document.getElementById('saveExpenseBtn'),
+      prevCat: document.getElementById('prevCat'),
+      nextCat: document.getElementById('nextCat'),
+      wheelText: document.getElementById('wheelText'),
+      otherWrap: document.getElementById('otherWrap'),
+      otherInput: document.getElementById('otherInput'),
+      statusMsg: document.getElementById('statusMsg'),
+      warningPanel: document.getElementById('warningPanel'),
+      badgeOk: document.getElementById('badgeOk'),
+      badgeBad: document.getElementById('badgeBad'),
+      badgeAlert: document.getElementById('badgeAlert'),
+      historyList: document.getElementById('historyList'),
+      legendChips: document.getElementById('legendChips'),
+      sunIcon: document.getElementById('sunIcon'),
+      moonIcon: document.getElementById('moonIcon'),
+      sumIncome: document.getElementById('sumIncome'),
+      sumSpent: document.getElementById('sumSpent'),
+      sumRemain: document.getElementById('sumRemain'),
+      chartCanvas: document.getElementById('chartCanvas'),
+      tabs: Array.from(document.querySelectorAll('.tab')),
+      themeGrid: document.getElementById('themeGrid'),
+      colorOne: document.getElementById('colorOne'),
+      colorTwo: document.getElementById('colorTwo'),
+      hexOne: document.getElementById('hexOne'),
+      hexTwo: document.getElementById('hexTwo'),
+      resetAllBtn: document.getElementById('resetAllBtn')
+    };
+
+    let chart;
+
+    function formatMoney(n) {
+      return `${Number(n || 0).toLocaleString('vi-VN')} đ`;
+    }
+
+    function totals() {
+      const spent = state.expenses.reduce((a, b) => a + Number(b.amount || 0), 0);
+      return { spent, remain: Math.max(0, state.income - spent) };
+    }
+
+    function grouped() {
+      return state.expenses.reduce((acc, item) => {
+        acc[item.category] = (acc[item.category] || 0) + Number(item.amount || 0);
+        return acc;
+      }, {});
+    }
+
+    function beep(seq = [[560,.06]]) {
+      if (!state.sound) return;
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const now = ctx.currentTime;
+      seq.forEach((note, i) => {
+        const [freq, dur] = note;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        gain.gain.value = .02;
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        const start = now + i * 0.07;
+        osc.start(start);
+        osc.stop(start + dur);
+      });
+    }
+
+    function save() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function load() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      try {
+        const data = JSON.parse(raw);
+        Object.assign(state, {
+          income: Number(data.income || 0),
+          expenses: Array.isArray(data.expenses) ? data.expenses : [],
+          catIndex: Number(data.catIndex || 0),
+          mode: data.mode === 'light' ? 'light' : 'dark',
+          sound: data.sound !== false,
+          chartMode: data.chartMode === 'doughnut' ? 'doughnut' : 'bar',
+          theme: THEMES[data.theme] ? data.theme : 'default',
+          customColors: Array.isArray(data.customColors) ? data.customColors : ['#ff4dbd','#47d7ff']
+        });
+      } catch {}
+    }
+
+    function applyTheme(name = state.theme, fromCustom = false) {
+      state.theme = name;
+      const t = fromCustom
+        ? { ...THEMES[name], c1: state.customColors[0], c2: state.customColors[1] }
+        : THEMES[name];
+      const root = document.documentElement.style;
+      root.setProperty('--bg-1', t.bg1);
+      root.setProperty('--bg-2', t.bg2);
+      root.setProperty('--bg-3', t.bg3);
+      root.setProperty('--chip-c1', t.c1);
+      root.setProperty('--chip-c2', t.c2);
+      root.setProperty('--chip-glow', t.c2 + '88');
+      el.colorOne.value = state.customColors[0];
+      el.colorTwo.value = state.customColors[1];
+      el.hexOne.textContent = state.customColors[0].toUpperCase();
+      el.hexTwo.textContent = state.customColors[1].toUpperCase();
+      document.querySelectorAll('.chip').forEach((c) => c.classList.toggle('active', c.dataset.theme === state.theme));
+      redrawChart();
+    }
+
+    function updateModeUI() {
+      const isLight = state.mode === 'light';
+      el.modeTop.textContent = isLight ? '☀️' : '🌙';
+      el.modeToggle.classList.toggle('on', !isLight);
+      el.sunIcon.classList.toggle('active', isLight);
+      el.moonIcon.classList.toggle('active', !isLight);
+      if (isLight) {
+        document.documentElement.style.setProperty('--card', 'rgba(248,251,255,.82)');
+        document.documentElement.style.setProperty('--text', '#0d1222');
+        document.documentElement.style.setProperty('--muted', '#44506c');
+      } else {
+        document.documentElement.style.setProperty('--card', 'rgba(12,16,27,.72)');
+        document.documentElement.style.setProperty('--text', '#f7fbff');
+        document.documentElement.style.setProperty('--muted', '#b7c1da');
+      }
+    }
+
+    function updateSoundUI() {
+      el.soundTop.textContent = state.sound ? '🔊' : '🔇';
+      el.soundToggle.textContent = state.sound ? 'Bật' : 'Tắt';
+    }
+
+    function updateCategory(direction = 0) {
+      if (direction !== 0) {
+        el.wheelText.classList.add(direction > 0 ? 'slide-left' : 'slide-right');
+        setTimeout(() => el.wheelText.classList.remove('slide-left', 'slide-right'), 180);
+      }
+      state.catIndex = (state.catIndex + CATS.length) % CATS.length;
+      const label = CATS[state.catIndex];
+      el.wheelText.textContent = label;
+      const isOther = label.includes('Mục khác');
+      el.otherWrap.classList.toggle('open', isOther);
+      if (!isOther) el.otherInput.value = '';
+    }
+
+    function currentCategory() {
+      const selected = CATS[state.catIndex];
+      if (!selected.includes('Mục khác')) return selected;
+      return el.otherInput.value.trim() ? `✍️ ${el.otherInput.value.trim()}` : '✍️ Mục khác';
+    }
+
+    function setDangerUI(active) {
+      el.body.classList.toggle('red-pulse', active);
+      if (active) {
+        el.saveExpenseBtn.classList.add('shake');
+        setTimeout(() => el.saveExpenseBtn.classList.remove('shake'), 480);
+      }
+    }
+
+    function validatePendingExpense(amount) {
+      const { spent } = totals();
+      const invalid = amount + spent > state.income;
+      el.saveExpenseBtn.disabled = invalid;
+      return !invalid;
+    }
+
+    function pickLine(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function updateStatus() {
+      const { spent } = totals();
+      const groupedData = grouped();
+      const cats = Object.keys(groupedData);
+      const ideal = cats.length ? state.income / cats.length : 0;
+
+      const reminders = [
+        '📌 Nhắc nhẹ: Bổ sung dữ liệu để hệ thống phân tích rõ hơn nè.',
+        '🪴 Gợi ý: Bạn nhập thu nhập trước để bật cảnh báo thông minh nhé.',
+        '🧩 Hệ thống đang chờ dữ liệu để dựng bức tranh tài chính của bạn.'
+      ];
+      const warnings = [
+        '⚠️ Cảnh báo nhẹ: Có danh mục đang vượt ngưỡng trung bình.',
+        '🚧 Cẩn thận: Có khoản đang tăng hơi nhanh, rà lại nha.',
+        '😵‍💫 Khịa yêu: Ví tiền đang hơi căng, mình siết nhẹ chút nhé.'
+      ];
+      const praises = [
+        '🌟 Quá xịn! Bạn đang kiểm soát chi tiêu rất tốt.',
+        '🎉 Khen nè: Nhịp chi tiêu hiện tại cực kỳ cân bằng.',
+        '💖 Đẹp đó! Tài chính của bạn đang đi rất mượt.'
+      ];
+
+      let text = pickLine(reminders);
+      let danger = false;
+      let level = 'warn';
+
+      if (state.income <= 0 || !state.expenses.length) {
+        text = pickLine(reminders);
+        level = 'warn';
+      } else if (spent > state.income) {
+        text = `🚨 Cảnh báo đỏ: Tổng chi vượt thu nhập ${formatMoney(spent - state.income)}.`;
+        danger = true;
+        level = 'bad';
+      } else {
+        const over = cats.filter((k) => groupedData[k] > ideal);
+        if (over.length) {
+          text = `${pickLine(warnings)} (${over.join(', ')})`;
+          level = 'warn';
+        } else {
+          text = pickLine(praises);
+          level = 'good';
+        }
+      }
+
+      el.statusMsg.textContent = text;
+      el.warningPanel.classList.remove('level-good','level-warn','level-bad');
+      el.warningPanel.classList.add(`level-${level}`);
+      setDangerUI(danger);
+    }
+
+    const neonPlugin = {
+      id: 'neonGlow',
+      beforeDatasetsDraw(chartInstance) {
+        const {ctx} = chartInstance;
+        ctx.save();
+        ctx.shadowBlur = 14;
+        ctx.shadowColor = getComputedStyle(document.documentElement).getPropertyValue('--chip-c2').trim();
+      },
+      afterDatasetsDraw(chartInstance) {
+        chartInstance.ctx.restore();
+      }
+    };
+
+    function buildDatasets(labels, values) {
+      const c1 = getComputedStyle(document.documentElement).getPropertyValue('--chip-c1').trim();
+      const c2 = getComputedStyle(document.documentElement).getPropertyValue('--chip-c2').trim();
+      return labels.map((_, i) => {
+        const ratio = labels.length > 1 ? i / (labels.length - 1) : 0.5;
+        return `color-mix(in srgb, ${c1} ${Math.round((1-ratio)*100)}%, ${c2})`;
+      });
+    }
+
+    function redrawChart() {
+      const data = grouped();
+      const labels = Object.keys(data);
+      const values = Object.values(data);
+      if (chart) chart.destroy();
+
+      if (!labels.length) {
+        const ctx = el.chartCanvas.getContext('2d');
+        ctx.clearRect(0, 0, el.chartCanvas.width, el.chartCanvas.height);
+        ctx.fillStyle = '#adbad4';
+        ctx.font = '600 15px Inter';
+        ctx.textAlign = 'center';
+        ctx.fillText('Chưa có dữ liệu', el.chartCanvas.width / 2, el.chartCanvas.height / 2);
+        el.legendChips.innerHTML = '';
+        return;
+      }
+
+      const colors = buildDatasets(labels, values);
+      chart = new Chart(el.chartCanvas.getContext('2d'), {
+        type: state.chartMode,
+        data: {
+          labels,
+          datasets: [{
+            data: values,
+            backgroundColor: colors,
+            borderColor: state.chartMode === 'doughnut' ? '#050505' : 'rgba(255,255,255,.15)',
+            borderWidth: state.chartMode === 'doughnut' ? 2.5 : 0,
+            borderRadius: state.chartMode === 'bar' ? 999 : 0,
+            barPercentage: 0.4,
+            categoryPercentage: 0.6,
+            hoverBackgroundColor: colors,
+            hoverBorderWidth: 0,
+            spacing: state.chartMode === 'doughnut' ? 0 : 0,
+            cutout: state.chartMode === 'doughnut' ? '0%' : undefined,
+            radius: state.chartMode === 'doughnut' ? '86%' : undefined
+          }]
+        },
+        options: {
+          maintainAspectRatio: false,
+          responsive: true,
+          animation: { duration: 460, easing: 'easeOutQuart' },
+          plugins: { legend: { display: false }, tooltip: { enabled: true } },
+          scales: state.chartMode === 'bar' ? {
+            x: {
+              grid: { display: false },
+              ticks: { color: '#a9b4cc', font: { size: 11 } }
+            },
+            y: {
+              grid: { display: false },
+              ticks: { color: '#8d98b1', font: { size: 11 } }
+            }
+          } : {}
+        },
+        plugins: [neonPlugin]
+      });
+
+      const sum = values.reduce((a,b)=>a+b,0);
+      el.legendChips.innerHTML = labels.map((lb,i)=>`<span class="legend-chip"><span class="dot" style="background:${colors[i]}"></span>${lb} · ${Math.round(values[i]/sum*100)}%</span>`).join('');
+    }
+
+    function renderHistory() {
+      if (!state.expenses.length) {
+        el.historyList.innerHTML = '<div class="summary-item">Chưa có khoản chi nào.</div>';
+        return;
+      }
+      el.historyList.innerHTML = state.expenses.slice().reverse().map((item) => `
+        <article class="history-item">
+          <div class="history-main"><span class="history-cat">${item.category}</span><span class="history-amount">${formatMoney(item.amount)}</span></div>
+          <button class="mini-btn mini-edit" data-act="edit" data-id="${item.id}">Sửa</button>
+          <button class="mini-btn mini-del" data-act="del" data-id="${item.id}">Xóa</button>
+        </article>
+      `).join('');
+    }
+
+    function render() {
+      const { spent, remain } = totals();
+      el.sumIncome.textContent = formatMoney(state.income);
+      el.sumSpent.textContent = formatMoney(spent);
+      el.sumRemain.textContent = formatMoney(remain);
+      el.incomeInput.value = state.income || '';
+      el.tabs.forEach((tab) => tab.classList.toggle('active', tab.dataset.mode === state.chartMode));
+      updateModeUI();
+      updateSoundUI();
+      updateCategory(0);
+      updateStatus();
+      renderHistory();
+      redrawChart();
+      save();
+    }
+
+    function addExpense() {
+      const amount = Number(el.amountInput.value || 0);
+      if (state.income <= 0) { beep([[320,.09],[280,.09]]); return; }
+      if (amount <= 0) { beep([[360,.08]]); return; }
+      if (!validatePendingExpense(amount)) {
+        setDangerUI(true);
+        beep([[180,.12],[140,.12],[110,.16]]);
+        return;
+      }
+      state.expenses.push({ id: crypto.randomUUID(), category: currentCategory(), amount });
+      el.amountInput.value = '';
+      el.otherInput.value = '';
+      updateCategory(0);
+      beep([[520,.06],[620,.06],[720,.08]]);
+      render();
+    }
+
+    function onHistoryClick(e) {
+      const btn = e.target.closest('button[data-act]');
+      if (!btn) return;
+      const id = btn.dataset.id;
+      const idx = state.expenses.findIndex((x) => x.id === id);
+      if (idx < 0) return;
+      if (btn.dataset.act === 'del') {
+        state.expenses.splice(idx, 1);
+        beep([[260,.07],[220,.09]]);
+      } else {
+        const item = state.expenses[idx];
+        const next = prompt('Nhập số tiền mới:', item.amount);
+        if (next === null) return;
+        const value = Number(next);
+        if (!value || value <= 0) return;
+        const spentWithout = state.expenses.reduce((a,b)=>a+Number(b.amount),0) - item.amount;
+        if (spentWithout + value > state.income) {
+          setDangerUI(true);
+          beep([[170,.13],[130,.15]]);
+          return;
+        }
+        item.amount = value;
+        beep([[480,.05],[600,.05]]);
+      }
+      render();
+    }
+
+    function bind() {
+      el.modeTop.addEventListener('click', () => {
+        state.mode = state.mode === 'light' ? 'dark' : 'light';
+        beep([[450,.05]]);
+        render();
+      });
+
+      el.modeToggle.addEventListener('click', () => {
+        state.mode = state.mode === 'light' ? 'dark' : 'light';
+        beep([[450,.05]]);
+        render();
+      });
+
+      el.soundTop.addEventListener('click', () => { state.sound = !state.sound; render(); });
+      el.soundToggle.addEventListener('click', () => { state.sound = !state.sound; render(); });
+
+      el.saveIncomeBtn.addEventListener('click', () => {
+        const next = Number(el.incomeInput.value || 0);
+        const { spent } = totals();
+        if (next < spent) {
+          setDangerUI(true);
+          beep([[180,.1],[130,.12],[90,.12]]);
+          return;
+        }
+        state.income = next;
+        beep([[530,.06],[690,.06]]);
+        render();
+      });
+
+      el.prevCat.addEventListener('click', () => { state.catIndex -= 1; updateCategory(-1); beep([[520,.04]]); save(); });
+      el.nextCat.addEventListener('click', () => { state.catIndex += 1; updateCategory(1); beep([[520,.04]]); save(); });
+
+      el.amountInput.addEventListener('input', () => {
+        const amount = Number(el.amountInput.value || 0);
+        validatePendingExpense(amount);
+      });
+
+      el.saveExpenseBtn.addEventListener('click', addExpense);
+      el.historyList.addEventListener('click', onHistoryClick);
+
+      el.tabs.forEach((tab) => tab.addEventListener('click', () => {
+        state.chartMode = tab.dataset.mode;
+        beep([[510,.05],[620,.05]]);
+        render();
+      }));
+
+      el.themeGrid.addEventListener('click', (e) => {
+        const chip = e.target.closest('[data-theme]');
+        if (!chip) return;
+        state.theme = chip.dataset.theme;
+        beep([[470,.05],[550,.05],[630,.06]]);
+        applyTheme(state.theme);
+        render();
+      });
+
+      el.colorOne.addEventListener('input', (e) => {
+        state.customColors[0] = e.target.value;
+        applyTheme(state.theme, true);
+        save();
+      });
+
+      el.colorTwo.addEventListener('input', (e) => {
+        state.customColors[1] = e.target.value;
+        applyTheme(state.theme, true);
+        save();
+      });
+
+      el.resetAllBtn.addEventListener('click', () => {
+        beep([[300,.08],[220,.09]]);
+        if (!confirm('Xóa toàn bộ thu nhập và chi tiêu?')) return;
+        state.income = 0;
+        state.expenses = [];
+        state.catIndex = 0;
+        el.amountInput.value = '';
+        el.otherInput.value = '';
+        beep([[200,.09],[170,.09],[130,.1]]);
+        render();
+      });
+
+      window.addEventListener('resize', () => {
+        if (chart) chart.resize();
+      });
+    }
+
+    load();
+    bind();
+    applyTheme(state.theme, true);
+    render();
+  </script>
+</body>
+</html>
