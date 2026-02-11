@@ -257,12 +257,122 @@
     .other-wrap.open { grid-template-rows: 1fr; }
     .other-inner { overflow: hidden; }
 
-    .status-msg {
+    .warning-panel {
       border-radius: 14px;
       padding: 12px;
       border: 1px solid color-mix(in srgb, var(--red), transparent 60%);
       background: rgba(38,10,20,.45);
-      min-height: 48px;
+      min-height: 92px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      transition: border-color .35s ease, box-shadow .35s ease, background .35s ease;
+    }
+
+    .status-msg {
+      font-size: .92rem;
+      line-height: 1.4;
+      color: color-mix(in srgb, var(--bg-4), #dbe7ff 45%);
+    }
+
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 120px;
+      justify-content: flex-end;
+    }
+
+    .badge-circle,
+    .badge-triangle {
+      width: 34px;
+      height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      opacity: .32;
+      transform: scale(.94);
+      transition: opacity .3s ease, transform .3s ease, box-shadow .3s ease, border-color .3s ease, background .3s ease;
+      will-change: transform, opacity;
+    }
+
+    .badge-circle {
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.24);
+      background: rgba(255,255,255,.05);
+    }
+
+    .badge-triangle {
+      clip-path: polygon(50% 0, 100% 100%, 0 100%);
+      background: rgba(255,255,255,.08);
+      position: relative;
+      width: 36px;
+      height: 34px;
+      font-size: .85rem;
+    }
+
+    .badge-triangle span {
+      position: relative;
+      top: 3px;
+    }
+
+    .warning-panel.level-good {
+      border-color: color-mix(in srgb, #35ff98, transparent 45%);
+      box-shadow: 0 0 18px color-mix(in srgb, #35ff98, transparent 72%);
+      background: rgba(10,42,28,.36);
+    }
+
+    .warning-panel.level-good .badge-ok {
+      opacity: 1;
+      transform: scale(1);
+      color: #22e685;
+      border-color: rgba(34,230,133,.8);
+      box-shadow: 0 0 16px rgba(34,230,133,.6);
+      animation: softPulse 1.6s ease-in-out infinite;
+    }
+
+    .warning-panel.level-bad {
+      border-color: color-mix(in srgb, #ff5a6a, transparent 42%);
+      box-shadow: 0 0 18px color-mix(in srgb, #ff5a6a, transparent 70%);
+      background: rgba(48,8,20,.45);
+    }
+
+    .warning-panel.level-bad .badge-bad {
+      opacity: 1;
+      transform: scale(1);
+      color: #ff4e63;
+      border-color: rgba(255,78,99,.82);
+      box-shadow: 0 0 16px rgba(255,78,99,.68);
+      animation: softPulse 1.45s ease-in-out infinite;
+    }
+
+    .warning-panel.level-bad .badge-alert {
+      opacity: 1;
+      transform: scale(1);
+      color: #ffe476;
+      box-shadow: 0 0 18px rgba(255,228,118,.75);
+      animation: softPulse 1.25s ease-in-out infinite;
+    }
+
+    .warning-panel.level-warn {
+      border-color: color-mix(in srgb, #ffcf66, transparent 42%);
+      box-shadow: 0 0 18px color-mix(in srgb, #ffcf66, transparent 72%);
+      background: rgba(42,30,8,.35);
+    }
+
+    .warning-panel.level-warn .badge-alert {
+      opacity: 1;
+      transform: scale(1);
+      color: #ffd760;
+      box-shadow: 0 0 16px rgba(255,215,96,.72);
+      animation: softPulse 1.35s ease-in-out infinite;
+    }
+
+    @keyframes softPulse {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
     }
 
     .history-list {
@@ -567,7 +677,14 @@
 
     <section class="card card-red box-warning">
       <h2 class="section-title">🚨 Cảnh báo</h2>
-      <div id="statusMsg" class="status-msg">Nhập dữ liệu để bắt đầu phân tích tài chính.</div>
+      <div id="warningPanel" class="warning-panel level-warn">
+        <div id="statusMsg" class="status-msg">Nhập dữ liệu để bắt đầu phân tích tài chính.</div>
+        <div class="status-icons" aria-hidden="true">
+          <span id="badgeOk" class="badge-circle badge-ok">✓</span>
+          <span id="badgeBad" class="badge-circle badge-bad">✕</span>
+          <span id="badgeAlert" class="badge-triangle badge-alert"><span>!</span></span>
+        </div>
+      </div>
     </section>
 
     <section class="card card-pink box-entry">
@@ -685,6 +802,10 @@
       otherWrap: document.getElementById('otherWrap'),
       otherInput: document.getElementById('otherInput'),
       statusMsg: document.getElementById('statusMsg'),
+      warningPanel: document.getElementById('warningPanel'),
+      badgeOk: document.getElementById('badgeOk'),
+      badgeBad: document.getElementById('badgeBad'),
+      badgeAlert: document.getElementById('badgeAlert'),
       historyList: document.getElementById('historyList'),
       legendChips: document.getElementById('legendChips'),
       sunIcon: document.getElementById('sunIcon'),
@@ -865,19 +986,29 @@
 
       let text = pickLine(reminders);
       let danger = false;
+      let level = 'warn';
 
       if (state.income <= 0 || !state.expenses.length) {
         text = pickLine(reminders);
+        level = 'warn';
       } else if (spent > state.income) {
         text = `🚨 Cảnh báo đỏ: Tổng chi vượt thu nhập ${formatMoney(spent - state.income)}.`;
         danger = true;
+        level = 'bad';
       } else {
         const over = cats.filter((k) => groupedData[k] > ideal);
-        if (over.length) text = `${pickLine(warnings)} (${over.join(', ')})`;
-        else text = pickLine(praises);
+        if (over.length) {
+          text = `${pickLine(warnings)} (${over.join(', ')})`;
+          level = 'warn';
+        } else {
+          text = pickLine(praises);
+          level = 'good';
+        }
       }
 
       el.statusMsg.textContent = text;
+      el.warningPanel.classList.remove('level-good','level-warn','level-bad');
+      el.warningPanel.classList.add(`level-${level}`);
       setDangerUI(danger);
     }
 
