@@ -3,317 +3,258 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NeuroX Finance</title>
+  <title>Neurox Finance</title>
   <style>
     :root{
-      --neuro-bg-1:#0a0a0a;
-      --neuro-bg-2:#1f1142;
-      --neuro-bg-3:#0d2f46;
-      --neuro-bg-4:#3c154b;
-      --neuro-blue:#6fd3ff;
-      --neuro-pink:#ff6ec7;
-      --neuro-gold:#ffd86f;
-      --neuro-mint:#73ffd1;
-      --neuro-white:#f5f7fa;
-      --glass-light:rgba(255,255,255,.08);
-      --glass-dark:rgba(0,0,0,.35);
-      --glow-blue:0 0 25px rgba(111,211,255,.45);
-      --glow-pink:0 0 30px rgba(255,110,199,.5);
-      --radius:24px;
-      --transition:.35s cubic-bezier(.2,.8,.2,1);
+      --black:#08090f;
+      --white:#f7f9ff;
+      --sky:#6fd3ff;
+      --pink:#ff6ec7;
       --nx-accent:#ff6ec7;
       --nx-accent-2:#6fd3ff;
-      --nx-glow:0 0 20px rgba(255,110,199,.6);
-      --bg:#0b0b12;
-      --card:rgba(15,18,25,.92);
-      --text:#ffffff;
-      --accent:#ff6ec7;
-      --glow:0 0 18px rgba(255,110,199,.6);
+      --text:#f7f9ff;
+      --card:rgba(16,18,29,.9);
+      --line:rgba(111,211,255,.35);
+      --glow-blue:0 0 20px rgba(111,211,255,.45);
+      --glow-pink:0 0 22px rgba(255,110,199,.55);
+      --r:22px;
+      --t:.28s cubic-bezier(.2,.8,.2,1);
     }
 
-    * { box-sizing: border-box; }
-
+    *{box-sizing:border-box}
     body{
       margin:0;
-      font-family:"Inter","Segoe UI",system-ui,sans-serif;
-      background:
-        radial-gradient(circle at 15% 20%, rgba(111,211,255,.18), transparent 55%),
-        radial-gradient(circle at 80% 20%, rgba(255,216,111,.14), transparent 48%),
-        radial-gradient(circle at 75% 80%, rgba(255,110,199,.20), transparent 58%),
-        radial-gradient(circle at 25% 80%, rgba(115,255,209,.16), transparent 52%),
-        linear-gradient(140deg,var(--neuro-bg-1),var(--neuro-bg-2) 35%,var(--neuro-bg-3) 65%,var(--neuro-bg-4));
-      color:var(--text);
-      transition:.35s ease;
       min-height:100dvh;
-      padding:22px 20px;
+      font-family:"Inter","Segoe UI",system-ui,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 12% 15%, rgba(111,211,255,.2), transparent 48%),
+        radial-gradient(circle at 88% 20%, rgba(255,110,199,.19), transparent 45%),
+        radial-gradient(circle at 70% 85%, rgba(255,255,255,.09), transparent 50%),
+        linear-gradient(140deg,#08090f,#11152a 40%,#0b2940 70%,#311634);
+      padding:20px;
       overflow-x:hidden;
-    }
-
-    .light{
-      --bg:#f6f7fb;
-      --card:#ffffff;
-      --text:#111;
-      --accent:#ff6ec7;
-      --glow:0 0 18px rgba(255,110,199,.4);
+      transition:.35s ease;
     }
 
     body.light{
+      --text:#11131a;
+      --card:rgba(255,255,255,.92);
+      --line:rgba(111,211,255,.42);
       background:
-        radial-gradient(circle at 18% 18%, rgba(111,211,255,.20), transparent 50%),
-        radial-gradient(circle at 82% 24%, rgba(255,216,111,.18), transparent 46%),
-        radial-gradient(circle at 70% 78%, rgba(255,110,199,.18), transparent 55%),
-        radial-gradient(circle at 20% 78%, rgba(115,255,209,.16), transparent 50%),
-        #f6f7fb;
+        radial-gradient(circle at 15% 15%, rgba(111,211,255,.23), transparent 50%),
+        radial-gradient(circle at 85% 18%, rgba(255,110,199,.20), transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(255,255,255,.7), transparent 48%),
+        #f6f8ff;
     }
 
-    .app{
-      max-width:1240px;
-      margin:0 auto;
-      display:grid;
-      grid-template-columns:1fr 1.45fr;
-      gap:16px;
-    }
-    @media(max-width:980px){ .app{ grid-template-columns:1fr; } }
-
-    .neuro-card, .card{
-      background:var(--card);
-      border-radius:var(--radius);
-      border:2px solid rgba(111,211,255,.28);
-      backdrop-filter:blur(18px);
-      box-shadow:var(--glow-blue);
-      padding:18px;
-      transition:all var(--transition);
-      overflow:hidden;
-    }
-    .neuro-card:hover,.card:hover{ transform:translateY(-2px); box-shadow:var(--glow-pink); }
-
-    .hero{ grid-column:1 / -1; }
-    .badge{
-      display:inline-flex; gap:8px; flex-wrap:wrap; align-items:center;
-      padding:7px 12px; border-radius:999px;
-      border:2px solid var(--neuro-blue); box-shadow:var(--nx-glow);
-      background:rgba(255,255,255,.06); margin-bottom:10px; font-size:.9rem;
-    }
-    .neuro-title{
-      margin:0 0 8px;
-      font-size:clamp(1.45rem,2.5vw,2.25rem);
-      font-weight:850;
-      letter-spacing:1.2px;
-      color:var(--neuro-pink);
-      text-shadow:0 0 25px rgba(255,110,199,.6),0 0 40px rgba(111,211,255,.3);
-    }
-
-    h2{ margin:0 0 10px; font-size:1.06rem; }
-    p{ margin:0; line-height:1.5; }
-    .muted{ opacity:.84; }
-    .tiny-note{ font-size:.84rem; opacity:.8; margin-top:8px; }
-    label{ display:block; margin-bottom:6px; font-size:.93rem; opacity:.86; }
-
-    .neuro-input, .neuro-toggle{
-      width:100%; border-radius:16px; padding:11px 12px; font-size:.95rem;
-      border:2px solid var(--neuro-blue); box-shadow:var(--glow-blue);
-      background:rgba(255,255,255,.10); color:var(--text); outline:none;
-    }
-    .neuro-input:focus,.neuro-toggle:focus{ border-color:var(--neuro-pink); box-shadow:var(--glow-pink); }
-
-    .neuro-btn{
-      width:100%; border:none; cursor:pointer; color:#fff; font-weight:800;
-      padding:11px 14px; border-radius:18px;
-      background:linear-gradient(135deg,var(--nx-accent),var(--nx-accent-2));
-      box-shadow:var(--nx-glow); transition:all var(--transition);
-    }
-    .neuro-btn:hover{ transform:translateY(-1px); }
-    .neuro-btn.subtle{ background:rgba(58,58,90,.35); border:2px solid rgba(111,211,255,.35); color:var(--text); }
-    .neuro-btn.danger{ background:linear-gradient(135deg,#ff5f92,#ff2d6d); }
-
-    .row{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-
-    .picker-wrap{
-      position:relative; height:220px; overflow:hidden; border-radius:18px;
-      border:2px solid var(--neuro-blue); box-shadow:var(--glow-blue);
-      background:rgba(255,255,255,.07); margin-bottom:12px;
-    }
-    .picker{ position:absolute; inset:0; overflow-y:auto; padding:84px 12px; scroll-snap-type:y mandatory; }
-    .picker::-webkit-scrollbar{ width:0; }
-    .picker-item{
-      height:52px; margin:5px 0; display:flex; align-items:center; justify-content:center;
-      border-radius:12px; border:2px solid transparent; opacity:.52;
-      scroll-snap-align:center; transition:.2s ease; font-weight:650;
-    }
-    .picker-item.active{ opacity:1; border-color:var(--neuro-pink); box-shadow:var(--glow-pink); background:rgba(255,255,255,.08); transform:scale(1.02); }
-    .picker-focus{ position:absolute; left:10px; right:10px; top:84px; height:52px; border-radius:12px; border:2px solid var(--neuro-blue); box-shadow:var(--glow-blue); pointer-events:none; }
-
-    .status{
-      border-radius:16px; border:2px solid var(--neuro-blue); box-shadow:var(--glow-blue);
-      padding:12px; line-height:1.45; background:rgba(255,255,255,.07);
-    }
-    .status.warn{ border-color:#ff88d8; box-shadow:0 0 22px rgba(255,136,216,.7); }
-    .status.danger{ border-color:#ff4f86; box-shadow:0 0 22px rgba(255,79,134,.8); }
-    .status.ok{ border-color:#76ffd4; box-shadow:0 0 22px rgba(118,255,212,.65); }
-
-    .list{ display:grid; gap:8px; max-height:350px; overflow:auto; }
-    .expense-item{
-      display:grid; grid-template-columns:1fr auto auto; gap:8px; align-items:center;
-      border-radius:14px; border:2px solid var(--neuro-blue); box-shadow:var(--glow-blue);
-      padding:10px; background:rgba(255,255,255,.07);
-    }
-    .expense-item small{ display:block; opacity:.74; margin-top:4px; }
-
-    .chart-toolbar{ display:flex; gap:8px; margin-bottom:10px; }
-    .neuro-toggle{ cursor:pointer; padding:10px 12px; font-weight:700; background:rgba(255,255,255,.09); }
-    .neuro-toggle.active{ border-color:var(--neuro-pink); box-shadow:var(--glow-pink); background:rgba(255,255,255,.14); }
-    canvas{ width:100%; border-radius:16px; border:2px solid var(--neuro-blue); box-shadow:var(--glow-blue); background:radial-gradient(circle at 50% -25%, rgba(255,255,255,.14), rgba(255,255,255,.03)); }
-
-    .nx-theme-title{ font-weight:800; letter-spacing:1px; margin-bottom:12px; text-align:center; text-shadow:var(--nx-glow); }
-    .nx-theme-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
-    .nx-theme-btn{ padding:11px; border-radius:14px; border:2px solid var(--neuro-blue); background:#000; color:#fff; cursor:pointer; font-size:.84rem; transition:.2s; box-shadow:var(--nx-glow); }
-    .nx-theme-btn:active{ transform:scale(.95); }
-    .nx-color-wrap{ margin-top:12px; display:flex; flex-direction:column; gap:6px; }
-    .nx-color-input{ width:100%; height:44px; border:none; border-radius:14px; cursor:pointer; box-shadow:var(--nx-glow); background:none; }
-
-    /* 🌗 Toggle Sáng / Tối — NeuroX UI */
     .mode-toggle{
-      position:fixed; top:20px; right:20px; width:48px; height:48px; border-radius:50%;
-      border:none; font-size:20px; cursor:pointer; background:var(--card); color:var(--text);
-      box-shadow:var(--glow); transition:.25s ease; z-index:99;
+      position:fixed; top:16px; right:16px; z-index:99;
+      width:48px; height:48px; border:none; border-radius:50%; cursor:pointer;
+      font-size:20px; color:var(--text); background:var(--card);
+      box-shadow:var(--glow-pink); transition:.25s ease;
     }
-    .mode-toggle:active{ transform:scale(.9); }
+    .mode-toggle:active{transform:scale(.9)}
 
-    /* ===== 🎵 SOUND UI ===== */
-    .nx-top-controls{ display:grid; grid-template-columns: 1fr auto; gap:10px; align-items:start; margin-bottom:10px; }
-    .nx-sound-card{
-      border-radius:22px; padding:16px; border:2px solid var(--neuro-blue); box-shadow:var(--glow-blue);
-      background:rgba(255,255,255,.08); backdrop-filter:blur(16px);
-    }
-    .nx-sound-title{ text-align:center; font-weight:800; letter-spacing:1px; margin-bottom:12px; text-shadow:var(--nx-glow); }
-    .nx-sound-toggle{
-      width:100%; border-radius:18px; padding:14px; border:2px solid var(--neuro-blue);
-      background:rgba(255,255,255,.08); font-weight:800; font-size:1rem; cursor:pointer;
-      display:flex; align-items:center; justify-content:center; gap:10px; transition:.25s; box-shadow:var(--glow-blue);
-      color:var(--text);
-    }
-    .nx-sound-toggle .icon{ font-size:1.2rem; }
-    .nx-sound-toggle.active{ border-color:var(--neuro-pink); box-shadow:var(--glow-pink); background:linear-gradient(135deg,var(--nx-accent),var(--nx-accent-2)); color:white; }
-    .nx-sound-toggle:active{ transform:scale(.97); }
+    .app{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:1fr 1.45fr;gap:16px}
+    @media(max-width:980px){.app{grid-template-columns:1fr}}
 
-    .palette-strip{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:10px;}
-    .palette-chip{height:14px; border-radius:999px; box-shadow:var(--glow-blue); border:1px solid rgba(255,255,255,.35);}
-    .chip1{background:var(--neuro-bg-2);} .chip2{background:var(--neuro-blue);} .chip3{background:var(--neuro-pink);} .chip4{background:var(--neuro-gold);} 
+    .card{
+      background:var(--card); border:2px solid var(--line); border-radius:var(--r);
+      box-shadow:var(--glow-blue); backdrop-filter:blur(18px); padding:18px; transition:var(--t);
+    }
+    .card:hover{box-shadow:var(--glow-pink); transform:translateY(-2px)}
+
+    .hero{grid-column:1 / -1; text-align:center}
+    .hero-title{margin:0;font-size:clamp(2rem,4.2vw,3.2rem);font-weight:900;color:var(--pink);text-shadow:0 0 30px rgba(255,110,199,.7),0 0 40px rgba(111,211,255,.4)}
+    .hero-sign{margin-top:8px;line-height:1.5;font-weight:700}
+    .hero-slogan{margin-top:8px;font-style:italic;opacity:.9}
+
+    h2{margin:0 0 10px;font-size:1.08rem}
+    label{display:block;margin-bottom:6px;font-size:.92rem;opacity:.9}
+
+    .input,.toggle,.btn{
+      width:100%; border-radius:16px; border:2px solid var(--sky); box-shadow:var(--glow-blue);
+      background:rgba(255,255,255,.08); color:var(--text); font-size:.95rem;
+    }
+    .input{padding:11px 12px;outline:none}
+    .input:focus,.toggle:focus,.btn:focus{border-color:var(--pink);box-shadow:var(--glow-pink)}
+
+    .btn{
+      cursor:pointer;padding:11px 13px;font-weight:800;border:none;
+      background:linear-gradient(135deg,var(--nx-accent),var(--nx-accent-2)); color:#fff; transition:var(--t)
+    }
+    .btn.subtle{background:rgba(57,62,89,.35);border:2px solid var(--line);color:var(--text)}
+    .btn.danger{background:linear-gradient(135deg,#ff5f92,#ff2f6d)}
+
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+    /* Single-visible wheel picker */
+    .picker-shell{
+      position:relative; height:76px; border-radius:18px; border:2px solid var(--sky);
+      box-shadow:var(--glow-blue); display:flex; align-items:center; justify-content:center;
+      overflow:hidden; background:rgba(255,255,255,.07); margin-bottom:12px;
+    }
+    .picker-item-single{
+      width:calc(100% - 84px); text-align:center; font-weight:800; font-size:1.02rem;
+      padding:10px 12px; border-radius:12px; border:2px solid var(--pink); box-shadow:var(--glow-pink);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .wheel-btn{
+      position:absolute; top:50%; transform:translateY(-50%); width:34px; height:34px;
+      border-radius:50%; border:2px solid var(--sky); background:rgba(255,255,255,.1);
+      color:var(--text); cursor:pointer; box-shadow:var(--glow-blue); font-weight:900;
+    }
+    .wheel-btn.left{left:10px}.wheel-btn.right{right:10px}
+
+    .status{border-radius:16px;border:2px solid var(--sky);box-shadow:var(--glow-blue);padding:12px;line-height:1.45;background:rgba(255,255,255,.08)}
+    .status.warn{border-color:#ff88d8;box-shadow:0 0 22px rgba(255,136,216,.7)}
+    .status.danger{border-color:#ff4f86;box-shadow:0 0 22px rgba(255,79,134,.8)}
+    .status.ok{border-color:#76ffd4;box-shadow:0 0 22px rgba(118,255,212,.65)}
+
+    .list{display:grid;gap:8px;max-height:350px;overflow:auto}
+    .expense-item{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;border:2px solid var(--sky);box-shadow:var(--glow-blue);border-radius:14px;padding:10px;background:rgba(255,255,255,.07)}
+    .expense-item small{display:block;opacity:.75;margin-top:4px}
+
+    .chart-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+    .chart-toolbar{display:flex;gap:6px}
+    .toggle{cursor:pointer;padding:6px 10px;font-size:.84rem;font-weight:800}
+    .toggle.active{border-color:var(--pink);box-shadow:var(--glow-pink)}
+
+    canvas{width:100%;border-radius:16px;border:2px solid var(--sky);box-shadow:var(--glow-blue);background:radial-gradient(circle at 50% -30%, rgba(255,255,255,.15), rgba(255,255,255,.03));}
+
+    .nx-theme-title{text-align:center;font-size:1.15rem;font-weight:900;margin-bottom:12px;text-shadow:var(--glow-pink)}
+    .nx-grid-top{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+    .nx-top-box{border:2px solid var(--sky);box-shadow:var(--glow-blue);border-radius:16px;padding:12px;background:rgba(255,255,255,.08)}
+    .nx-top-title{text-align:center;font-weight:800;margin-bottom:8px}
+
+    .nx-sound-toggle{width:100%;border-radius:14px;padding:10px;border:2px solid var(--sky);box-shadow:var(--glow-blue);background:rgba(255,255,255,.08);cursor:pointer;font-weight:800;color:var(--text);display:flex;gap:8px;justify-content:center;align-items:center}
+    .nx-sound-toggle.active{border-color:var(--pink);box-shadow:var(--glow-pink);background:linear-gradient(135deg,var(--nx-accent),var(--nx-accent-2));color:#fff}
+
+    .nx-preset-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px}
+    .nx-theme-btn{padding:10px;border-radius:14px;border:2px solid transparent;cursor:pointer;font-weight:800;color:#fff;box-shadow:0 0 14px rgba(0,0,0,.35)}
+    .preset-default{background:linear-gradient(135deg,#ff6ec7,#6fd3ff);border-color:#ffd5f1}
+    .preset-ocean{background:linear-gradient(135deg,#00e5ff,#0066ff);border-color:#a8f5ff}
+    .preset-sunset{background:linear-gradient(135deg,#ff9966,#ff3366);border-color:#ffd0bf}
+    .preset-forest{background:linear-gradient(135deg,#00ff99,#006644);border-color:#b0ffd9}
+    .preset-violet{background:linear-gradient(135deg,#d66dff,#6a00ff);border-color:#eec7ff}
+    .preset-zen{background:linear-gradient(135deg,#ffffff,#888888);color:#111;border-color:#fff}
+
+    .nx-color-wrap{margin-bottom:10px}
+    .nx-color-input{width:100%;height:44px;border:none;border-radius:14px;cursor:pointer;box-shadow:var(--glow-pink)}
+
+    .hide{display:none}
   </style>
 </head>
 <body>
   <button id="modeToggle" class="mode-toggle">🌙</button>
 
   <main class="app">
-    <section class="neuro-card hero">
-      <div class="badge">🧠 Signature: <strong>NeuroX</strong> — Neuro: thần kinh, não bộ • X: đột phá → Trí tuệ não bộ vượt giới hạn</div>
-      <h1 class="neuro-title">NeuroX Finance ✨</h1>
-      <p class="muted">Trang quản lý chi tiêu cao cấp, hiện đại, logic và nghệ thuật: dữ liệu rõ ràng, cảnh báo AI sắc nét, giao diện glow đẹp mắt, icon cute và trải nghiệm zen mà vẫn cực kỳ thực dụng. 🌸</p>
-      <div class="palette-strip">
-        <div class="palette-chip chip1"></div><div class="palette-chip chip2"></div><div class="palette-chip chip3"></div><div class="palette-chip chip4"></div>
+    <section class="card hero">
+      <h1 class="hero-title">Neurox Finance</h1>
+      <div class="hero-sign">Neuro: thần kinh, não bộ &nbsp;&nbsp;&nbsp; X: đột phá<br>→ Trí tuệ não bộ vượt giới hạn</div>
+      <div class="hero-slogan">"Chi đúng, sống nhẹ, tương lai sáng." ✨</div>
+    </section>
+
+    <section>
+      <div class="card" style="margin-bottom:16px;">
+        <h2>💸 Thu nhập</h2>
+        <label for="incomeInput">Số tiền thu nhập (VND)</label>
+        <input id="incomeInput" class="input" type="number" min="0" step="1000" placeholder="Ví dụ: 18000000" />
+        <button id="saveIncomeBtn" class="btn" style="margin-top:10px;">💾 Lưu / đổi thu nhập</button>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h2>🧩 Danh mục khoản chi</h2>
+
+        <div id="pickerShell" class="picker-shell" title="Dùng lăn chuột hoặc nút trái/phải để đổi danh mục">
+          <button class="wheel-btn left" id="prevCat">‹</button>
+          <div id="pickerSingle" class="picker-item-single">🍱 Ăn uống</div>
+          <button class="wheel-btn right" id="nextCat">›</button>
+        </div>
+
+        <div id="otherWrap" class="hide">
+          <label for="otherInput">Mặt khác</label>
+          <input id="otherInput" class="input" type="text" placeholder="Nhập danh mục riêng của bạn" />
+        </div>
+
+        <label for="amountInput" style="margin-top:10px;">💵 Số tiền chi</label>
+        <input id="amountInput" class="input" type="number" min="0" step="1000" placeholder="Ví dụ: 350000" />
+
+        <button id="addBtn" class="btn" style="margin-top:10px;">➕ Thêm khoản chi</button>
       </div>
     </section>
 
     <section>
-      <div class="neuro-card" style="margin-bottom:16px;">
-        <h2>💸 Thu nhập hàng tháng</h2>
-        <label for="incomeInput">Số tiền thu nhập (VND)</label>
-        <input id="incomeInput" class="neuro-input" type="number" min="0" step="1000" placeholder="Ví dụ: 18000000" />
-        <div class="row" style="margin-top:10px;">
-          <button id="saveIncomeBtn" class="neuro-btn">💾 Lưu / đổi thu nhập</button>
-          <button id="resetBtn" class="neuro-btn subtle">♻️ Xoá toàn bộ dữ liệu</button>
-        </div>
-        <p id="incomeHint" class="tiny-note">💡 Mẹo NeuroX: cập nhật thu nhập trước khi thêm chi tiêu để AI phân tích chính xác.</p>
+      <div class="card" style="margin-bottom:16px;">
+        <h2>🚨 Cảnh báo</h2>
+        <div id="aiStatus" class="status">AI đang chờ dữ liệu… 🌿</div>
       </div>
 
-      <div class="neuro-card" style="margin-bottom:16px;">
-        <h2>🧩 Picker View danh mục khoản chi</h2>
-        <div class="picker-wrap">
-          <div id="picker" class="picker"></div>
-          <div class="picker-focus"></div>
-        </div>
-
-        <label for="otherInput">✍️ Mục khác (tự nhập nếu không có trong danh sách)</label>
-        <input id="otherInput" class="neuro-input" type="text" placeholder="Ví dụ: 🐾 Thú cưng" />
-
-        <label for="amountInput" style="margin-top:10px;">💵 Số tiền chi</label>
-        <input id="amountInput" class="neuro-input" type="number" min="0" step="1000" placeholder="Ví dụ: 350000" />
-
-        <div class="row" style="margin-top:10px;">
-          <button id="addBtn" class="neuro-btn">➕ Thêm khoản chi</button>
-          <button id="cancelEditBtn" class="neuro-btn subtle" disabled>❎ Huỷ sửa</button>
-        </div>
+      <div class="card" style="margin-bottom:16px;">
+        <h2>🗂️ Lịch sửa khoản chi</h2>
+        <div id="expenseList" class="list"></div>
       </div>
 
-      <div class="neuro-card">
-        <div class="nx-theme-title">🎨 GIAO DIỆN NeuroX</div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="chart-head">
+          <h2 style="margin:0;">📊 Biểu đồ phân tích</h2>
+          <div class="chart-toolbar">
+            <button class="toggle active" data-mode="bar">Cột</button>
+            <button class="toggle" data-mode="pie">Tròn</button>
+          </div>
+        </div>
+        <canvas id="chart" width="920" height="350"></canvas>
+      </div>
 
-        <div class="nx-top-controls">
-          <div class="nx-sound-card">
-            <div class="nx-sound-title">🎶 Âm thanh NeuroX</div>
+      <div class="card">
+        <div class="nx-theme-title">🎨 Giao diện NeuroX</div>
+
+        <div class="nx-grid-top">
+          <div class="nx-top-box">
+            <div class="nx-top-title">🌗 Sáng tối</div>
+            <button id="modeCardBtn" class="btn subtle">Đổi giao diện</button>
+          </div>
+          <div class="nx-top-box">
+            <div class="nx-top-title">🎵 Âm thanh</div>
             <button id="nxSoundToggle" class="nx-sound-toggle active">
               <span class="icon">🔊</span>
               <span class="label">Âm thanh: Bật</span>
             </button>
           </div>
-          <div class="tiny-note">🌗 Nút sáng/tối nằm góc trên phải để truy cập siêu nhanh.</div>
         </div>
 
-        <div class="nx-theme-grid">
-          <button class="nx-theme-btn" data-preset="default">🌌 Mặc định</button>
-          <button class="nx-theme-btn" data-preset="ocean">🌊 Đại Dương</button>
-          <button class="nx-theme-btn" data-preset="sunset">🌇 Hoàng Hôn</button>
-          <button class="nx-theme-btn" data-preset="forest">🌲 Rừng Xanh</button>
-          <button class="nx-theme-btn" data-preset="violet">💜 Tím Hồng</button>
-          <button class="nx-theme-btn" data-preset="zen">🧘 Zen</button>
+        <div class="nx-preset-grid">
+          <button class="nx-theme-btn preset-default" data-preset="default">🌌 Mặc định</button>
+          <button class="nx-theme-btn preset-ocean" data-preset="ocean">🌊 Đại dương</button>
+          <button class="nx-theme-btn preset-sunset" data-preset="sunset">🌇 Hoàng hôn</button>
+          <button class="nx-theme-btn preset-forest" data-preset="forest">🌲 Rừng xanh</button>
+          <button class="nx-theme-btn preset-violet" data-preset="violet">💜 Tím hồng</button>
+          <button class="nx-theme-btn preset-zen" data-preset="zen">🧘 Zen</button>
         </div>
 
         <div class="nx-color-wrap">
-          <div class="tiny-note">🎯 Tuỳ chỉnh màu accent</div>
-          <input id="themeColorInput" type="color" class="nx-color-input" />
+          <label for="themeColorInput">🎯 Tự tuỳ chỉnh màu</label>
+          <input id="themeColorInput" class="nx-color-input" type="color" />
         </div>
-      </div>
-    </section>
 
-    <section>
-      <div class="neuro-card" style="margin-bottom:16px;">
-        <h2>🤖 AI đánh giá & cảnh báo</h2>
-        <div id="aiStatus" class="status">AI đang chờ dữ liệu… 🌿</div>
-        <p id="summary" class="tiny-note">Chưa có dữ liệu để phân tích.</p>
-      </div>
-
-      <div class="neuro-card" style="margin-bottom:16px;">
-        <h2>🗂️ Lịch sử khoản chi (sửa / xoá)</h2>
-        <div id="expenseList" class="list"></div>
-      </div>
-
-      <div class="neuro-card">
-        <h2>📊 Biểu đồ phân tích</h2>
-        <div class="chart-toolbar">
-          <button class="neuro-toggle active" data-mode="bar">1️⃣ Cột</button>
-          <button class="neuro-toggle" data-mode="pie">2️⃣ Tròn</button>
-        </div>
-        <canvas id="chart" width="920" height="350"></canvas>
+        <button id="resetBtn" class="btn danger">🗑️ Xóa toàn bộ dữ liệu</button>
       </div>
     </section>
   </main>
 
   <script>
-    const STORAGE_KEY = "neurox-finance-v5";
+    const STORAGE_KEY = "neurox-finance-v6";
     const THEME_KEY = "nx-theme";
-
-    const CATEGORIES = [
-      "🍱 Ăn uống", "☕ Cafe", "🛍️ Mua sắm", "🚗 Di chuyển", "🎮 Giải trí",
-      "📚 Học tập", "💊 Sức khỏe", "🏠 Nhà cửa", "✍️ Mục khác"
-    ];
+    const CATEGORIES = ["🍱 Ăn uống","☕ Cafe","🛍️ Mua sắm","🚗 Di chuyển","🎮 Giải trí","📚 Học tập","💊 Sức khỏe","🏠 Nhà cửa","✍️ Mặt khác"];
 
     const nxPresets = {
-      default:["#ff6ec7", "#6fd3ff"],
-      ocean:["#00e5ff", "#0066ff"],
-      sunset:["#ff9966", "#ff3366"],
-      forest:["#00ff99", "#006644"],
-      violet:["#d66dff", "#6a00ff"],
-      zen:["#ffffff", "#888888"]
+      default:["#ff6ec7","#6fd3ff"],
+      ocean:["#00e5ff","#0066ff"],
+      sunset:["#ff9966","#ff3366"],
+      forest:["#00ff99","#006644"],
+      violet:["#d66dff","#6a00ff"],
+      zen:["#ffffff","#888888"]
     };
 
     const state = {
@@ -329,17 +270,19 @@
 
     const el = {
       modeToggle: document.getElementById("modeToggle"),
+      modeCardBtn: document.getElementById("modeCardBtn"),
       incomeInput: document.getElementById("incomeInput"),
       saveIncomeBtn: document.getElementById("saveIncomeBtn"),
       resetBtn: document.getElementById("resetBtn"),
-      incomeHint: document.getElementById("incomeHint"),
-      picker: document.getElementById("picker"),
+      pickerShell: document.getElementById("pickerShell"),
+      pickerSingle: document.getElementById("pickerSingle"),
+      prevCat: document.getElementById("prevCat"),
+      nextCat: document.getElementById("nextCat"),
+      otherWrap: document.getElementById("otherWrap"),
       otherInput: document.getElementById("otherInput"),
       amountInput: document.getElementById("amountInput"),
       addBtn: document.getElementById("addBtn"),
-      cancelEditBtn: document.getElementById("cancelEditBtn"),
       aiStatus: document.getElementById("aiStatus"),
-      summary: document.getElementById("summary"),
       expenseList: document.getElementById("expenseList"),
       chart: document.getElementById("chart"),
       soundBtn: document.getElementById("nxSoundToggle"),
@@ -369,26 +312,22 @@
         state.chartMode = data.chartMode === "pie" ? "pie" : "bar";
         state.soundOn = data.soundOn !== false;
         state.mode = data.mode === "light" ? "light" : "dark";
-      } catch { console.warn("NeuroX: invalid storage"); }
+      } catch { console.warn("bad storage"); }
     }
 
-    function nxBeep(freq=520, dur=.08){
+    function nxBeep(freq=520,dur=.08){
       if(!state.soundOn) return;
       const ctx = new (window.AudioContext||window.webkitAudioContext)();
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.connect(gain); gain.connect(ctx.destination);
-      gain.gain.value=.035; osc.frequency.value=freq;
-      osc.start(); osc.stop(ctx.currentTime+dur);
+      gain.gain.value = .035; osc.frequency.value = freq;
+      osc.start(); osc.stop(ctx.currentTime + dur);
     }
 
     function playEventSound(type){
-      const map = {
-        click:[560,.05], edit:[640,.06], delete:[220,.09],
-        warn:[320,.12], danger:[180,.16], success:[760,.07],
-        theme:[500,.06], chart:[620,.07], mode:[470,.07]
-      };
-      const [f,d]= map[type] || map.click;
+      const map={click:[560,.05],edit:[640,.06],delete:[220,.09],warn:[320,.12],danger:[180,.16],success:[760,.07],theme:[500,.06],chart:[620,.07],mode:[470,.07]};
+      const [f,d] = map[type] || map.click;
       nxBeep(f,d);
     }
 
@@ -396,22 +335,11 @@
       document.documentElement.style.setProperty("--nx-accent",c1);
       document.documentElement.style.setProperty("--nx-accent-2",c2);
       document.documentElement.style.setProperty("--nx-glow",`0 0 20px ${c1}`);
-      localStorage.setItem(THEME_KEY,JSON.stringify([c1,c2]));
+      localStorage.setItem(THEME_KEY, JSON.stringify([c1,c2]));
     }
-
     function nxPreset(name){ const [c1,c2]=nxPresets[name]; nxApply(c1,c2); playEventSound("theme"); }
     function nxCustom(hex){ nxApply(hex,"#ffffff"); playEventSound("theme"); }
-
-    function loadTheme(){
-      const saved=JSON.parse(localStorage.getItem(THEME_KEY)||"null");
-      if(saved) nxApply(saved[0],saved[1]);
-    }
-
-    function syncSoundUI(){
-      el.soundBtn.classList.toggle("active", state.soundOn);
-      el.soundBtn.querySelector(".icon").textContent = state.soundOn ? "🔊" : "🔇";
-      el.soundBtn.querySelector(".label").textContent = state.soundOn ? "Âm thanh: Bật" : "Âm thanh: Tắt";
-    }
+    function loadTheme(){ const saved=JSON.parse(localStorage.getItem(THEME_KEY)||"null"); if(saved) nxApply(saved[0],saved[1]); }
 
     function syncModeUI(){
       const isLight = state.mode === "light";
@@ -420,301 +348,294 @@
       localStorage.setItem("mode", isLight ? "light" : "dark");
     }
 
-    function buildPicker(){
-      el.picker.innerHTML="";
-      CATEGORIES.forEach((cat,index)=>{
-        const node=document.createElement("div");
-        node.className="picker-item";
-        node.textContent=cat;
-        node.addEventListener("click",()=>{ scrollToPicker(index); playEventSound("click"); });
-        el.picker.appendChild(node);
-      });
-      scrollToPicker(0,false);
+    function syncSoundUI(){
+      el.soundBtn.classList.toggle("active", state.soundOn);
+      el.soundBtn.querySelector(".icon").textContent = state.soundOn ? "🔊" : "🔇";
+      el.soundBtn.querySelector(".label").textContent = state.soundOn ? "Âm thanh: Bật" : "Âm thanh: Tắt";
     }
 
-    function scrollToPicker(index,smooth=true){
-      const itemHeight=57;
-      el.picker.scrollTo({top:index*itemHeight,behavior:smooth?"smooth":"auto"});
-      state.selectedCategoryIndex=index;
-      refreshPickerActive();
-    }
-
-    function refreshPickerActive(){
-      const itemHeight=57;
-      const index=Math.round(el.picker.scrollTop/itemHeight);
-      state.selectedCategoryIndex=Math.max(0,Math.min(CATEGORIES.length-1,index));
-      [...el.picker.children].forEach((n,i)=>n.classList.toggle("active",i===state.selectedCategoryIndex));
+    function setCategoryByIndex(index){
+      state.selectedCategoryIndex = (index + CATEGORIES.length) % CATEGORIES.length;
+      const value = CATEGORIES[state.selectedCategoryIndex];
+      el.pickerSingle.textContent = value;
+      const isOther = value.includes("Mặt khác");
+      el.otherWrap.classList.toggle("hide", !isOther);
+      if (!isOther) el.otherInput.value = "";
     }
 
     function currentCategory(){
-      const value=CATEGORIES[state.selectedCategoryIndex]||CATEGORIES[0];
-      if(value!=="✍️ Mục khác") return value;
-      const custom=el.otherInput.value.trim();
-      return custom?`✍️ ${custom}`:"✍️ Mục khác";
+      const value = CATEGORIES[state.selectedCategoryIndex];
+      if (!value.includes("Mặt khác")) return value;
+      const custom = el.otherInput.value.trim();
+      return custom ? `✍️ ${custom}` : "✍️ Mặt khác";
     }
 
     function groupedExpenses(){
-      return state.expenses.reduce((acc,item)=>{ acc[item.category]=(acc[item.category]||0)+Number(item.amount||0); return acc; },{});
+      return state.expenses.reduce((acc,item)=>{acc[item.category]=(acc[item.category]||0)+Number(item.amount||0); return acc;},{});
     }
 
     function auditFinance(){
-      const income=Number(state.income||0);
-      const byCategory=groupedExpenses();
-      const categories=Object.keys(byCategory);
-      const categoryCount=categories.length;
-      const totalExpense=Object.values(byCategory).reduce((a,b)=>a+b,0);
-      const idealPerCategory=categoryCount>0?income/categoryCount:0;
+      const income = Number(state.income || 0);
+      const byCategory = groupedExpenses();
+      const categories = Object.keys(byCategory);
+      const categoryCount = categories.length;
+      const totalExpense = Object.values(byCategory).reduce((a,b)=>a+b,0);
+      const idealPerCategory = categoryCount > 0 ? income / categoryCount : 0;
 
-      let level="ok";
-      let text="🌿 Hãy thêm dữ liệu để AI bắt đầu nhận xét hành vi chi tiêu.";
+      let level = "ok";
+      let text = "🌿 Hãy thêm dữ liệu để AI bắt đầu nhận xét hành vi chi tiêu.";
 
-      if(income<=0){
-        level="warn";
-        text="🩷 Bạn cần nhập thu nhập tháng để hệ thống tạo ngưỡng cảnh báo chính xác.";
-      }else if(categoryCount===0){
-        level="warn";
-        text="🪷 Chưa có khoản chi nào. Thêm dữ liệu để xem đánh giá AI và biểu đồ.";
-      }else if(totalExpense>income){
-        level="danger";
-        text=`🚨 Cảnh báo đỏ: tổng chi đã vượt thu nhập ${formatMoney(totalExpense-income)}. Ưu tiên giảm 1-2 danh mục cao nhất ngay hôm nay.`;
-      }else{
-        const over=categories.filter((cat)=>byCategory[cat]>idealPerCategory);
-        if(over.length){
-          level="warn";
-          text=`⚠️ Cảnh báo hồng: ${over.join(", ")} đang vượt ngưỡng trung bình theo thuật toán. Gợi ý: chia ngân sách theo tuần để giữ nhịp ổn định.`;
-        }else{
-          level="ok";
-          text="✅ Chi tiêu đang cân đối tốt. Giữ nhịp đều đặn, bạn đang kiểm soát rất tốt! ✨";
+      if (income <= 0) {
+        level = "warn";
+        text = "🩷 Bạn cần nhập thu nhập để hệ thống tạo ngưỡng cảnh báo chính xác.";
+      } else if (categoryCount === 0) {
+        level = "warn";
+        text = "🪷 Chưa có khoản chi nào. Thêm dữ liệu để xem đánh giá AI và biểu đồ.";
+      } else if (totalExpense > income) {
+        level = "danger";
+        text = `🚨 Cảnh báo đỏ: tổng chi đã vượt thu nhập ${formatMoney(totalExpense - income)}.`;
+      } else {
+        const over = categories.filter((cat)=>byCategory[cat] > idealPerCategory);
+        if (over.length) {
+          level = "warn";
+          text = `⚠️ Cảnh báo hồng: ${over.join(", ")} đang vượt ngưỡng trung bình theo thuật toán.`;
+        } else {
+          level = "ok";
+          text = "✅ Chi tiêu đang cân đối tốt. Bạn đang kiểm soát rất tốt! ✨";
         }
       }
 
-      el.aiStatus.className=`status ${level}`;
-      el.aiStatus.textContent=text;
-      el.summary.textContent=`Thu nhập: ${formatMoney(income)} • Tổng chi: ${formatMoney(totalExpense)} • Còn lại: ${formatMoney(Math.max(0,income-totalExpense))} • Danh mục hiện có: ${categoryCount}`;
+      el.aiStatus.className = `status ${level}`;
+      el.aiStatus.textContent = text;
 
-      if(totalExpense>income){
-        el.incomeHint.textContent="🚨 Thu nhập hiện không đủ cho tổng chi. Cần giảm chi hoặc tăng thu nhập để cân bằng.";
-      }else if(categoryCount>0){
-        el.incomeHint.textContent=`📌 Ngưỡng nội bộ AI đang tính theo income / số danh mục hiện có (${categoryCount}).`;
-      }else{
-        el.incomeHint.textContent="💡 Mẹo NeuroX: cập nhật thu nhập trước khi thêm chi tiêu để AI phân tích chính xác.";
-      }
-
-      if(state.lastAuditLevel!==level){
-        if(level==="danger") playEventSound("danger");
-        else if(level==="warn") playEventSound("warn");
+      if (state.lastAuditLevel !== level) {
+        if (level === "danger") playEventSound("danger");
+        else if (level === "warn") playEventSound("warn");
         else playEventSound("success");
-        state.lastAuditLevel=level;
+        state.lastAuditLevel = level;
       }
     }
 
+    function drawLegend(ctx, items, startX, startY){
+      ctx.font = "12px Inter";
+      items.forEach((it, i)=>{
+        const y = startY + i * 20;
+        ctx.fillStyle = it.color;
+        ctx.fillRect(startX, y - 10, 12, 12);
+        ctx.fillStyle = state.mode === "light" ? "#1c1633" : "#f4edff";
+        ctx.fillText(it.label, startX + 18, y);
+      });
+    }
+
     function drawChart(){
-      const canvas=el.chart, ctx=canvas.getContext("2d");
-      const W=canvas.width, H=canvas.height;
+      const canvas = el.chart, ctx = canvas.getContext("2d");
+      const W = canvas.width, H = canvas.height;
       ctx.clearRect(0,0,W,H);
 
-      const grouped=groupedExpenses();
-      const labels=Object.keys(grouped);
-      const values=Object.values(grouped);
+      const grouped = groupedExpenses();
+      const labels = Object.keys(grouped);
+      const values = Object.values(grouped);
 
-      if(!labels.length){
+      if (!labels.length) {
         ctx.fillStyle = state.mode === "light" ? "#3a3157" : "#efe8ff";
-        ctx.font="20px Inter";
-        ctx.fillText("Chưa có dữ liệu biểu đồ 🌙",24,46);
+        ctx.font = "20px Inter";
+        ctx.fillText("Chưa có dữ liệu biểu đồ 🌙", 24, 46);
         return;
       }
 
-      const colors=labels.map((_,i)=>`hsl(${(i*49)%360} 85% 64%)`);
+      const colors = labels.map((_,i)=>`hsl(${(i*57)%360} 84% 62%)`);
+      const legendItems = labels.map((l, i)=>({label:l, color:colors[i]}));
 
-      if(state.chartMode==="bar"){
-        const max=Math.max(...values,1), left=58, top=24, cw=W-90, ch=H-86;
-        ctx.strokeStyle= state.mode === "light" ? "rgba(0,0,0,.2)" : "rgba(255,255,255,.22)";
-        for(let i=0;i<5;i++){ const y=top+(ch/4)*i; ctx.beginPath(); ctx.moveTo(left,y); ctx.lineTo(left+cw,y); ctx.stroke(); }
+      if (state.chartMode === "bar") {
+        const max = Math.max(...values, 1);
+        const left = 50, top = 26, rightGap = 260;
+        const cw = W - left - rightGap;
+        const ch = H - 80;
 
-        labels.forEach((lb,i)=>{
-          const x=left+(i*cw)/labels.length+12;
-          const bw=Math.max(26,cw/labels.length-18);
-          const h=(values[i]/max)*(ch-8);
-          const y=top+ch-h;
-          const grad=ctx.createLinearGradient(0,y,0,top+ch);
-          grad.addColorStop(0,colors[i]); grad.addColorStop(1,"rgba(255,255,255,.2)");
-          ctx.fillStyle=grad; ctx.fillRect(x,y,bw,h);
-          ctx.fillStyle= state.mode === "light" ? "#2b2149" : "#fbf3ff";
-          ctx.font="12px Inter";
-          ctx.fillText(values[i].toLocaleString("vi-VN"),x,y-6);
-          ctx.fillText(lb.slice(0,12),x,top+ch+18);
+        ctx.strokeStyle = state.mode === "light" ? "rgba(0,0,0,.2)" : "rgba(255,255,255,.22)";
+        for (let i=0;i<5;i++) {
+          const y = top + (ch/4)*i;
+          ctx.beginPath(); ctx.moveTo(left,y); ctx.lineTo(left+cw,y); ctx.stroke();
+        }
+
+        labels.forEach((lb, i)=>{
+          const x = left + (i*cw)/labels.length + 14;
+          const bw = Math.max(28, cw/labels.length - 18);
+          const h = (values[i]/max)*(ch-12);
+          const y = top + ch - h;
+
+          ctx.fillStyle = colors[i];
+          ctx.fillRect(x, y, bw, h);
+          ctx.fillStyle = state.mode === "light" ? "#2b2149" : "#f8f0ff";
+          ctx.font = "11px Inter";
+          ctx.fillText(values[i].toLocaleString("vi-VN"), x, y - 6);
+          ctx.fillText(`C${i+1}`, x + 6, top + ch + 16);
         });
-      }else{
-        const total=values.reduce((a,b)=>a+b,0);
-        let angleStart=-Math.PI/2;
-        const cx=W*0.34, cy=H*0.53, r=Math.min(W,H)*0.28;
+
+        drawLegend(ctx, legendItems, W - 240, 44);
+      } else {
+        const total = values.reduce((a,b)=>a+b,0);
+        let aStart = -Math.PI/2;
+        const cx = W*0.34, cy = H*0.53, r = Math.min(W,H)*0.28;
+
         values.forEach((v,i)=>{
-          const angle=(v/total)*2*Math.PI;
-          ctx.beginPath(); ctx.moveTo(cx,cy); ctx.fillStyle=colors[i];
-          ctx.arc(cx,cy,r,angleStart,angleStart+angle); ctx.closePath(); ctx.fill(); angleStart+=angle;
+          const a = (v/total)*Math.PI*2;
+          ctx.beginPath(); ctx.moveTo(cx,cy); ctx.fillStyle = colors[i];
+          ctx.arc(cx,cy,r,aStart,aStart+a); ctx.closePath(); ctx.fill(); aStart += a;
         });
-        ctx.beginPath();
-        ctx.fillStyle= state.mode === "light" ? "rgba(255,255,255,.82)" : "rgba(6,6,14,.72)";
-        ctx.arc(cx,cy,r*0.5,0,2*Math.PI); ctx.fill();
-        ctx.fillStyle= state.mode === "light" ? "#2b2149" : "#fff";
-        ctx.font="bold 14px Inter";
-        ctx.fillText("Tổng chi",cx-28,cy-4); ctx.fillText(formatMoney(total),cx-52,cy+18);
 
-        labels.forEach((lb,i)=>{
-          const y=38+i*27, lx=W*0.62;
-          ctx.fillStyle=colors[i]; ctx.fillRect(lx,y,14,14);
-          ctx.fillStyle= state.mode === "light" ? "#2b2149" : "#f6edff";
-          ctx.font="13px Inter";
-          const pct=((values[i]/total)*100).toFixed(1);
-          ctx.fillText(`${lb} — ${pct}% (${values[i].toLocaleString("vi-VN")})`,lx+20,y+12);
-        });
+        ctx.beginPath();
+        ctx.fillStyle = state.mode === "light" ? "rgba(255,255,255,.9)" : "rgba(6,6,14,.72)";
+        ctx.arc(cx,cy,r*0.5,0,Math.PI*2); ctx.fill();
+        ctx.fillStyle = state.mode === "light" ? "#2b2149" : "#fff";
+        ctx.font = "bold 14px Inter";
+        ctx.fillText("Tổng chi", cx - 28, cy - 4);
+        ctx.fillText(formatMoney(total), cx - 52, cy + 18);
+
+        drawLegend(ctx, legendItems, W - 260, 44);
       }
     }
 
     function renderExpenseList(){
-      el.expenseList.innerHTML="";
-      if(!state.expenses.length){
-        el.expenseList.innerHTML=`<div class="status">Chưa có khoản chi nào. Hãy thêm dữ liệu để AI và biểu đồ hoạt động nhé 💫</div>`;
+      el.expenseList.innerHTML = "";
+      if (!state.expenses.length) {
+        el.expenseList.innerHTML = `<div class="status">Chưa có khoản chi nào. Thêm mục đầu tiên nhé 💫</div>`;
         return;
       }
 
       state.expenses.slice().sort((a,b)=>b.createdAt-a.createdAt).forEach((item)=>{
-        const card=document.createElement("article");
-        card.className="expense-item";
-        card.innerHTML=`
-          <div>
-            <strong>${item.category}</strong>
-            <small>${new Date(item.createdAt).toLocaleString("vi-VN")}</small>
-          </div>
+        const node = document.createElement("article");
+        node.className = "expense-item";
+        node.innerHTML = `
+          <div><strong>${item.category}</strong><small>${new Date(item.createdAt).toLocaleString("vi-VN")}</small></div>
           <div><strong>${formatMoney(item.amount)}</strong></div>
           <div class="row" style="grid-template-columns:1fr 1fr;">
-            <button class="neuro-btn subtle" data-action="edit" data-id="${item.id}">✏️</button>
-            <button class="neuro-btn danger" data-action="delete" data-id="${item.id}">🗑️</button>
+            <button class="btn subtle" data-action="edit" data-id="${item.id}">✏️</button>
+            <button class="btn danger" data-action="delete" data-id="${item.id}">🗑️</button>
           </div>
         `;
-        el.expenseList.appendChild(card);
+        el.expenseList.appendChild(node);
       });
     }
 
-    function resetEditor(){
-      state.editingId=null;
-      el.addBtn.textContent="➕ Thêm khoản chi";
-      el.cancelEditBtn.disabled=true;
-      el.amountInput.value="";
-      el.otherInput.value="";
-      scrollToPicker(0,false);
-    }
+    function resetEditor(){ state.editingId=null; el.addBtn.textContent="➕ Thêm khoản chi"; el.amountInput.value=""; el.otherInput.value=""; setCategoryByIndex(0); }
 
     function addOrUpdateExpense(){
-      const income=Number(state.income||0);
-      if(income<=0){ alert("Vui lòng nhập thu nhập hợp lệ trước khi thêm khoản chi."); playEventSound("warn"); return; }
-      const amount=Number(el.amountInput.value||0);
-      if(!amount || amount<=0){ alert("Số tiền chi phải lớn hơn 0."); playEventSound("warn"); return; }
+      const income = Number(state.income || 0);
+      if (income <= 0) { alert("Vui lòng nhập thu nhập hợp lệ trước."); playEventSound("warn"); return; }
 
-      const category=currentCategory();
-      const now=Date.now();
-      if(state.editingId){
-        const item=state.expenses.find((x)=>x.id===state.editingId);
-        if(!item) return;
-        item.category=category; item.amount=amount; item.createdAt=now;
+      const amount = Number(el.amountInput.value || 0);
+      if (!amount || amount <= 0) { alert("Số tiền chi phải lớn hơn 0."); playEventSound("warn"); return; }
+
+      const category = currentCategory();
+      const now = Date.now();
+
+      if (state.editingId) {
+        const item = state.expenses.find((x)=>x.id===state.editingId);
+        if (!item) return;
+        item.category = category; item.amount = amount; item.createdAt = now;
         playEventSound("edit");
-      }else{
-        state.expenses.push({id:uid(),category,amount,createdAt:now});
+      } else {
+        state.expenses.push({ id: uid(), category, amount, createdAt: now });
         playEventSound("success");
       }
+
       saveState(); resetEditor(); renderAll();
     }
 
     function editExpense(id){
-      const item=state.expenses.find((x)=>x.id===id);
-      if(!item) return;
-      state.editingId=id;
-      el.addBtn.textContent="✅ Cập nhật khoản chi";
-      el.cancelEditBtn.disabled=false;
-      el.amountInput.value=item.amount;
-      if(item.category.startsWith("✍️")){
-        state.selectedCategoryIndex=CATEGORIES.indexOf("✍️ Mục khác");
-        el.otherInput.value=item.category.replace(/^✍️\s*/,"");
-      }else{
-        const idx=CATEGORIES.indexOf(item.category);
-        state.selectedCategoryIndex=idx>=0?idx:0;
-        el.otherInput.value="";
+      const item = state.expenses.find((x)=>x.id===id);
+      if (!item) return;
+      state.editingId = id;
+      el.addBtn.textContent = "✅ Cập nhật khoản chi";
+      el.amountInput.value = item.amount;
+
+      if (item.category.startsWith("✍️")) {
+        setCategoryByIndex(CATEGORIES.indexOf("✍️ Mặt khác"));
+        el.otherInput.value = item.category.replace(/^✍️\s*/,"");
+      } else {
+        const idx = CATEGORIES.indexOf(item.category);
+        setCategoryByIndex(idx >= 0 ? idx : 0);
       }
-      scrollToPicker(state.selectedCategoryIndex);
       playEventSound("edit");
-      window.scrollTo({top:0,behavior:"smooth"});
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function deleteExpense(id){
-      state.expenses=state.expenses.filter((x)=>x.id!==id);
+      state.expenses = state.expenses.filter((x)=>x.id!==id);
       playEventSound("delete");
       saveState(); renderAll();
     }
 
     function renderAll(){
-      syncModeUI();
-      syncSoundUI();
-      el.incomeInput.value=state.income||"";
-      document.querySelectorAll(".neuro-toggle[data-mode]").forEach((btn)=>btn.classList.toggle("active",btn.dataset.mode===state.chartMode));
-      renderExpenseList();
-      drawChart();
-      auditFinance();
+      syncModeUI(); syncSoundUI();
+      el.incomeInput.value = state.income || "";
+      document.querySelectorAll(".toggle[data-mode]").forEach((btn)=>btn.classList.toggle("active", btn.dataset.mode===state.chartMode));
+      renderExpenseList(); drawChart(); auditFinance();
+    }
+
+    function toggleMode(){
+      state.mode = state.mode === "light" ? "dark" : "light";
+      playEventSound("mode");
+      saveState(); renderAll();
     }
 
     function bindEvents(){
-      // mode toggle module behavior
-      if(localStorage.getItem("mode")==="light") state.mode="light";
-      el.modeToggle.addEventListener("click",()=>{
-        state.mode = state.mode === "light" ? "dark" : "light";
-        playEventSound("mode");
-        saveState(); renderAll();
-      });
+      if (localStorage.getItem("mode") === "light") state.mode = "light";
+      el.modeToggle.addEventListener("click", toggleMode);
+      el.modeCardBtn.addEventListener("click", toggleMode);
 
-      el.soundBtn.addEventListener("click",()=>{
+      el.soundBtn.addEventListener("click", ()=>{
         const next = !state.soundOn;
-        if(next){ state.soundOn=true; playEventSound("success"); }
-        else { playEventSound("warn"); state.soundOn=false; }
+        if (next) { state.soundOn = true; playEventSound("success"); }
+        else { playEventSound("warn"); state.soundOn = false; }
         saveState(); renderAll();
       });
 
-      el.saveIncomeBtn.addEventListener("click",()=>{
-        const value=Number(el.incomeInput.value||0);
-        if(value<0){ alert("Thu nhập không được âm."); playEventSound("warn"); return; }
-        state.income=value;
+      el.saveIncomeBtn.addEventListener("click", ()=>{
+        const value = Number(el.incomeInput.value || 0);
+        if (value < 0) { alert("Thu nhập không được âm."); playEventSound("warn"); return; }
+        state.income = value;
         saveState(); playEventSound("success"); renderAll();
       });
 
-      el.resetBtn.addEventListener("click",()=>{
-        if(!confirm("Bạn chắc chắn muốn xoá toàn bộ dữ liệu?")) return;
-        state.income=0; state.expenses=[]; state.lastAuditLevel="none";
+      el.resetBtn.addEventListener("click", ()=>{
+        if (!confirm("Bạn chắc chắn muốn xóa toàn bộ dữ liệu?")) return;
+        state.income = 0; state.expenses = []; state.lastAuditLevel = "none";
         resetEditor(); saveState(); playEventSound("delete"); renderAll();
       });
 
-      el.addBtn.addEventListener("click",addOrUpdateExpense);
-      el.cancelEditBtn.addEventListener("click",()=>{ resetEditor(); playEventSound("click"); });
-      el.picker.addEventListener("scroll",refreshPickerActive);
+      el.addBtn.addEventListener("click", addOrUpdateExpense);
 
-      document.querySelectorAll(".neuro-toggle[data-mode]").forEach((btn)=>{
-        btn.addEventListener("click",()=>{ state.chartMode=btn.dataset.mode; saveState(); playEventSound("chart"); renderAll(); });
+      el.prevCat.addEventListener("click", ()=>{ setCategoryByIndex(state.selectedCategoryIndex - 1); playEventSound("click"); });
+      el.nextCat.addEventListener("click", ()=>{ setCategoryByIndex(state.selectedCategoryIndex + 1); playEventSound("click"); });
+      el.pickerShell.addEventListener("wheel", (e)=>{
+        e.preventDefault();
+        setCategoryByIndex(state.selectedCategoryIndex + (e.deltaY > 0 ? 1 : -1));
+        playEventSound("click");
+      }, { passive: false });
+
+      document.querySelectorAll(".toggle[data-mode]").forEach((btn)=>{
+        btn.addEventListener("click", ()=>{ state.chartMode = btn.dataset.mode; saveState(); playEventSound("chart"); renderAll(); });
       });
 
       document.querySelectorAll(".nx-theme-btn[data-preset]").forEach((btn)=>{
-        btn.addEventListener("click",()=>nxPreset(btn.dataset.preset));
+        btn.addEventListener("click", ()=>nxPreset(btn.dataset.preset));
       });
-      el.themeColorInput.addEventListener("change",(e)=>nxCustom(e.target.value));
+      el.themeColorInput.addEventListener("change", (e)=>nxCustom(e.target.value));
 
-      el.expenseList.addEventListener("click",(event)=>{
-        const target=event.target.closest("button[data-action]");
-        if(!target) return;
-        const id=target.dataset.id;
-        if(target.dataset.action==="edit") editExpense(id);
-        if(target.dataset.action==="delete") deleteExpense(id);
+      el.expenseList.addEventListener("click", (e)=>{
+        const target = e.target.closest("button[data-action]");
+        if (!target) return;
+        const id = target.dataset.id;
+        if (target.dataset.action === "edit") editExpense(id);
+        if (target.dataset.action === "delete") deleteExpense(id);
       });
     }
 
     loadState();
     loadTheme();
-    buildPicker();
+    setCategoryByIndex(0);
     bindEvents();
     renderAll();
   </script>
