@@ -12,21 +12,22 @@ Mở: `http://localhost:4173`
 
 ## Tính năng chính
 
-- Tiêu đề trung tâm + thông điệp Neuro/X + slogan.
-- 4 màu nền chủ đạo nổi bật: đen/trắng/xanh da trời/hồng sáng, phối thêm màu nổi để UI sáng tạo.
-- Danh mục khoản chi dạng wheel 1-mục-hiển-thị (cuộn hoặc bấm trái/phải).
-- Chỉ hiện ô **Mặt khác** khi chọn danh mục **✍️ Mặt khác**.
-- Thêm / sửa / xoá khoản chi.
-- Thu nhập độc lập (đổi bất kỳ lúc nào).
-- Biểu đồ cột / tròn với chú thích màu cho từng danh mục.
-- Cảnh báo AI theo thuật toán:
-  - `idealBudgetPerCategory = income / existingCategoryCount`
-  - Cảnh báo hồng (vượt ngưỡng danh mục)
-  - Cảnh báo đỏ (tổng chi vượt thu nhập)
-- Ô **Giao diện NeuroX** đặt cuối trang với bố cục:
+- Tiêu đề trung tâm nổi bật: **Neurox Finance** + phần ý nghĩa Neuro/X + slogan.
+- 4 màu chủ đạo nền: đen, trắng, xanh da trời, hồng sáng (phối thêm màu nổi để giao diện sinh động).
+- Ô **Thu nhập** có thêm bảng tóm tắt: Thu nhập / Đã chi / Còn lại.
+- Danh mục khoản chi dạng wheel chỉ hiển thị **1 mục mỗi lần**.
+- Ô nhập **Mục khác** chỉ hiện khi chọn `✍️ Mục khác`.
+- Không cho phép nhập khoản chi làm tổng chi vượt thu nhập (cảnh báo đỏ và chặn thêm).
+- Biểu đồ phân tích lớn hơn, có 2 chế độ:
+  - Cột (thanh mảnh + chú thích)
+  - Tròn (hình tròn đầy + chú thích + tổng chi)
+- Âm thanh đa trạng thái cho thao tác vui / cảnh báo / nguy hiểm.
+- Ô **Giao diện NeuroX** đặt cuối với thứ tự:
   - Sáng tối | Âm thanh
-  - Mặc định, Đại dương, Hoàng hôn
-  - Rừng xanh, Tím hồng, Zen
-  - Tự tùy chỉnh màu
+  - Mặc định / Đại dương / Hoàng hôn
+  - Rừng xanh / Tím hồng / Xám tối
+  - Tự tùy chỉnh màu bằng 2 ô màu + mã hex
   - Xóa toàn bộ dữ liệu
-- Âm thanh phản hồi cho các thao tác chính và trạng thái cảnh báo/thành công.
+- Có thêm 2 nút nhỏ góc trên phải:
+  - Nút mode (🌙/☀️)
+  - Nút âm thanh (🔊/🔇)
