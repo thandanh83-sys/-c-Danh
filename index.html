@@ -55,8 +55,11 @@
       display:flex; align-items:center; justify-content:center;
     }
 
-    .app{max-width:1280px; margin:0 auto; display:grid; grid-template-columns:1fr 1.45fr; gap:16px}
+    .app{max-width:1280px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:stretch}
     @media(max-width:980px){.app{grid-template-columns:1fr}}
+    .app > section{display:grid; gap:16px; align-content:start}
+    .app > section > .card{height:100%}
+
 
     .card{
       background:var(--card); border:2px solid var(--line); border-radius:var(--r);
@@ -112,7 +115,7 @@
 
     .theme-title{text-align:center; font-size:1.22rem; font-weight:900; margin-bottom:12px; text-shadow:var(--glow-pink)}
     .theme-top{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px}
-    .top-box{border:2px solid var(--sky); box-shadow:var(--glow-blue); border-radius:16px; padding:10px; background:rgba(255,255,255,.08)}
+    .top-box{border:2px solid var(--accent-2); box-shadow:var(--glow-pink); border-radius:16px; padding:10px; background:linear-gradient(135deg,rgba(255,110,199,.08),rgba(111,211,255,.08))}
     .top-title{text-align:center; font-weight:850; margin-bottom:8px}
 
     .switch-row{display:flex; align-items:center; justify-content:center; gap:8px}
@@ -133,7 +136,7 @@
     .p-ocean{background:linear-gradient(135deg,#00e5ff,#0066ff);border-color:#adf8ff}
     .p-sunset{background:linear-gradient(135deg,#ff9966,#ff3366);border-color:#ffd2c3}
     .p-forest{background:linear-gradient(135deg,#00ff99,#006644);border-color:#b7ffdc}
-    .p-violet{background:linear-gradient(135deg,#d66dff,#6a00ff);border-color:#f0d1ff}
+    .p-violet{background:linear-gradient(135deg,#a855f7,#ff5fcf);border-color:#ffd1ef}
     .p-zen{background:linear-gradient(135deg,#a8a8a8,#4d4d4d);border-color:#ddd}
 
     .custom-grid{display:grid; grid-template-columns:auto auto 1fr; gap:10px; align-items:center; margin-bottom:10px}
@@ -267,7 +270,7 @@
       ocean:["#00e5ff","#0066ff"],
       sunset:["#ff9966","#ff3366"],
       forest:["#00ff99","#006644"],
-      violet:["#d66dff","#6a00ff"],
+      violet:["#a855f7","#ff5fcf"],
       zen:["#7f7f7f","#3f3f3f"]
     };
 
@@ -421,7 +424,7 @@
       const labels = Object.keys(grouped);
       const values = Object.values(grouped);
 
-      if(!labels.length){ ctx.fillStyle = state.mode==="light"?"#3a3157":"#efe8ff"; ctx.font="24px Inter"; ctx.fillText("Chưa có dữ liệu biểu đồ 🌙", 26, 56); return; }
+      if(!labels.length){ ctx.fillStyle = state.mode==="light"?"#3a3157":"#efe8ff"; ctx.font="700 34px Inter"; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText("Chưa có dữ liệu", W/2, H/2); ctx.textAlign="start"; ctx.textBaseline="alphabetic"; return; }
 
       const colors = labels.map((_,i)=>`hsl(${(i*57)%360} 84% 62%)`);
       const legend = labels.map((l,i)=>({label:l, color:colors[i]}));
