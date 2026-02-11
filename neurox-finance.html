@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Neurox Finance</title>
+  <title>NeuroX  Finance</title>
   <style>
     :root{
       --black:#0a0a0a;
@@ -111,7 +111,7 @@
     canvas{width:100%; border-radius:16px; border:2px solid var(--sky); box-shadow:var(--glow-blue); background:radial-gradient(circle at 50% -30%, rgba(255,255,255,.14), rgba(255,255,255,.03));}
 
     .chart-card{padding:18px}
-    #chart{height:420px}
+    #chart{height:360px}
     .legend-card{margin-top:10px; border:2px solid var(--sky); box-shadow:var(--glow-blue); border-radius:14px; padding:12px; background:rgba(255,255,255,.08)}
     .legend-title{font-weight:800; margin-bottom:8px}
     .legend-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:8px}
@@ -160,7 +160,7 @@
 
   <main class="app">
     <section class="card hero">
-      <h1 class="hero-title">Neurox Finance</h1>
+      <h1 class="hero-title">NeuroX  Finance</h1>
       <div class="hero-sign">Neuro: thần kinh, não bộ &nbsp;&nbsp;&nbsp; X: đột phá<br>→ Trí tuệ não bộ vượt giới hạn</div>
       <div class="hero-slogan">"Chi đúng, sống nhẹ, tương lai sáng." ✨</div>
     </section>
@@ -218,7 +218,7 @@
             <button class="toggle" data-mode="pie">Tròn</button>
           </div>
         </div>
-        <canvas id="chart" width="980" height="420"></canvas>
+        <canvas id="chart" width="900" height="360"></canvas>
 
         <div id="chartLegendCard" class="legend-card hide">
           <div class="legend-title">🧾 Ghi chú màu biểu đồ</div>
@@ -466,7 +466,7 @@
       if(!labels.length){
         renderLegendPanel([], [], []);
         ctx.fillStyle = state.mode==="light"?"#3a3157":"#efe8ff";
-        ctx.font="700 24px Inter";
+        ctx.font="700 22px Inter";
         ctx.textAlign="center";
         ctx.textBaseline="middle";
         ctx.fillText("Chưa có dữ liệu", W/2, H/2);
@@ -480,8 +480,8 @@
 
       if(state.chartMode === "bar"){
         const max = Math.max(...values, 1);
-        const left = 58, top = 34, rightGap = 40;
-        const cw = W - left - rightGap, ch = H - 100;
+        const left = 58, top = 28, rightGap = 52;
+        const cw = W - left - rightGap, ch = H - 82;
 
         ctx.strokeStyle = state.mode==="light"?"rgba(0,0,0,.2)":"rgba(255,255,255,.22)";
         for(let i=0;i<5;i++){ const y = top + (ch/4)*i; ctx.beginPath(); ctx.moveTo(left,y); ctx.lineTo(left+cw,y); ctx.stroke(); }
@@ -502,7 +502,7 @@
       } else {
         const total = values.reduce((a,b)=>a+b,0);
         let start = -Math.PI/2;
-        const cx = W*0.5, cy = H*0.5, r = Math.min(W,H)*0.26;
+        const cx = W*0.5, cy = H*0.5, r = Math.min(W,H)*0.2;
 
         values.forEach((v,i)=>{
           const a = (v/total)*Math.PI*2;
