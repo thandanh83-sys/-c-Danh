@@ -75,7 +75,8 @@
       top: 20px;
       right: 20px;
       display: flex;
-      gap: 10px;
+      flex-direction: column;
+      gap: 8px;
       z-index: 50;
     }
 
@@ -112,7 +113,6 @@
       gap: var(--gap);
       grid-template-areas:
         "header header"
-        "stats stats"
         "leftTop rightTop"
         "leftMid rightMid"
         "leftBottom rightBottom";
@@ -121,7 +121,6 @@
     }
 
     .header { grid-area: header; text-align: center; }
-    .stats-grid { grid-area: stats; }
     .box-income { grid-area: leftTop; }
     .box-warning { grid-area: rightTop; }
     .box-entry { grid-area: leftMid; }
@@ -161,27 +160,6 @@
     .card-amber { border-color: color-mix(in srgb, var(--amber), transparent 55%); box-shadow: 0 0 20px color-mix(in srgb, var(--amber), transparent 72%); }
 
     .section-title { margin: 0 0 14px; font-size: 1.05rem; }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap: var(--gap);
-    }
-
-    .kpi {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-radius: 24px;
-      padding: 18px;
-      background: rgba(10,14,25,.64);
-      border: 1px solid var(--line);
-      backdrop-filter: blur(15px);
-    }
-
-    .kpi-icon { font-size: 1.5rem; filter: drop-shadow(0 0 8px var(--cyan)); }
-    .kpi-label { color: var(--muted); font-size: .88rem; }
-    .kpi-value { font-size: 1.24rem; font-weight: 800; }
 
     .field-label { display: block; margin: 0 0 8px; color: var(--muted); font-size: .92rem; }
 
@@ -305,13 +283,34 @@
 
     .history-item {
       display: grid;
-      grid-template-columns: 1fr auto auto;
+      grid-template-columns: minmax(0,1fr) auto auto;
       align-items: center;
       gap: 8px;
       border-radius: 12px;
       border: 1px solid color-mix(in srgb, var(--amber), transparent 60%);
       padding: 10px;
       background: rgba(20,18,10,.4);
+    }
+
+    .history-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .history-cat {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 700;
+    }
+
+    .history-amount {
+      white-space: nowrap;
+      font-weight: 700;
+      color: #f7fbff;
     }
 
     .mini-btn {
@@ -431,6 +430,19 @@
       margin-top: 6px;
     }
 
+    .mode-icon {
+      font-size: 1rem;
+      filter: saturate(.7);
+      opacity: .55;
+      transition: opacity .25s ease, filter .25s ease, text-shadow .25s ease;
+    }
+
+    .mode-icon.active {
+      opacity: 1;
+      filter: saturate(1.2);
+      text-shadow: 0 0 12px color-mix(in srgb, var(--chip-c2), transparent 40%);
+    }
+
     .toggle-btn {
       width: 56px;
       height: 30px;
@@ -499,7 +511,6 @@
         grid-template-columns: 1fr;
         grid-template-areas:
           "header"
-          "stats"
           "leftTop"
           "leftMid"
           "rightTop"
@@ -507,7 +518,6 @@
           "leftBottom"
           "rightBottom";
       }
-      .stats-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -524,14 +534,8 @@
       <div class="slogan">Chi thông minh, sống nhẹ nhàng ✨</div>
     </section>
 
-    <section class="stats-grid">
-      <article class="kpi"><span class="kpi-icon">💸</span><div><div class="kpi-label">Thu nhập</div><div id="kpiIncome" class="kpi-value">0 đ</div></div></article>
-      <article class="kpi"><span class="kpi-icon">📉</span><div><div class="kpi-label">Đã chi</div><div id="kpiSpent" class="kpi-value">0 đ</div></div></article>
-      <article class="kpi"><span class="kpi-icon">💎</span><div><div class="kpi-label">Còn lại</div><div id="kpiRemain" class="kpi-value">0 đ</div></div></article>
-    </section>
-
     <section class="card card-cyan box-income">
-      <h2 class="section-title">Thu nhập & Tóm tắt</h2>
+      <h2 class="section-title">💰 Thu nhập</h2>
       <label class="field-label" for="incomeInput">Nhập thu nhập tháng</label>
       <input id="incomeInput" class="input" type="number" min="0" step="1000" placeholder="Ví dụ: 18,000,000" />
       <button id="saveIncomeBtn" class="btn">Lưu thu nhập</button>
@@ -543,12 +547,12 @@
     </section>
 
     <section class="card card-red box-warning">
-      <h2 class="section-title">Cảnh báo thông minh</h2>
+      <h2 class="section-title">🚨 Cảnh báo</h2>
       <div id="statusMsg" class="status-msg">Nhập dữ liệu để bắt đầu phân tích tài chính.</div>
     </section>
 
     <section class="card card-pink box-entry">
-      <h2 class="section-title">Nhập khoản chi</h2>
+      <h2 class="section-title">🧁 Nhập khoản chi</h2>
       <div class="wheel">
         <button id="prevCat" class="wheel-arrow">‹</button>
         <div id="wheelText" class="wheel-text">🍱 Ăn uống</div>
@@ -566,7 +570,7 @@
     </section>
 
     <section class="card card-amber box-history">
-      <h2 class="section-title">Lịch sử khoản chi</h2>
+      <h2 class="section-title">📒 Lịch sử khoản chi</h2>
       <div id="historyList" class="history-list"></div>
     </section>
 
@@ -583,11 +587,11 @@
     </section>
 
     <section class="card card-pink box-theme">
-      <h2 class="section-title">Giao diện NeuroX</h2>
+      <h2 class="section-title">🎨 Giao diện NeuroX</h2>
       <div class="footer-ctrls">
         <div class="toggle-box">
           <small>Sáng tối</small>
-          <div class="toggle-line">☀️ <button id="modeToggle" class="toggle-btn" aria-label="Đổi sáng tối"></button> 🌙</div>
+          <div class="toggle-line"><span id="sunIcon" class="mode-icon">☀️</span> <button id="modeToggle" class="toggle-btn" aria-label="Đổi sáng tối"></button> <span id="moonIcon" class="mode-icon">🌙</span></div>
         </div>
         <div class="toggle-box">
           <small>Âm thanh</small>
@@ -661,9 +665,8 @@
       statusMsg: document.getElementById('statusMsg'),
       historyList: document.getElementById('historyList'),
       legendChips: document.getElementById('legendChips'),
-      kpiIncome: document.getElementById('kpiIncome'),
-      kpiSpent: document.getElementById('kpiSpent'),
-      kpiRemain: document.getElementById('kpiRemain'),
+      sunIcon: document.getElementById('sunIcon'),
+      moonIcon: document.getElementById('moonIcon'),
       sumIncome: document.getElementById('sumIncome'),
       sumSpent: document.getElementById('sumSpent'),
       sumRemain: document.getElementById('sumRemain'),
@@ -760,6 +763,8 @@
       const isLight = state.mode === 'light';
       el.modeTop.textContent = isLight ? '☀️' : '🌙';
       el.modeToggle.classList.toggle('on', !isLight);
+      el.sunIcon.classList.toggle('active', isLight);
+      el.moonIcon.classList.toggle('active', !isLight);
       if (isLight) {
         document.documentElement.style.setProperty('--card', 'rgba(248,251,255,.82)');
         document.documentElement.style.setProperty('--text', '#0d1222');
@@ -810,24 +815,44 @@
       return !invalid;
     }
 
+    function pickLine(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
     function updateStatus() {
       const { spent } = totals();
       const groupedData = grouped();
       const cats = Object.keys(groupedData);
       const ideal = cats.length ? state.income / cats.length : 0;
 
-      let text = 'Nhập dữ liệu để bắt đầu phân tích tài chính.';
+      const reminders = [
+        '📌 Nhắc nhẹ: Bổ sung dữ liệu để hệ thống phân tích rõ hơn nè.',
+        '🪴 Gợi ý: Bạn nhập thu nhập trước để bật cảnh báo thông minh nhé.',
+        '🧩 Hệ thống đang chờ dữ liệu để dựng bức tranh tài chính của bạn.'
+      ];
+      const warnings = [
+        '⚠️ Cảnh báo nhẹ: Có danh mục đang vượt ngưỡng trung bình.',
+        '🚧 Cẩn thận: Có khoản đang tăng hơi nhanh, rà lại nha.',
+        '😵‍💫 Khịa yêu: Ví tiền đang hơi căng, mình siết nhẹ chút nhé.'
+      ];
+      const praises = [
+        '🌟 Quá xịn! Bạn đang kiểm soát chi tiêu rất tốt.',
+        '🎉 Khen nè: Nhịp chi tiêu hiện tại cực kỳ cân bằng.',
+        '💖 Đẹp đó! Tài chính của bạn đang đi rất mượt.'
+      ];
+
+      let text = pickLine(reminders);
       let danger = false;
 
-      if (state.income <= 0) text = 'Vui lòng nhập Thu nhập trước khi thêm chi tiêu.';
-      else if (!state.expenses.length) text = 'Chưa có khoản chi nào. Hãy thêm mục đầu tiên nhé.';
-      else if (spent > state.income) {
-        text = `Cảnh báo đỏ: Tổng chi vượt thu nhập ${formatMoney(spent - state.income)}.`;
+      if (state.income <= 0 || !state.expenses.length) {
+        text = pickLine(reminders);
+      } else if (spent > state.income) {
+        text = `🚨 Cảnh báo đỏ: Tổng chi vượt thu nhập ${formatMoney(spent - state.income)}.`;
         danger = true;
       } else {
         const over = cats.filter((k) => groupedData[k] > ideal);
-        if (over.length) text = `Cảnh báo: ${over.join(', ')} đang cao hơn ngưỡng trung bình.`;
-        else text = 'Chi tiêu cân bằng tốt, tiếp tục duy trì nhịp ổn định ✨';
+        if (over.length) text = `${pickLine(warnings)} (${over.join(', ')})`;
+        else text = pickLine(praises);
       }
 
       el.statusMsg.textContent = text;
@@ -844,27 +869,6 @@
       },
       afterDatasetsDraw(chartInstance) {
         chartInstance.ctx.restore();
-      }
-    };
-
-    const doughnutCenterText = {
-      id: 'doughnutCenterText',
-      afterDraw(chartInstance) {
-        if (chartInstance.config.type !== 'doughnut') return;
-        const total = Object.values(grouped()).reduce((a,b)=>a+b,0);
-        const {ctx, chartArea} = chartInstance;
-        const x = (chartArea.left + chartArea.right) / 2;
-        const y = (chartArea.top + chartArea.bottom) / 2;
-        ctx.save();
-        ctx.textAlign = 'center';
-        ctx.fillStyle = '#ecf4ff';
-        ctx.shadowBlur = 16;
-        ctx.shadowColor = 'rgba(71,215,255,.65)';
-        ctx.font = '700 13px Inter';
-        ctx.fillText('Tổng chi', x, y - 5);
-        ctx.font = '800 14px Inter';
-        ctx.fillText(formatMoney(total), x, y + 14);
-        ctx.restore();
       }
     };
 
@@ -910,7 +914,7 @@
             hoverBackgroundColor: colors,
             hoverBorderWidth: 0,
             spacing: state.chartMode === 'doughnut' ? 2 : 0,
-            cutout: state.chartMode === 'doughnut' ? '58%' : undefined
+            cutout: state.chartMode === 'doughnut' ? '0%' : undefined
           }]
         },
         options: {
@@ -929,7 +933,7 @@
             }
           } : {}
         },
-        plugins: [neonPlugin, doughnutCenterText]
+        plugins: [neonPlugin]
       });
 
       const sum = values.reduce((a,b)=>a+b,0);
@@ -943,7 +947,7 @@
       }
       el.historyList.innerHTML = state.expenses.slice().reverse().map((item) => `
         <article class="history-item">
-          <div><b>${item.category}</b><div style="color:var(--muted);font-size:.84rem">${formatMoney(item.amount)}</div></div>
+          <div class="history-main"><span class="history-cat">${item.category}</span><span class="history-amount">${formatMoney(item.amount)}</span></div>
           <button class="mini-btn mini-edit" data-act="edit" data-id="${item.id}">Sửa</button>
           <button class="mini-btn mini-del" data-act="del" data-id="${item.id}">Xóa</button>
         </article>
@@ -952,9 +956,6 @@
 
     function render() {
       const { spent, remain } = totals();
-      el.kpiIncome.textContent = formatMoney(state.income);
-      el.kpiSpent.textContent = formatMoney(spent);
-      el.kpiRemain.textContent = formatMoney(remain);
       el.sumIncome.textContent = formatMoney(state.income);
       el.sumSpent.textContent = formatMoney(spent);
       el.sumRemain.textContent = formatMoney(remain);
