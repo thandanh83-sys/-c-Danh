@@ -145,9 +145,10 @@
     .p-violet{background:linear-gradient(135deg,#a855f7,#ff5fcf);border-color:#ffd1ef}
     .p-zen{background:linear-gradient(135deg,#a8a8a8,#4d4d4d);border-color:#ddd}
 
-    .custom-grid{display:grid; grid-template-columns:auto auto 1fr; gap:10px; align-items:center; margin-bottom:10px}
-    .color-box{width:56px; height:36px; border-radius:10px; border:2px solid var(--sky); box-shadow:var(--glow-blue); cursor:pointer}
-    .hex-text{font-weight:700; font-size:.92rem; word-break:break-all}
+    .custom-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px; align-items:start; margin-bottom:10px}
+    .color-control{display:grid; gap:6px; justify-items:start}
+    .color-box{width:64px; height:34px; border-radius:8px; border:2px solid var(--sky); box-shadow:var(--glow-blue); cursor:pointer}
+    .hex-text{font-weight:700; font-size:.9rem; word-break:break-all}
 
     .hide{display:none}
   </style>
@@ -221,7 +222,7 @@
         <canvas id="chart" width="900" height="360"></canvas>
 
         <div id="chartLegendCard" class="legend-card hide">
-          <div class="legend-title">🧾 Ghi chú màu biểu đồ</div>
+          <div class="legend-title">🧾 Ghi chú</div>
           <div id="chartLegendGrid" class="legend-grid"></div>
         </div>
       </div>
@@ -246,7 +247,7 @@
             <div class="top-title">🎵 Âm thanh</div>
             <button id="soundToggle" class="sound-toggle active">
               <span class="icon">🔊</span>
-              <span class="label">Âm thanh: Bật</span>
+              <span class="label">Bật</span>
             </button>
           </div>
         </div>
@@ -262,9 +263,14 @@
 
         <label>🎯 Tự tùy chỉnh màu</label>
         <div class="custom-grid">
-          <input id="color1" class="color-box" type="color" />
-          <input id="color2" class="color-box" type="color" />
-          <div class="hex-text" id="hexText">#ff6ec7 • #6fd3ff</div>
+          <div class="color-control">
+            <input id="color1" class="color-box" type="color" />
+            <div class="hex-text" id="hex1">#ff6ec7</div>
+          </div>
+          <div class="color-control">
+            <input id="color2" class="color-box" type="color" />
+            <div class="hex-text" id="hex2">#6fd3ff</div>
+          </div>
         </div>
 
         <button id="resetBtn" class="btn danger">🗑️ Xóa toàn bộ dữ liệu</button>
@@ -313,7 +319,8 @@
       chartLegendGrid: document.getElementById("chartLegendGrid"),
       color1: document.getElementById("color1"),
       color2: document.getElementById("color2"),
-      hexText: document.getElementById("hexText")
+      hex1: document.getElementById("hex1"),
+      hex2: document.getElementById("hex2")
     };
 
     function formatMoney(v){ return Number(v||0).toLocaleString("vi-VN") + " đ"; }
@@ -358,7 +365,7 @@
       document.documentElement.style.setProperty("--accent-1", c1);
       document.documentElement.style.setProperty("--accent-2", c2);
       localStorage.setItem(THEME_KEY, JSON.stringify([c1,c2]));
-      el.color1.value = c1; el.color2.value = c2; el.hexText.textContent = `${c1} • ${c2}`;
+      el.color1.value = c1; el.color2.value = c2; el.hex1.textContent = c1; el.hex2.textContent = c2;
     }
     function loadTheme(){ const saved = JSON.parse(localStorage.getItem(THEME_KEY)||"null"); if(saved){ applyTheme(saved[0],saved[1]); } else { applyTheme(state.theme[0], state.theme[1]); } }
 
@@ -376,7 +383,7 @@
     function syncSoundUI(){
       el.soundToggle.classList.toggle("active", state.soundOn);
       el.soundToggle.querySelector(".icon").textContent = state.soundOn ? "🔊" : "🔇";
-      el.soundToggle.querySelector(".label").textContent = state.soundOn ? "Âm thanh: Bật" : "Âm thanh: Tắt";
+      el.soundToggle.querySelector(".label").textContent = state.soundOn ? "Bật" : "Tắt";
       el.soundFab.textContent = state.soundOn ? "🔊" : "🔇";
     }
 
@@ -486,11 +493,12 @@
         ctx.strokeStyle = state.mode==="light"?"rgba(0,0,0,.2)":"rgba(255,255,255,.22)";
         for(let i=0;i<5;i++){ const y = top + (ch/4)*i; ctx.beginPath(); ctx.moveTo(left,y); ctx.lineTo(left+cw,y); ctx.stroke(); }
 
-        const barGap = 14;
-        const bw = Math.max(12, (cw - barGap * (labels.length + 1)) / labels.length);
+        const sGap = 12;
+        const n = labels.length;
+        const bw = Math.max(10, (cw - (n + 1) * sGap) / n);
 
         labels.forEach((lb, i)=>{
-          const x = left + barGap + i * (bw + barGap);
+          const x = left + sGap + i * (bw + sGap);
           const h = (values[i]/max)*(ch-16);
           const y = top + ch - h;
           ctx.fillStyle = colors[i];
@@ -502,7 +510,7 @@
       } else {
         const total = values.reduce((a,b)=>a+b,0);
         let start = -Math.PI/2;
-        const cx = W*0.5, cy = H*0.5, r = Math.min(W,H)*0.2;
+        const cx = W*0.5, cy = H*0.5, r = Math.min(W,H)*0.23;
 
         values.forEach((v,i)=>{
           const a = (v/total)*Math.PI*2;
