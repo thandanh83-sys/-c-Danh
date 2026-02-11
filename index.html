@@ -10,10 +10,10 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
   <style>
     :root {
-      --bg-1:#05070f;
-      --bg-2:#0a1f36;
-      --bg-3:#291034;
-      --bg-4:#f4f7ff;
+      --bg-1:#05070f; /* đen chủ đạo */
+      --bg-2:#0fb8ff; /* xanh da trời chủ đạo */
+      --bg-3:#ff5ec4; /* hồng sáng chủ đạo */
+      --bg-4:#f4f7ff; /* trắng chủ đạo */
       --text:#f7fbff;
       --muted:#b7c1da;
       --card:rgba(12,16,27,.72);
@@ -40,10 +40,10 @@
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at 15% 15%, color-mix(in srgb, var(--cyan), transparent 80%), transparent 50%),
-        radial-gradient(circle at 85% 20%, color-mix(in srgb, var(--pink), transparent 82%), transparent 50%),
-        radial-gradient(circle at 70% 85%, rgba(255,255,255,.08), transparent 45%),
-        linear-gradient(135deg,var(--bg-1),var(--bg-2) 45%,var(--bg-3));
+        radial-gradient(circle at 14% 14%, color-mix(in srgb, var(--bg-2), transparent 74%), transparent 52%),
+        radial-gradient(circle at 86% 20%, color-mix(in srgb, var(--bg-3), transparent 76%), transparent 52%),
+        radial-gradient(circle at 65% 84%, color-mix(in srgb, var(--bg-4), transparent 84%), transparent 48%),
+        linear-gradient(140deg, var(--bg-1) 0%, color-mix(in srgb, var(--bg-1), var(--bg-2) 36%) 42%, color-mix(in srgb, var(--bg-1), var(--bg-3) 32%) 100%);
       min-height: 100vh;
       padding: 20px;
       transition: background var(--t), color var(--t);
@@ -354,13 +354,27 @@
       border: 1px solid color-mix(in srgb, var(--cyan), transparent 62%);
       padding: 12px;
       background: rgba(10,16,32,.5);
-      display: grid;
-      grid-template-columns: minmax(0,1fr) 230px;
-      gap: 12px;
+      display: flex;
       align-items: stretch;
     }
 
     #chartCanvas { width: 100%; height: 100%; }
+
+    .legend-box {
+      margin-top: 12px;
+      border-radius: 14px;
+      border: 1px solid color-mix(in srgb, var(--pink), transparent 60%);
+      background: rgba(16,22,42,.52);
+      padding: 10px;
+      box-shadow: 0 0 16px color-mix(in srgb, var(--pink), transparent 72%);
+    }
+
+    .legend-title {
+      margin: 0 0 8px;
+      font-size: .92rem;
+      color: color-mix(in srgb, var(--bg-4), var(--cyan) 26%);
+      font-weight: 700;
+    }
 
     .legend-chips {
       margin-top: 0;
@@ -523,7 +537,6 @@
           "leftBottom"
           "rightBottom";
       }
-      .chart-wrap { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -588,7 +601,11 @@
           <button class="tab" data-mode="doughnut">Tròn</button>
         </div>
       </div>
-      <div class="chart-wrap"><canvas id="chartCanvas"></canvas><div id="legendChips" class="legend-chips"></div></div>
+      <div class="chart-wrap"><canvas id="chartCanvas"></canvas></div>
+      <div class="legend-box">
+        <h3 class="legend-title">🧾 Ghi chú biểu đồ</h3>
+        <div id="legendChips" class="legend-chips"></div>
+      </div>
     </section>
 
     <section class="card card-pink box-theme">
